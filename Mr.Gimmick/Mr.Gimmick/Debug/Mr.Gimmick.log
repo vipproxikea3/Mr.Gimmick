@@ -1,0 +1,20 @@
+﻿  Animations.cpp
+  Brick.cpp
+  Game.cpp
+  GameObject.cpp
+  KeyEventHandler.cpp
+  main.cpp
+  Mario.cpp
+  PlayScene.cpp
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(84,20): warning C4018: '<': signed/unsigned mismatch
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(106,20): warning C4018: '<': signed/unsigned mismatch
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(129,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(130,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(250,20): warning C4018: '<': signed/unsigned mismatch
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(259,20): warning C4018: '<': signed/unsigned mismatch
+  Scene.cpp
+  Sprites.cpp
+  Textures.cpp
+  Utils.cpp
+  Generating Code...
+  Mr.Gimmick.vcxproj -> D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe

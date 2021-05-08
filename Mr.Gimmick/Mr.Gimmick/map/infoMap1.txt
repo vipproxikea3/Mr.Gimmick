@@ -1,0 +1,2 @@
+Map {w: 128, h: 48}
+Tileset {w: 11, h: 40, count: 440}
