@@ -20,14 +20,18 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 */
 
 #define SCENE_SECTION_UNKNOWN -1
-#define SCENE_SECTION_TEXTURES 2
+#define SCENE_SECTION_TEXTURES 1
+#define SCENE_SECTION_MAP 2
 #define SCENE_SECTION_SPRITES 3
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
-#define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
+#define OBJECT_TYPE_MARIO			0
+#define OBJECT_TYPE_BRICK			1
+#define OBJECT_TYPE_COGWHEELSMALL	3
+#define OBJECT_TYPE_COGWHEEL		4
+#define OBJECT_TYPE_CHAIN			5
 
 #define MAX_SCENE_LINE 1024
 
@@ -45,6 +49,25 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 	int B = atoi(tokens[4].c_str());
 
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
+}
+
+void CPlayScene::_ParseSection_MAP(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 8) return; // skip invalid lines
+
+	float PosX = atof(tokens[0].c_str());
+	float PosY = atof(tokens[1].c_str());
+	int TotalRowsOfMap = atoi(tokens[2].c_str());
+	int TotalColumnsOfMap = atoi(tokens[3].c_str());
+	int TotalRowsOfTileSet = atoi(tokens[4].c_str());
+	int TotalColumnsOfTileSet = atoi(tokens[5].c_str());
+	int TileSetID = atoi(tokens[6].c_str());
+	wstring mapMatrixPath = ToWSTR(tokens[7]);
+
+	this->map = new Map(PosX, PosY, TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	DebugOut(L"[INFO] Load map OK\n");
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -149,6 +172,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
+	case OBJECT_TYPE_COGWHEEL:
+		obj = new CCogwheel(atoi(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_CHAIN:
+		obj = new CChain(atoi(tokens[4].c_str()));
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -181,6 +211,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
+		if (line == "[MAP]") { section = SCENE_SECTION_MAP; continue; }
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
@@ -201,6 +232,7 @@ void CPlayScene::Load()
 		switch (section)
 		{
 		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
+		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
@@ -234,6 +266,10 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
+	SetCamPos();
+}
+
+void CPlayScene::SetCamPos() {
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -242,11 +278,14 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, cy);
 }
 
 void CPlayScene::Render()
 {
+	if (map)
+		map->Render();
+
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
