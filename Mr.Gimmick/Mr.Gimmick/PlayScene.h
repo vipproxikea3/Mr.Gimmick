@@ -9,6 +9,7 @@
 #include "CogwheelSmall.h"
 #include "Cogwheel.h"
 #include "Chain.h"
+#include "BlueFire.h"
 
 
 class CPlayScene : public CScene

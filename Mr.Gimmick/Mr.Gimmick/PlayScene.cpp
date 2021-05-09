@@ -32,6 +32,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_COGWHEELSMALL	3
 #define OBJECT_TYPE_COGWHEEL		4
 #define OBJECT_TYPE_CHAIN			5
+#define OBJECT_TYPE_BLUEFIRE		6
 
 #define MAX_SCENE_LINE 1024
 
@@ -179,6 +180,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_CHAIN:
 		obj = new CChain(atoi(tokens[4].c_str()));
 		break;
+	case OBJECT_TYPE_BLUEFIRE: obj = new CBlueFire(); break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
