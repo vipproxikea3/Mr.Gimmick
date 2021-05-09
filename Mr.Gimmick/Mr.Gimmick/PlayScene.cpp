@@ -27,8 +27,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
-#define OBJECT_TYPE_MARIO			0
-#define OBJECT_TYPE_BRICK			1
+#define OBJECT_TYPE_GIMMICK			2
 #define OBJECT_TYPE_COGWHEELSMALL	3
 #define OBJECT_TYPE_COGWHEEL		4
 #define OBJECT_TYPE_CHAIN			5
@@ -161,18 +160,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
+	case OBJECT_TYPE_GIMMICK:
 		if (player != NULL)
 		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
+			DebugOut(L"[ERROR] GIMMICK object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
+		obj = new CGimmick();
+		player = (CGimmick*)obj;
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
@@ -310,14 +308,11 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		mario->SetState(MARIO_STATE_JUMP);
-		break;
-	case DIK_A:
-		mario->Reset();
+		gimmick->SetState(GIMMICK_STATE_JUMP);
 		break;
 	}
 }
@@ -325,14 +320,14 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 void CPlaySceneKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
-	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 
 	// disable control key when Mario die 
-	if (mario->GetState() == MARIO_STATE_DIE) return;
+	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
+		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+		gimmick->SetState(GIMMICK_STATE_IDLE);
 }

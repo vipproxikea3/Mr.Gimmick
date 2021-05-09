@@ -1,16 +1,18 @@
-﻿  BlueFire.cpp
-  Game.cpp
+﻿  Game.cpp
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  PlayScene.cpp
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(60,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(61,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(107,20): warning C4018: '<': signed/unsigned mismatch
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(129,20): warning C4018: '<': signed/unsigned mismatch
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(152,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(153,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(289,20): warning C4018: '<': signed/unsigned mismatch
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(298,20): warning C4018: '<': signed/unsigned mismatch
   main.cpp
+D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
 D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(183,64): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(183,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  PlayScene.cpp
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(61,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(62,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(108,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(130,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(153,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(154,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(291,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(300,20): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   Mr.Gimmick.vcxproj -> D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe

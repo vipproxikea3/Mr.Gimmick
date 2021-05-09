@@ -63,6 +63,9 @@
     <ClInclude Include="BlueFire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gimmick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -114,6 +117,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BlueFire.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gimmick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
