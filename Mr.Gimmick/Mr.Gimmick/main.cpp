@@ -29,8 +29,8 @@
 #define MAIN_WINDOW_TITLE L"MR GIMMICK"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 192
 
 #define MAX_FRAME_RATE 120
 
@@ -180,7 +180,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"gData\\mrGimmick_gData.txt");
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2.5, SCREEN_HEIGHT * 2.5, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 3, SCREEN_HEIGHT * 3, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

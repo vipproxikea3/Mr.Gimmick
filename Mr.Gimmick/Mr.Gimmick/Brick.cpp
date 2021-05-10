@@ -1,10 +1,13 @@
 #include "Brick.h"
 
+void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
+
 void CBrick::Render()
 {
-	animation_set->at(0)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
+
+void CBrick::SetState(int state) {}
 
 void CBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

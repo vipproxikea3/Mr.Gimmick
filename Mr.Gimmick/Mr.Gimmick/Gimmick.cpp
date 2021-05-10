@@ -19,6 +19,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += GIMMICK_GRAVITY * dt;
 
+	onInclinedBrick = false;
+
+	vector<LPGAMEOBJECT> newCoObjects;
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+
+		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
+			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
+			brick->Collision(this, dy);
+		}
+	}
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -26,10 +39,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// turn off collision when die 
 	if (state != GIMMICK_STATE_DIE)
-		CalcPotentialCollisions(coObjects, coEvents);
+		CalcPotentialCollisions(&newCoObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME)
+	if (GetTickCount64() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -39,13 +52,17 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (coEvents.size() == 0)
 	{
 		x += dx;
-		y += dy;
+		if (!onInclinedBrick)
+			y += dy;
 	}
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
+
+		float x0 = x;
+		float y0 = y;
 
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
@@ -55,11 +72,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//	x += nx*abs(rdx); 
 
 		// block every object first!
-		x += min_tx * dx + nx * 0.4f;
+		/*x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
+		if (ny != 0) vy = 0;*/
 
 
 		//
@@ -68,9 +85,20 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (dynamic_cast<CBrick*>(e->obj)) {
+				x = x0 + min_tx * dx + nx * 0.1f;
+				if (onInclinedBrick) x = x0 + dx;
+				y = y0 + min_ty * dy + ny * 0.1f;
+
+				if (e->nx != 0) vx = 0;
+				if (e->ny != 0) vy = 0;
+			}
 		}
 	}
 
+	// clean up newCoObjects
+	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
@@ -81,8 +109,8 @@ void CGimmick::Render()
 	if (state == GIMMICK_STATE_DIE)
 		ani = GIMMICK_ANI_DIE;
 	else {
-		if (vy != 0) {
-			if (vx > 0)
+		if (vy < 0) {
+			if (nx > 0)
 				ani = GIMMICK_ANI_JUMP_RIGHT;
 			else
 				ani = GIMMICK_ANI_JUMP_LEFT;

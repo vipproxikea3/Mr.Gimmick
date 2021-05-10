@@ -27,11 +27,13 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
+#define OBJECT_TYPE_BRICK			1
 #define OBJECT_TYPE_GIMMICK			2
 #define OBJECT_TYPE_COGWHEELSMALL	3
 #define OBJECT_TYPE_COGWHEEL		4
 #define OBJECT_TYPE_CHAIN			5
 #define OBJECT_TYPE_BLUEFIRE		6
+#define OBJECT_TYPE_INCLINEDBRICK	7
 
 #define MAX_SCENE_LINE 1024
 
@@ -160,6 +162,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
+	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_GIMMICK:
 		if (player != NULL)
 		{
@@ -179,6 +182,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CChain(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLUEFIRE: obj = new CBlueFire(); break;
+	case OBJECT_TYPE_INCLINEDBRICK:
+		obj = new CInclinedBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -255,13 +261,20 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
+		if (dynamic_cast<CGimmick*>(objects[i]))
+			continue;
 		coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (dynamic_cast<CGimmick*>(objects[i]))
+			continue;
 		objects[i]->Update(dt, &coObjects);
 	}
+
+	if (player)
+		player->Update(dt, &coObjects);
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
@@ -287,7 +300,9 @@ void CPlayScene::Render()
 		map->Render();
 
 	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+		if (!dynamic_cast<CGimmick*>(objects[i]))
+			objects[i]->Render();
+	if (player) player->Render();
 }
 
 /*

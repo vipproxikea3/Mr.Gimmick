@@ -57,22 +57,63 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	return e;
 }
 
+bool CGameObject::CheckAABB(CGameObject* obj)
+{
+	float l, t, r, b;
+	float l1, t1, r1, b1;
+
+	this->GetBoundingBox(l, t, r, b);
+	obj->GetBoundingBox(l1, t1, r1, b1);
+
+	if (CGame::GetInstance()->CheckAABB(l, t, r, b, l1, t1, r1, b1))
+		return true;
+
+	return false;
+}
+
 /*
 	Calculate potential collisions with the list of colliable objects
 
 	coObjects: the list of colliable objects
 	coEvents: list of potential collisions
 */
-void CGameObject::CalcPotentialCollisions(
-	vector<LPGAMEOBJECT>* coObjects,
-	vector<LPCOLLISIONEVENT>& coEvents)
+void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
+		LPGAMEOBJECT object = coObjects->at(i);
+		/*CScene* s = CGame::GetInstance()->GetCurrentScene();
+		if (dynamic_cast<CPlayScene*>(s)) {
+			if (!this->IsInCamera())
+				continue;
+		}*/
+
+		LPCOLLISIONEVENT e = SweptAABBEx(object);
 
 		if (e->t > 0 && e->t <= 1.0f)
+		{
+			float mleft, mtop, mright, mbottom;
+			GetBoundingBox(mleft, mtop, mright, mbottom);
+			float oleft, otop, obottom, oright;
+			e->obj->GetBoundingBox(oleft, otop, oright, obottom);
+			if (e->nx != 0)
+			{
+				if (ceil(mbottom) == otop)
+				{
+					continue;
+				}
+				if (ceil(mtop) == obottom)
+				{
+					continue;
+				}
+			}
+			if (e->ny != 0)
+			{
+				if (ceil(mleft) == oright || floor(mright) == oleft)
+					continue;
+			}
 			coEvents.push_back(e);
+		}
 		else
 			delete e;
 	}
@@ -129,7 +170,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
+	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 100);
 }
 
 

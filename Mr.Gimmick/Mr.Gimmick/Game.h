@@ -82,6 +82,8 @@ public:
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 
+	bool CheckAABB(float l, float t, float r, float b, float l1, float t1, float r1, float b1);
+
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 

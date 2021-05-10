@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Brick.h"
+#include "InclinedBrick.h"
 
 #define GIMMICK_WALKING_SPEED		0.1f 
 #define GIMMICK_JUMP_SPEED_Y		0.5f
@@ -31,7 +33,10 @@ class CGimmick : public CGameObject
 {
 	int untouchable;
 	DWORD untouchable_start;
+	
 public:
+	bool onInclinedBrick = false;
+
 	CGimmick();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

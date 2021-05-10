@@ -308,6 +308,12 @@ void CGame::SweptAABB(
 
 }
 
+bool CGame::CheckAABB(float l, float t, float r, float b, float l1, float t1, float r1, float b1)
+{
+	return !(r < l1 || l > r1 || t > b1 || b < t1);
+
+}
+
 CGame* CGame::GetInstance()
 {
 	if (__instance == NULL) __instance = new CGame();

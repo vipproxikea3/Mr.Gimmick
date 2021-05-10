@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Brick.h"
+#include "InclinedBrick.h"
 #include "Gimmick.h"
 #include "CogwheelSmall.h"
 #include "Cogwheel.h"
