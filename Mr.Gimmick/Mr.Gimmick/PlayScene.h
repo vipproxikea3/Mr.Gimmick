@@ -11,13 +11,14 @@
 #include "Cogwheel.h"
 #include "Chain.h"
 #include "BlueFire.h"
+#include "Conveyor.h"
 
 
 class CPlayScene : public CScene
 {
 protected:
-	CGimmick* player;					// A play scene has to have player, right?
-	Map* map;
+	CGimmick* player = nullptr;					// A play scene has to have player, right?
+	Map* map = nullptr;
 
 	vector<LPGAMEOBJECT> objects;
 

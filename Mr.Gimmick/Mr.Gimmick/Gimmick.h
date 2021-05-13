@@ -2,10 +2,11 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "InclinedBrick.h"
+#include "Conveyor.h"
 
 #define GIMMICK_WALKING_SPEED		0.1f 
-#define GIMMICK_JUMP_SPEED_Y		0.5f
-#define GIMMICK_GRAVITY				0.002f
+#define GIMMICK_JUMP_SPEED_Y		0.3f
+#define GIMMICK_GRAVITY				0.001f
 #define GIMMICK_DIE_DEFLECT_SPEED	 0.5f
 
 #define GIMMICK_STATE_IDLE			0

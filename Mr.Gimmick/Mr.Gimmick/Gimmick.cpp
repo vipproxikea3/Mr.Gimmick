@@ -8,7 +8,7 @@
 CGimmick::CGimmick() : CGameObject()
 {
 	untouchable = 0;
-	SetState(GIMMICK_STATE_IDLE);
+	SetState(GIMMICK_STATE_JUMP);
 }
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -25,6 +25,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -94,6 +95,15 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0) vx = 0;
 				if (e->ny != 0) vy = 0;
 			}
+
+			if (dynamic_cast<CConveyor*>(e->obj)) {
+				x = x0 + min_tx * dx + nx * 0.1f;
+				if (onInclinedBrick) x = x0 + dx;
+				y = y0 + min_ty * dy + ny * 0.1f;
+
+				if (e->nx != 0) vx = 0;
+				if (e->ny != 0) vy = 0;
+			}
 		}
 	}
 
@@ -132,7 +142,7 @@ void CGimmick::Render()
 
 	animation_set->at(ani)->Render(x, y - 3, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::SetState(int state)
@@ -161,9 +171,9 @@ void CGimmick::SetState(int state)
 
 void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + GIMMICK_BBOX_WIDTH;
+	left = x + 0.25f;
+	top = y + 0.5f;
+	right = x + GIMMICK_BBOX_WIDTH - 0.25f;
 	bottom = y + GIMMICK_BBOX_HEIGHT;
 }
 

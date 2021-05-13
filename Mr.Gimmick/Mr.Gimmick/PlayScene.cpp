@@ -12,6 +12,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	key_handler = new CPlaySceneKeyHandler(this);
+	this->player = nullptr;
+	this->map = nullptr;
 }
 
 /*
@@ -34,6 +36,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_CHAIN			5
 #define OBJECT_TYPE_BLUEFIRE		6
 #define OBJECT_TYPE_INCLINEDBRICK	7
+#define OBJECT_TYPE_CONVEYOR		8
 
 #define MAX_SCENE_LINE 1024
 
@@ -184,6 +187,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLUEFIRE: obj = new CBlueFire(); break;
 	case OBJECT_TYPE_INCLINEDBRICK:
 		obj = new CInclinedBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
+		break;
+	case OBJECT_TYPE_CONVEYOR:
+		obj = new CConveyor(atoi(tokens[4].c_str()));
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
