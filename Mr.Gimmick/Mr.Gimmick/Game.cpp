@@ -3,8 +3,11 @@
 
 #include "Game.h"
 #include "Utils.h"
+#include "define.h"
 
 #include "PlayScene.h"
+#include "IntroScene.h"
+
 
 CGame* CGame::__instance = NULL;
 
@@ -346,8 +349,16 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
-	LPSCENE scene = new CPlayScene(id, path);
-	scenes[id] = scene;
+	if (id == INTRO_SCENE_ID)
+	{
+		LPSCENE scene = new CIntroScene(id, path);
+		scenes[id] = scene;
+	}
+	else
+	{
+		LPSCENE scene = new CPlayScene(id, path);
+		scenes[id] = scene;
+	}
 }
 
 /*
@@ -398,6 +409,7 @@ void CGame::SwitchScene(int scene_id)
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
+	//update:
 
 	current_scene = scene_id;
 	LPSCENE s = scenes[scene_id];

@@ -98,3 +98,14 @@ void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
 }
+
+void CAnimationSets::Clear()
+{
+	for (auto x : animation_sets)
+	{
+		LPANIMATION_SET ani_set = x.second;
+		delete ani_set;
+	}
+
+	animation_sets.clear();
+}
