@@ -150,10 +150,12 @@
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
     <ClInclude Include="Conveyor.h" />
+    <ClInclude Include="define.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
     <ClInclude Include="InclinedBrick.h" />
+    <ClInclude Include="IntroScene.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mario.h" />
@@ -175,6 +177,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
     <ClCompile Include="InclinedBrick.cpp" />
+    <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
