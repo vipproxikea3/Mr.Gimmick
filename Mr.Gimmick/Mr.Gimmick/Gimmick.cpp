@@ -171,9 +171,9 @@ void CGimmick::SetState(int state)
 
 void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 0.25f;
+	left = x + 0.5f;
 	top = y + 0.5f;
-	right = x + GIMMICK_BBOX_WIDTH - 0.25f;
+	right = x + GIMMICK_BBOX_WIDTH - 0.5f;
 	bottom = y + GIMMICK_BBOX_HEIGHT;
 }
 
