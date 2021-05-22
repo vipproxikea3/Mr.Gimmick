@@ -20,11 +20,9 @@ void CConveyor::Render()
 		break;
 	}
 
-	DebugOut(L"[ANI] ani: %d\n", ani);
-
 	int alpha = 255;
 	animation_set->at(ani)->Render(x, y, alpha);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CConveyor::SetState(int state) {}
@@ -33,6 +31,6 @@ void CConveyor::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + CONVEYOR_BBOX_WIDTH;
-	b = y + CONVEYOR_BBOX_HEIGHT;
+	r = l + CONVEYOR_BBOX_WIDTH;
+	b = t - CONVEYOR_BBOX_HEIGHT;
 }

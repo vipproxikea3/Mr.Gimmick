@@ -41,6 +41,6 @@ void CChain::GetBoundingBox(float& left, float& top, float& right, float& bottom
 {
 	left = x;
 	top = y;
-	right = x + CHAIN_BBOX_WIDTH;
-	bottom = y + CHAIN_BBOX_HEIGHT;
+	right = left + CHAIN_BBOX_WIDTH;
+	bottom = top - CHAIN_BBOX_HEIGHT;
 }

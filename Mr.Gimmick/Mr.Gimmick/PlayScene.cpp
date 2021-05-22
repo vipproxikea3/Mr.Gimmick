@@ -60,18 +60,16 @@ void CPlayScene::_ParseSection_MAP(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 8) return; // skip invalid lines
+	if (tokens.size() < 6) return; // skip invalid lines
 
-	float PosX = atof(tokens[0].c_str());
-	float PosY = atof(tokens[1].c_str());
-	int TotalRowsOfMap = atoi(tokens[2].c_str());
-	int TotalColumnsOfMap = atoi(tokens[3].c_str());
-	int TotalRowsOfTileSet = atoi(tokens[4].c_str());
-	int TotalColumnsOfTileSet = atoi(tokens[5].c_str());
-	int TileSetID = atoi(tokens[6].c_str());
-	wstring mapMatrixPath = ToWSTR(tokens[7]);
+	int TotalRowsOfMap = atoi(tokens[0].c_str());
+	int TotalColumnsOfMap = atoi(tokens[1].c_str());
+	int TotalRowsOfTileSet = atoi(tokens[2].c_str());
+	int TotalColumnsOfTileSet = atoi(tokens[3].c_str());
+	int TileSetID = atoi(tokens[4].c_str());
+	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	this->map = new Map(PosX, PosY, TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	this->map = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
@@ -295,7 +293,7 @@ void CPlayScene::SetCamPos() {
 
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
+	cy += game->GetScreenHeight() / 2;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 }

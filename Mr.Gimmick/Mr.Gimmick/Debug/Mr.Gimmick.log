@@ -1,3 +1,3 @@
-﻿  Gimmick.cpp
+﻿  InclinedBrick.cpp
 D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\Gimmick.h(46,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
   Mr.Gimmick.vcxproj -> D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe
