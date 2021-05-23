@@ -35,7 +35,7 @@ void Map::DrawTile(int idOfTile, float x, float y) {
 	xOfTile = colOfTile * TILE_WIDTH;
 	yOfTile = rowOfTile * TILE_HEIGHT;
 
-	CGame::GetInstance()->Draw(x, TotalRowsOfMap * TILE_HEIGHT - y, TileSetImg, xOfTile, yOfTile, xOfTile + TILE_WIDTH, yOfTile + TILE_HEIGHT);
+	CGame::GetInstance()->Draw(x, y, TileSetImg, xOfTile, yOfTile, xOfTile + TILE_WIDTH, yOfTile + TILE_HEIGHT);
 }
 
 float Map::getMapWidth() {
@@ -61,23 +61,23 @@ void Map::Render() {
 
 	bool isDraw;
 
-	/*colBegin = floor(cx / TILE_WIDTH);
+	colBegin = floor(cx / TILE_WIDTH);
 	colEnd = ceil((cx + screenWidth) / TILE_WIDTH);
 
-	rowBegin = floor(cy / TILE_HEIGHT);
-	rowEnd = ceil((cy - screenHeight) / TILE_HEIGHT);*/
+	rowBegin = ceil(cy / TILE_HEIGHT);
+	rowEnd = floor((cy - screenHeight) / TILE_HEIGHT);
 
 	for (int i = 0; i < TotalRowsOfMap * TotalColumnsOfMap; i++) {
 		isDraw = true;
 
-		rowOfTile = i / TotalColumnsOfMap;
+		rowOfTile = TotalRowsOfMap - (i / TotalColumnsOfMap);
 		colOfTile = i % TotalColumnsOfMap;
 
 		xOfTile = colOfTile * TILE_WIDTH;
 		yOfTile = rowOfTile * TILE_HEIGHT;
 
-		//if (colOfTile < colBegin || colOfTile > colEnd) isDraw = false;
-		//if (rowOfTile > rowBegin || rowOfTile < rowEnd) isDraw = false;
+		if (colOfTile < colBegin || colOfTile > colEnd) isDraw = false;
+		if (rowOfTile > rowBegin || rowOfTile < rowEnd) isDraw = false;
 
 		if (isDraw)
 			DrawTile(MapData[i], xOfTile, yOfTile);

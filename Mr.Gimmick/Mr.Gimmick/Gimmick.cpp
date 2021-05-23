@@ -142,7 +142,7 @@ void CGimmick::Render()
 
 	animation_set->at(ani)->Render(x, y + 3, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::SetState(int state)

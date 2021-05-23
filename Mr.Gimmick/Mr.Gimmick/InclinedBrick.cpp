@@ -34,7 +34,7 @@ void CInclinedBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
 
 void CInclinedBrick::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CInclinedBrick::SetState(int state) {}

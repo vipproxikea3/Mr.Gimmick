@@ -78,6 +78,15 @@
     <ClInclude Include="define.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Zone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -141,6 +150,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntroScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Zone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
