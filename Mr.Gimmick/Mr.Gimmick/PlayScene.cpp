@@ -5,6 +5,7 @@
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -72,7 +73,10 @@ void CPlayScene::_ParseSection_MAP(string line)
 	int TileSetID = atoi(tokens[4].c_str());
 	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	this->map = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	if (maptt == -1)
+		this->map = new Map * [spritemap];
+	maptt++;
+	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
@@ -355,8 +359,21 @@ void CPlayScene::SetCamPos() {
 
 void CPlayScene::Render()
 {
-	if (map)
-		map->Render();
+	if (countfps == fps)
+	{
+		if (this->maptt == this->spritemap - 1)
+			this->maptt = 0;
+		else
+			this->maptt++;
+	}
+	if (this->map)
+		this->map[maptt]->Render();
+	if (countfps >= fps)
+	{
+		countfps = 0;
+	}
+	else
+		countfps++;
 
 	for (int i = 0; i < objects.size(); i++)
 		if (!dynamic_cast<CGimmick*>(objects[i]))
