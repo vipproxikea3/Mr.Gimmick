@@ -9,9 +9,10 @@
 
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
-
-48	128	40	11	0	Map\Gimmick!(J)-Level1_map.txt
-
+48	128	45	11	0	Map\GimmickJ-Level1c_map.txt
+48	128	45	11	0	Map\GimmickJ-Level1d_map.txt
+48	128	45	11	0	Map\GimmickJ-Level1b_map.txt
+48	128	45	11	0	Map\GimmickJ-Level1a_map.txt
 [ZONES]
 0	768	1024	576
 0	576	1024	384

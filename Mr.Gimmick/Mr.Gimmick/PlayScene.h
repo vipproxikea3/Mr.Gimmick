@@ -21,7 +21,14 @@ class CPlayScene : public CScene
 {
 protected:
 	CGimmick* player = nullptr;					// A play scene has to have player, right?
-	Map* map = nullptr;
+	//Map* map = nullptr;
+
+	Map** map = nullptr;
+	//unordered_map<int, Map*> map;
+	int maptt = -1; // stt cua sprite map
+	int spritemap = 4;// so luong sprite map
+	int countfps = 0;//speed waterfall
+	int fps = 1;
 
 	vector<CZone*> zones;
 	float ll = -9999.0f;

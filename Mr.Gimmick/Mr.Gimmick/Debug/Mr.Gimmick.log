@@ -1,29 +1,28 @@
 ﻿  Game.cpp
   IntroScene.cpp
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(75,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(76,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(122,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(144,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(167,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(168,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(188,57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(188,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(298,35): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(385,21): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(386,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(522,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(539,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(75,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(76,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(122,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(144,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(167,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(168,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(188,57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(188,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(298,35): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(385,21): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(386,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(522,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\IntroScene.cpp(539,20): warning C4018: '<': signed/unsigned mismatch
   PlayScene.cpp
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(128,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(150,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(173,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(174,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(205,57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(205,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(361,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(367,20): warning C4018: '<': signed/unsigned mismatch
-D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(377,20): warning C4018: '<': signed/unsigned mismatch
-  Tube.cpp
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(132,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(154,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(177,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(178,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(209,57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(209,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(378,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(384,20): warning C4018: '<': signed/unsigned mismatch
+D:\UITDA\Mr.Gimmick\Mr.Gimmick\Mr.Gimmick\PlayScene.cpp(394,20): warning C4018: '<': signed/unsigned mismatch
   main.cpp
   Generating Code...
-  Mr.Gimmick.vcxproj -> D:\DATA\UIT\Deadline\Game\Mr.Gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe
+  Mr.Gimmick.vcxproj -> D:\UITDA\Mr.Gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe
