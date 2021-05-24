@@ -6,6 +6,9 @@
 30	textures\stage1.png	215	121	214
 40	textures\NES - Gimmick Mr Gimmick - Intro.png	200	205	250
 41	textures\INTRO_GATE.png	255	174	201
+50	textures\Enemies.png	255	0	0
+51	textures\Enemies_flip.png	255	0	0
+
 
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
@@ -153,6 +156,14 @@
 100003	103	307	119	323	30
 100004	120	307	136	323	30
 
+#WORM
+# walk right
+110001	2	314	25	328	50
+110002	27	314	49	328	50
+# walk left
+110010	671	314	694	328	51
+110011	647	314	669	328	51	
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 
@@ -212,6 +223,14 @@
 100003	100003	100
 100004	100004	100
 
+# ==== WORM ========
+#die
+110005	110001	100
+110006	110010	100
+#walk
+110001	110001	250	110002	250
+110010	110010	250	110011	250
+
 #
 # id	ani1	ani2	ani3
 #
@@ -241,9 +260,12 @@
 # WINDOW
 100001	100001	100002	100003	100004
 
+# WORM
+110001	110005	110006	110001	110010	
+
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor, 9 = Tube
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor, 9 = Tube, 10 = Worm
 
 # BRICK
 # zone 1
@@ -1371,3 +1393,7 @@
 10	1744	96	100001	2
 10	1728	80	100001	3
 10	1744	80	100001	4
+
+
+#WORM
+11	32	448	110001

@@ -15,7 +15,7 @@
 #include "Conveyor.h"
 #include "Tube.h"
 #include "Window.h"
-
+#include "Worm.h"
 
 class CPlayScene : public CScene
 {
