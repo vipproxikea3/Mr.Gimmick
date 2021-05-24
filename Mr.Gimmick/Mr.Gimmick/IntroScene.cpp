@@ -283,8 +283,8 @@ void CIntroScene::Update(DWORD dt)
 }
 
 void CIntroScene::SetCamPos() {
-
-	CGame::GetInstance()->SetCamPos(0, 0);
+	float y = CGame::GetInstance()->GetScreenHeight();
+	CGame::GetInstance()->SetCamPos(0, y);
 }
 
 void CIntroScene::RenderMainIntro()
@@ -307,7 +307,7 @@ void CIntroScene::RenderCake()
 
 	float cake_x, cake_y;
 	cake_x = intro_x + 56;
-	cake_y = intro_y + 48;
+	cake_y = intro_y - 48;
 
 	CAnimations::GetInstance()->Get(INTRO_CAKE_ANI_ID)->Render(cake_x, cake_y);
 }
@@ -321,7 +321,7 @@ void CIntroScene::RenderGirlBlow()
 
 	float girl_x, girl_y;
 	girl_x = intro_x + 56;
-	girl_y = intro_y + 24;
+	girl_y = intro_y - 24;
 
 	CSprites::GetInstance()->Get(INTRO_GIRL_BLOW_SPRITE_ID)->Draw(girl_x, girl_y);
 }
@@ -335,7 +335,7 @@ void CIntroScene::RenderLightingDissapear()
 
 	float ani_x, ani_y;
 	ani_x = intro_x + 48;
-	ani_y = intro_y + 48;
+	ani_y = intro_y - 48;
 
 	CAnimations::GetInstance()->Get(INTRO_LIGHTNING_DISSAPEAR_ANI_ID)->Render(ani_x, ani_y);
 }
@@ -350,22 +350,22 @@ void CIntroScene::RenderGimmick()
 	switch (gimmick_state)
 	{
 	case INTRO_GIMMICK_STATE_IDLE:
-		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_IDLE)->Render(intro_x + gimmick_x, intro_y + gimmick_y);
+		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_IDLE)->Render(intro_x + gimmick_x, intro_y - gimmick_y);
 		break;
 	case INTRO_GIMMICK_STATE_FALL:
-		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_FALL)->Render(intro_x + gimmick_x, intro_y + gimmick_y);
+		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_FALL)->Render(intro_x + gimmick_x, intro_y - gimmick_y);
 		break;
 	case INTRO_GIMMICK_STATE_BOUNCE:
-		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_BOUNCE)->Render(intro_x + gimmick_x, intro_y + gimmick_y);
+		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_BOUNCE)->Render(intro_x + gimmick_x, intro_y - gimmick_y);
 		break;
 	case INTRO_GIMMICK_STATE_GETUP:
-		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_GETUP)->Render(intro_x + gimmick_x, intro_y + gimmick_y);
+		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_GETUP)->Render(intro_x + gimmick_x, intro_y - gimmick_y);
 		break;
 	case INTRO_GIMMICK_STATE_IDLE_LOOKUP:
-		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_IDLE_LOOKUP)->Render(intro_x + gimmick_x, intro_y + gimmick_y);
+		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_IDLE_LOOKUP)->Render(intro_x + gimmick_x, intro_y - gimmick_y);
 		break;
 	case INTRO_GIMMICK_STATE_JUMP:
-		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_JUMP)->Render(intro_x + gimmick_x, intro_y + gimmick_y);
+		CAnimations::GetInstance()->Get(INTRO_GIMMICK_ANI_JUMP)->Render(intro_x + gimmick_x, intro_y - gimmick_y);
 		break;
 	}
 }
@@ -386,7 +386,7 @@ void CIntroScene::getIntroPos(float &intro_x, float &intro_y)
 	float screen_height = CGame::GetInstance()->GetScreenHeight();
 
 	intro_x = (screen_width - INTRO_WIDTH) / 2;
-	intro_y = (screen_height - INTRO_HEIGHT) / 2;
+	intro_y = (screen_height + INTRO_HEIGHT) / 2;
 }
 
 void CIntroScene::Timing()
@@ -512,6 +512,16 @@ void CIntroScene::Timing()
 			gimmick_y += 1.5f;
 	}
 
+	//END INTRO:
+	if (GetTickCount64() - mainintro_start >= INTRO_TIME - 2000)
+	{
+		DebugOut(L"true");
+	}
+}
+
+void CIntroScene::EndScene()
+{
+	CGame::GetInstance()->SwitchScene(1);
 }
 
 void CIntroScene::Render()

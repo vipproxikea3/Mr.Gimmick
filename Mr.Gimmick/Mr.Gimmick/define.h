@@ -21,6 +21,7 @@
 #define INTRO_WIDTH		128
 #define INTRO_HEIGHT	80
 
+#define INTRO_TIME							55000
 #define FRAME_1_TIME						3000
 #define FRAME_CAKE_TIME						2000
 #define FRAME_GIRL_BLOW_TIME				1000
