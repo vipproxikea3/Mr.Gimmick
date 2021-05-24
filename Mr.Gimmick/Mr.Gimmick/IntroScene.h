@@ -61,6 +61,7 @@ public:
 	void RenderGate();
 	void getIntroPos(float &intro_x, float &intro_y);
 	void Timing();
+	void EndScene();
 
 	//friend class CPlayScenceKeyHandler;
 };
