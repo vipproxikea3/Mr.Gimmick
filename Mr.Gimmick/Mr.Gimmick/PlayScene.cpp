@@ -5,6 +5,7 @@
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
+#define SCENE_SECTION_ZONES	7
 
 #define OBJECT_TYPE_BRICK			1
 #define OBJECT_TYPE_GIMMICK			2
@@ -37,6 +39,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BLUEFIRE		6
 #define OBJECT_TYPE_INCLINEDBRICK	7
 #define OBJECT_TYPE_CONVEYOR		8
+#define OBJECT_TYPE_TUBE			9
+#define OBJECT_TYPE_WINDOW			10
 
 #define MAX_SCENE_LINE 1024
 
@@ -60,19 +64,35 @@ void CPlayScene::_ParseSection_MAP(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 8) return; // skip invalid lines
+	if (tokens.size() < 6) return; // skip invalid lines
 
-	float PosX = atof(tokens[0].c_str());
-	float PosY = atof(tokens[1].c_str());
-	int TotalRowsOfMap = atoi(tokens[2].c_str());
-	int TotalColumnsOfMap = atoi(tokens[3].c_str());
-	int TotalRowsOfTileSet = atoi(tokens[4].c_str());
-	int TotalColumnsOfTileSet = atoi(tokens[5].c_str());
-	int TileSetID = atoi(tokens[6].c_str());
-	wstring mapMatrixPath = ToWSTR(tokens[7]);
+	int TotalRowsOfMap = atoi(tokens[0].c_str());
+	int TotalColumnsOfMap = atoi(tokens[1].c_str());
+	int TotalRowsOfTileSet = atoi(tokens[2].c_str());
+	int TotalColumnsOfTileSet = atoi(tokens[3].c_str());
+	int TileSetID = atoi(tokens[4].c_str());
+	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	this->map = new Map(PosX, PosY, TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	if (maptt == -1)
+		this->map = new Map * [spritemap];
+	maptt++;
+	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
 	DebugOut(L"[INFO] Load map OK\n");
+}
+
+void CPlayScene::_ParseSection_ZONES(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 4) return; // skip invalid lines
+
+	float l = (float)atof(tokens[0].c_str());
+	float t = (float)atof(tokens[1].c_str());
+	float r = (float)atof(tokens[2].c_str());
+	float b = (float)atof(tokens[3].c_str());
+
+	CZone* zone = new CZone(l, t, r, b);
+	zones.push_back(zone);
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -191,6 +211,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_CONVEYOR:
 		obj = new CConveyor(atoi(tokens[4].c_str()));
 		break;
+	case OBJECT_TYPE_TUBE:
+		obj = new CTube(atoi(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_WINDOW:
+		obj = new CWindow(atoi(tokens[4].c_str()));
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -224,6 +250,7 @@ void CPlayScene::Load()
 
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
 		if (line == "[MAP]") { section = SCENE_SECTION_MAP; continue; }
+		if (line == "[ZONES]") { section = SCENE_SECTION_ZONES; continue; }
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
@@ -245,6 +272,7 @@ void CPlayScene::Load()
 		{
 		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
 		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
+		case SCENE_SECTION_ZONES: _ParseSection_ZONES(line); break;
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
@@ -288,27 +316,74 @@ void CPlayScene::Update(DWORD dt)
 	SetCamPos();
 }
 
+void CPlayScene::UpdateZone() {
+	float x, y;
+	player->GetPosition(x, y);
+	for (unsigned int i = 0; i < zones.size(); i++)
+	{
+		boolean inZone = true;
+		if (x < zones[i]->l) inZone = false;
+		if (x > zones[i]->r) inZone = false;
+		if (y > zones[i]->t) inZone = false;
+		if (y < zones[i]->b) inZone = false;
+
+		if (inZone) {
+			ll = zones[i]->l;
+			lt = zones[i]->t;
+			lr = zones[i]->r;
+			lb = zones[i]->b;
+		}
+	}
+}
+
 void CPlayScene::SetCamPos() {
+	UpdateZone();
+
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
+	cy += game->GetScreenHeight() / 2;
+
+
+	if (cx < ll) cx = ll;
+	if (cx + game->GetScreenWidth() > lr) cx = lr - game->GetScreenWidth();
+
+	if (cy > lt) cy = lt;
+	if (cy - game->GetScreenHeight() < lb) cy = lb + game->GetScreenHeight();
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 }
 
 void CPlayScene::Render()
 {
-	if (map)
-		map->Render();
+	if (countfps == fps)
+	{
+		if (this->maptt == this->spritemap - 1)
+			this->maptt = 0;
+		else
+			this->maptt++;
+	}
+	if (this->map)
+		this->map[maptt]->Render();
+	if (countfps >= fps)
+	{
+		countfps = 0;
+	}
+	else
+		countfps++;
 
 	for (int i = 0; i < objects.size(); i++)
 		if (!dynamic_cast<CGimmick*>(objects[i]))
 			objects[i]->Render();
+
 	if (player) player->Render();
+
+	for (int i = 0; i < objects.size(); i++)
+		if (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i]))
+			objects[i]->Render();
 }
 
 /*
@@ -321,6 +396,9 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+	for (unsigned int i = 0; i < zones.size(); i++)
+		delete zones[i];
+	zones.clear();
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

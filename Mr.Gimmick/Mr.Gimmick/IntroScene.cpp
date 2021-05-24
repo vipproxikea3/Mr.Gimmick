@@ -81,7 +81,7 @@ void CIntroScene::_ParseSection_MAP(string line)
 	int TileSetID = atoi(tokens[6].c_str());
 	wstring mapMatrixPath = ToWSTR(tokens[7]);
 
-	this->map = new Map(PosX, PosY, TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	this->map = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
 	DebugOut(L"[INFO] Load map OK\n");
 }
 

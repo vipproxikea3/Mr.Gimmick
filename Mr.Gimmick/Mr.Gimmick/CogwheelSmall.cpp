@@ -16,6 +16,6 @@ void CCogwheelSmall::GetBoundingBox(float& left, float& top, float& right, float
 {
 	left = x;
 	top = y;
-	right = x + COGWHEELSMALL_BBOX_WIDTH;
-	bottom = y + COGWHEELSMALL_BBOX_HEIGHT;
+	right = left + COGWHEELSMALL_BBOX_WIDTH;
+	bottom = top - COGWHEELSMALL_BBOX_HEIGHT;
 }

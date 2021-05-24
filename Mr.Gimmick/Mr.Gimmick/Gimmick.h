@@ -43,7 +43,7 @@ public:
 	virtual void Render();
 
 	void SetState(int state);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = DWORD(GetTickCount64()); }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

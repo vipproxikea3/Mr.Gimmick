@@ -70,7 +70,7 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 {
 	float _x = round(x);
 	float _y = round(y);
-	D3DXVECTOR3 p(round(_x - cam_x), round(_y - cam_y), 0);
+	D3DXVECTOR3 p(round(_x - cam_x), -(round(_y - cam_y)), 0);
 	RECT r;
 	r.left = left;
 	r.top = top;
@@ -234,11 +234,11 @@ void CGame::SweptAABB(
 	//
 
 	float bl = dx > 0 ? ml : ml + dx;
-	float bt = dy > 0 ? mt : mt + dy;
+	float bt = dy > 0 ? mt + dy : mt;
 	float br = dx > 0 ? mr + dx : mr;
-	float bb = dy > 0 ? mb + dy : mb;
+	float bb = dy > 0 ? mb : mb + dy;
 
-	if (br < sl || bl > sr || bb < st || bt > sb) return;
+	if (br < sl || bl > sr || bb > st || bt < sb) return;
 
 
 	if (dx == 0 && dy == 0) return;		// moving object is not moving > obvious no collision
@@ -257,13 +257,13 @@ void CGame::SweptAABB(
 
 	if (dy > 0)
 	{
-		dy_entry = st - mb;
-		dy_exit = sb - mt;
+		dy_entry = sb - mt;
+		dy_exit = st - mb;
 	}
 	else if (dy < 0)
 	{
-		dy_entry = sb - mt;
-		dy_exit = st - mb;
+		dy_entry = st - mb;
+		dy_exit = sb - mt;
 	}
 
 	if (dx == 0)
@@ -308,12 +308,11 @@ void CGame::SweptAABB(
 		nx = 0.0f;
 		dy > 0 ? ny = -1.0f : ny = 1.0f;
 	}
-
 }
 
 bool CGame::CheckAABB(float l, float t, float r, float b, float l1, float t1, float r1, float b1)
 {
-	return !(r < l1 || l > r1 || t > b1 || b < t1);
+	return !(r < l1 || l > r1 || t < b1 || b > t1);
 
 }
 

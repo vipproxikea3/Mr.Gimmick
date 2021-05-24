@@ -16,6 +16,6 @@ void CBlueFire::GetBoundingBox(float& left, float& top, float& right, float& bot
 {
 	left = x;
 	top = y;
-	right = x + BLUEFIRE_BBOX_WIDTH;
-	bottom = y + BLUEFIRE_BBOX_HEIGHT;
+	right = left + BLUEFIRE_BBOX_WIDTH;
+	bottom = top - BLUEFIRE_BBOX_HEIGHT;
 }

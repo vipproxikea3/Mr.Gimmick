@@ -8,7 +8,7 @@
 CGimmick::CGimmick() : CGameObject()
 {
 	untouchable = 0;
-	SetState(GIMMICK_STATE_JUMP);
+	SetState(GIMMICK_STATE_IDLE);
 }
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -17,7 +17,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += GIMMICK_GRAVITY * dt;
+	vy -= GIMMICK_GRAVITY * dt;
 
 	onInclinedBrick = false;
 
@@ -119,7 +119,7 @@ void CGimmick::Render()
 	if (state == GIMMICK_STATE_DIE)
 		ani = GIMMICK_ANI_DIE;
 	else {
-		if (vy < 0) {
+		if (vy > 0) {
 			if (nx > 0)
 				ani = GIMMICK_ANI_JUMP_RIGHT;
 			else
@@ -140,7 +140,7 @@ void CGimmick::Render()
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y - 3, alpha);
+	animation_set->at(ani)->Render(x, y + 3, alpha);
 
 	//RenderBoundingBox();
 }
@@ -161,7 +161,7 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		vy = -GIMMICK_JUMP_SPEED_Y;
+		vy = GIMMICK_JUMP_SPEED_Y;
 		break;
 	case GIMMICK_STATE_IDLE:
 		vx = 0;
@@ -171,9 +171,9 @@ void CGimmick::SetState(int state)
 
 void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 0.25f;
-	top = y + 0.5f;
-	right = x + GIMMICK_BBOX_WIDTH - 0.25f;
-	bottom = y + GIMMICK_BBOX_HEIGHT;
+	left = x + 0.5f;
+	top = y - 0.5f;
+	right = left + GIMMICK_BBOX_WIDTH - 0.5f;
+	bottom = top - GIMMICK_BBOX_HEIGHT + 0.5f;
 }
 

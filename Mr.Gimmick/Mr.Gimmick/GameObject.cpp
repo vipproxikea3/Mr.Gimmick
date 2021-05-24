@@ -92,17 +92,12 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 
 		if (e->t > 0 && e->t <= 1.0f)
 		{
-			float mleft, mtop, mright, mbottom;
+			/*float mleft, mtop, mright, mbottom;
 			GetBoundingBox(mleft, mtop, mright, mbottom);
 			float oleft, otop, obottom, oright;
 			e->obj->GetBoundingBox(oleft, otop, oright, obottom);
 			if (e->nx != 0)
-			{
-				if (e->ny != 0)
-				{
-					if (ceil(mleft) == oright || floor(mright) == oleft)
-						continue;
-				}
+			{	
 				if (ceil(mbottom) == otop)
 				{
 					continue;
@@ -111,7 +106,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 				{
 					continue;
 				}
-			}
+			}*/
 			
 			coEvents.push_back(e);
 		}
@@ -169,7 +164,7 @@ void CGameObject::RenderBoundingBox()
 	rect.left = 0;
 	rect.top = 0;
 	rect.right = (int)r - (int)l;
-	rect.bottom = (int)b - (int)t;
+	rect.bottom = (int)t - (int)b;
 
 	CGame::GetInstance()->Draw(l, t, bbox, rect.left, rect.top, rect.right, rect.bottom, 125);
 }
