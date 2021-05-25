@@ -6,6 +6,7 @@
 #include "define.h"
 
 #include "PlayScene.h"
+#include "Sound.h"
 #include "IntroScene.h"
 
 
@@ -408,6 +409,9 @@ void CGame::SwitchScene(int scene_id)
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
+	//sound
+	Sound::GetInstance()->StopAll();
+	Sound::GetInstance()->UnLoadAllSound();
 	//update:
 
 	current_scene = scene_id;

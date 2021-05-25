@@ -515,7 +515,7 @@ void CIntroScene::Timing()
 	//END INTRO:
 	if (GetTickCount64() - mainintro_start >= INTRO_TIME - 2000)
 	{
-		DebugOut(L"true");
+		DebugOut(L"end intro \n");
 	}
 }
 
