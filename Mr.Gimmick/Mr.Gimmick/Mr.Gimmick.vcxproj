@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BlueFire.h" />
+    <ClInclude Include="Boom.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Cogwheel.h" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BlueFire.cpp" />
+    <ClCompile Include="Boom.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
