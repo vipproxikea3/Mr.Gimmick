@@ -4,7 +4,7 @@
 #define WORM_BBOX_WIDTH	23
 #define WORM_BBOX_HEIGHT	14
 
-#define WORM_WALKING_SPEED		0.015f 
+#define WORM_WALKING_SPEED		0.0075f 
 #define WORM_DIE_DEFLECT_SPEED	 0.5f
 #define WORM_GRAVITY	0.001f
 
@@ -21,8 +21,12 @@
 
 class CWorm : public CGameObject
 {
+	int length;
+	bool firstLocation = true;
+	float leftLimit, rightLimit;
 public:
 	CWorm();
+	CWorm(int length);
 	~CWorm() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

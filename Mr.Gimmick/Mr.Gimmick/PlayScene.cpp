@@ -215,7 +215,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CWindow(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_WORM:
-		obj = new CWorm();
+		obj = new CWorm(atoi(tokens[4].c_str()));
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);

@@ -7,11 +7,25 @@
 
 CWorm::CWorm() : CGameObject()
 {
+	
+	SetState(WORM_STATE_WALKING_RIGHT);
+}
+
+CWorm::CWorm(int l) : CGameObject()
+{
+	length = l;
 	SetState(WORM_STATE_WALKING_RIGHT);
 }
 
 void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (firstLocation)
+	{
+		float tmp = y;
+		GetPosition(leftLimit, tmp);
+		rightLimit = leftLimit + (length - 1) * 16;
+		firstLocation = false;
+	}
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -30,10 +44,17 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float mLeft, mTop, mRight, mBottom;
 	float oLeft, oTop, oRight, oBottom;
 
-
 	if (coEvents.size() == 0)
 	{
-		x += dx;
+		if (x >= (rightLimit) || x <= (leftLimit))
+		{
+			vx = -vx;
+			x -= dx;
+		}
+		else
+		{
+			x += dx;
+		}
 		y += dy;
 	}
 	else
@@ -44,7 +65,14 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		float x0 = x;
 		float y0 = y;
-
+		/*if (x >= (rightLimit) || x <= (leftLimit))
+		{
+			x = x0 - dx;
+		}
+		else
+		{
+			x = x0 + dx;
+		}*/
 		x = x0 + dx;
 		y = y0 + dy;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
@@ -60,9 +88,13 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				x = x0 + min_tx * dx + nx * 0.1f;
 				y = y0 + min_ty * dy + ny * 0.1f;
 				if (e->nx != 0)
-				{					
+				{	
 					if (ceil(mBottom) != oTop)
-						vx = -vx;
+					{
+						if (x >= rightLimit || x <= leftLimit)
+							vx = -vx;
+					}
+						
 				}
 				if (e->ny != 0)
 				{
