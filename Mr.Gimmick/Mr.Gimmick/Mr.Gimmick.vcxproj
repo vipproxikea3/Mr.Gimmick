@@ -167,6 +167,7 @@
     <ClInclude Include="Tube.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="Worm.h" />
     <ClInclude Include="Zone.h" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +195,7 @@
     <ClCompile Include="Tube.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
