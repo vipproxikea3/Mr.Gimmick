@@ -221,6 +221,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_BOOM:
 		obj = new CBoom();
+		break;
 	case OBJECT_TYPE_WORM:
 		obj = new CWorm(atoi(tokens[4].c_str()));
 		break;
