@@ -41,6 +41,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_CONVEYOR		8
 #define OBJECT_TYPE_TUBE			9
 #define OBJECT_TYPE_WINDOW			10
+#define OBJECT_TYPE_BOOM			11
 
 #define MAX_SCENE_LINE 1024
 
@@ -216,6 +217,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_WINDOW:
 		obj = new CWindow(atoi(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_BOOM:
+		obj = new CBoom();
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
