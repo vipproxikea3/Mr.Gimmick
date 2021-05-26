@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 
 #include "PlayScene.h"
@@ -310,15 +310,46 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
+	// Create quadtree
+	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
 	Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
 }
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+	// Cho tất cả các object có nhiệm vụ làm coObject vào Quadtree
+	for (size_t i = 0; i < objects.size(); i++) {
+		if (dynamic_cast<CGimmick*>(objects[i]))
+			continue;
+		if (dynamic_cast<CChain*>(objects[i]))
+			continue;
+		if (dynamic_cast<CCogwheel*>(objects[i]))
+			continue;
+		if (dynamic_cast<CCogwheelSmall*>(objects[i]))
+			continue;
+		if (dynamic_cast<CTube*>(objects[i]))
+			continue;
+		if (dynamic_cast<CWindow*>(objects[i]))
+			continue;
+		quadtree->Insert(objects[i]);
+	}
+	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (!CGame::GetInstance()->InCamera(objects[i]))
+			continue;
+		if (dynamic_cast<CGimmick*>(objects[i]) || dynamic_cast<CBoom*>(objects[i]))
+		{
+			vector<LPGAMEOBJECT> coObjects;
+			quadtree->Retrieve(&coObjects, objects[i]);
+			objects[i]->Update(dt, &coObjects);
+		}
+	}
+	// Làm trống quadtree
+	quadtree->Clear();
 
-	vector<LPGAMEOBJECT> coObjects;
+
+	/*vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		if (dynamic_cast<CGimmick*>(objects[i]))
@@ -326,15 +357,10 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (dynamic_cast<CGimmick*>(objects[i]))
-			continue;
-		objects[i]->Update(dt, &coObjects);
-	}
-
-	if (player)
-		player->Update(dt, &coObjects);
+	for (size_t i = 0; i < objects.size(); i++) {
+		if (dynamic_cast<CGimmick*>(objects[i]) || dynamic_cast<CBoom*>(objects[i]))
+			objects[i]->Update(dt, &coObjects);
+	}*/
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
@@ -385,6 +411,7 @@ void CPlayScene::SetCamPos() {
 
 void CPlayScene::Render()
 {
+	// Render Waterfall
 	if (countfps == fps)
 	{
 		if (this->maptt == this->spritemap - 1)
@@ -401,14 +428,16 @@ void CPlayScene::Render()
 	else
 		countfps++;
 
+	// Render objects
 	for (int i = 0; i < objects.size(); i++)
-		if (!dynamic_cast<CGimmick*>(objects[i]))
+		if (!dynamic_cast<CGimmick*>(objects[i]) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
-
+	// Render player
 	if (player) player->Render();
 
+	// Render top layer
 	for (int i = 0; i < objects.size(); i++)
-		if (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i]))
+		if ((dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
 }
 
@@ -425,6 +454,11 @@ void CPlayScene::Unload()
 	for (unsigned int i = 0; i < zones.size(); i++)
 		delete zones[i];
 	zones.clear();
+
+	if (quadtree) {
+		delete quadtree;
+		quadtree = nullptr;
+	}
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
