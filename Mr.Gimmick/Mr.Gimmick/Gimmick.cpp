@@ -13,6 +13,8 @@ CGimmick::CGimmick() : CGameObject()
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"[SIZE] %d\n", coObjects->size());
+
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 

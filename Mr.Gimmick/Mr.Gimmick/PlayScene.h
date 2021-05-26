@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "Quadtree.h"
 #include "Textures.h"
 #include "Map.h"
 #include "Zone.h"
@@ -38,6 +39,8 @@ protected:
 	float lr = 9999.0f;
 	float lb = -9999.0f;
 
+	Quadtree* quadtree;
+
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_TEXTURES(string line);
@@ -62,8 +65,6 @@ public:
 	void SetCamPos();
 
 	CGimmick* GetPlayer() { return player; }
-
-	//friend class CPlayScenceKeyHandler;
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler
