@@ -9,13 +9,10 @@ CSwing::CSwing() : CGameObject()
 
 void CSwing::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == SWING_STATE_STAND || state == SWING_STATE_MOVE)
-	{
-		left = x;
-		top = y - 62.0f;
-		right = x + SWING_BBOX_WIDTH;
-		bottom = y - SWING_BBOX_HEIGHT;
-	}
+	left = x;
+	top = y - 62.0f;
+	right = x + SWING_BBOX_WIDTH;
+	bottom = y - SWING_BBOX_HEIGHT;
 }
 
 void CSwing::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

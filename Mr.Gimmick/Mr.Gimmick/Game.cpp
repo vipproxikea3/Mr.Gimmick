@@ -1,11 +1,14 @@
 #include <iostream>
 #include <fstream>
 
+#include "GameObject.h"
+
 #include "Game.h"
 #include "Utils.h"
 #include "define.h"
 
 #include "PlayScene.h"
+#include "Sound.h"
 #include "IntroScene.h"
 
 
@@ -316,6 +319,13 @@ bool CGame::CheckAABB(float l, float t, float r, float b, float l1, float t1, fl
 
 }
 
+bool CGame::InCamera(CGameObject* object)
+{
+	float l, t, r, b;
+	object->GetBoundingBox(l, t, r, b);
+	return !(r < cam_x - 16.0f || l > cam_x + screen_width + 16.0f || t < cam_y - screen_height - 16.0f || b > cam_y + 16.0f);
+}
+
 CGame* CGame::GetInstance()
 {
 	if (__instance == NULL) __instance = new CGame();
@@ -408,6 +418,9 @@ void CGame::SwitchScene(int scene_id)
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
+	//sound
+	Sound::GetInstance()->StopAll();
+	Sound::GetInstance()->UnLoadAllSound();
 	//update:
 
 	current_scene = scene_id;

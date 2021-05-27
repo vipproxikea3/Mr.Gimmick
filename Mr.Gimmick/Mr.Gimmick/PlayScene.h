@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "Quadtree.h"
 #include "Textures.h"
 #include "Map.h"
 #include "Zone.h"
@@ -17,6 +18,7 @@
 #include "Window.h"
 #include "Boom.h"
 #include "Swing.h"
+#include "Worm.h"
 
 
 class CPlayScene : public CScene
@@ -38,6 +40,8 @@ protected:
 	float lr = 9999.0f;
 	float lb = -9999.0f;
 
+	Quadtree* quadtree;
+
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_TEXTURES(string line);
@@ -47,6 +51,7 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_SOUNDS(string line);
 
 
 public:
@@ -61,8 +66,6 @@ public:
 	void SetCamPos();
 
 	CGimmick* GetPlayer() { return player; }
-
-	//friend class CPlayScenceKeyHandler;
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler

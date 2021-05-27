@@ -175,7 +175,7 @@ void CIntroScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_BRICK: obj = new CBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
 	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
@@ -515,7 +515,7 @@ void CIntroScene::Timing()
 	//END INTRO:
 	if (GetTickCount64() - mainintro_start >= INTRO_TIME - 2000)
 	{
-		DebugOut(L"true");
+		DebugOut(L"end intro \n");
 	}
 }
 

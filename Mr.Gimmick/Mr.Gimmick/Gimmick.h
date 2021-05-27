@@ -5,7 +5,10 @@
 #include "Conveyor.h"
 #include "Swing.h"
 
-#define GIMMICK_WALKING_SPEED		0.1f 
+#define GIMMICK_WALKING_SPEED_BASE	0.075f 
+#define GIMMICK_WALKING_SPEED		0.1f
+#define GIMMICK_ACCELERATION		0.00015f
+#define GIMMICK_WALKING_FRICTION	0.00025f
 #define GIMMICK_JUMP_SPEED_Y		0.3f
 #define GIMMICK_GRAVITY				0.001f
 #define GIMMICK_DIE_DEFLECT_SPEED	 0.5f
@@ -35,11 +38,16 @@ class CGimmick : public CGameObject
 {
 	int untouchable;
 	DWORD untouchable_start;
+
+	float ax = NULL;
+
+	bool onGround = false;
 	
 public:
 	bool onInclinedBrick = false;
 
 	CGimmick();
+	void CalculateSpeed(DWORD dt);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 

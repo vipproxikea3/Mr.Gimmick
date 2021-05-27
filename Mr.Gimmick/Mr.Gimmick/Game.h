@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include "GameObject.h"
+
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -63,6 +65,8 @@ public:
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
 
+	HWND GetHWND() { return hWnd; }
+
 	static void SweptAABB(
 		float ml,			// move left 
 		float mt,			// move top
@@ -84,6 +88,7 @@ public:
 
 	bool CheckAABB(float l, float t, float r, float b, float l1, float t1, float r1, float b1);
 
+	bool InCamera(CGameObject* object);
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 
