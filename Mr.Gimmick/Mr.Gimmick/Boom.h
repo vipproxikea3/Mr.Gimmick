@@ -18,7 +18,7 @@
 #define BOOM_ANI_DEAD		1
 #define	BOOM_ANI_EXPLODE	2
 
-#define	BOOM_GRAVITY		0.1f
+#define	BOOM_GRAVITY		0.15f
 
 #define	BOOM_EXPLODE_TIME	300
 

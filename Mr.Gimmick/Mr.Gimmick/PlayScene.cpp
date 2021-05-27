@@ -201,7 +201,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_BRICK: obj = new CBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
 	case OBJECT_TYPE_GIMMICK:
 		if (player != NULL)
 		{
@@ -320,6 +320,8 @@ void CPlayScene::Update(DWORD dt)
 	// Cho tất cả các object có nhiệm vụ làm coObject vào Quadtree
 	for (size_t i = 0; i < objects.size(); i++) {
 		if (dynamic_cast<CGimmick*>(objects[i]))
+			continue;
+		if (dynamic_cast<CBlueFire*>(objects[i]))
 			continue;
 		if (dynamic_cast<CChain*>(objects[i]))
 			continue;

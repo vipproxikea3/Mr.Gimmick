@@ -61,7 +61,7 @@ void CBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (gimmick->y < this->y)
 		{
-			if (gimmick->x + GIMMICK_BBOX_WIDTH / 2 >= this->x && gimmick->x + GIMMICK_BBOX_WIDTH / 2 <= this->x + BOOM_BBOX_WIDTH)
+			if (gimmick->x + GIMMICK_BBOX_WIDTH >= this->x && gimmick->x <= this->x + BOOM_BBOX_WIDTH)
 			{
 				SetState(BOOM_STATE_FALLING);
 			}
