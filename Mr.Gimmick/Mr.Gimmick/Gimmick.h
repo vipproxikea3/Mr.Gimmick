@@ -3,6 +3,7 @@
 #include "Brick.h"
 #include "InclinedBrick.h"
 #include "Conveyor.h"
+#include "Swing.h"
 
 #define GIMMICK_WALKING_SPEED		0.1f 
 #define GIMMICK_JUMP_SPEED_Y		0.3f

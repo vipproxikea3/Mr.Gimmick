@@ -90,6 +90,9 @@
     <ClInclude Include="Boom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Swing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -165,6 +168,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Boom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Swing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

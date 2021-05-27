@@ -16,6 +16,7 @@
 #include "Tube.h"
 #include "Window.h"
 #include "Boom.h"
+#include "Swing.h"
 
 
 class CPlayScene : public CScene
