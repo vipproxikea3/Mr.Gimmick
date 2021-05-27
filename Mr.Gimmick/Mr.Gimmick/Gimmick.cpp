@@ -11,15 +11,29 @@ CGimmick::CGimmick() : CGameObject()
 	SetState(GIMMICK_STATE_IDLE);
 }
 
+void CGimmick::CalculateSpeed(DWORD dt) {
+	vx += ax * dt;
+
+	if (abs(vx) > GIMMICK_WALKING_SPEED) {
+		vx = nx * GIMMICK_WALKING_SPEED;
+	}
+
+	if (((vx > 0 && nx < 0) || (vx < 0 && nx > 0)) && this->state == GIMMICK_STATE_IDLE)
+		vx = 0;
+
+}
+
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"[SIZE] %d\n", coObjects->size());
+	CalculateSpeed(dt);
 
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
 	// Simple fall down
 	vy -= GIMMICK_GRAVITY * dt;
+
+	onGround = false;
 
 	onInclinedBrick = false;
 
@@ -96,6 +110,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (e->nx != 0) vx = 0;
 				if (e->ny != 0) vy = 0;
+
+				if (e->ny == 1)
+					this->onGround = true;
 			}
 
 			if (dynamic_cast<CConveyor*>(e->obj)) {
@@ -105,6 +122,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (e->nx != 0) vx = 0;
 				if (e->ny != 0) vy = 0;
+
+				if (e->ny == 1)
+					this->onGround = true;
 			}
 		}
 	}
@@ -154,11 +174,16 @@ void CGimmick::SetState(int state)
 	switch (state)
 	{
 	case GIMMICK_STATE_WALKING_RIGHT:
-		vx = GIMMICK_WALKING_SPEED;
+		ax = GIMMICK_ACCELERATION;
+		/*if (vx < GIMMICK_WALKING_SPEED_BASE)
+			vx = GIMMICK_WALKING_SPEED_BASE;*/
 		nx = 1;
 		break;
+		break;
 	case GIMMICK_STATE_WALKING_LEFT:
-		vx = -GIMMICK_WALKING_SPEED;
+		ax = -GIMMICK_ACCELERATION;
+		/*if (vx > -GIMMICK_WALKING_SPEED_BASE)
+			vx = -GIMMICK_WALKING_SPEED_BASE;*/
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
@@ -166,7 +191,13 @@ void CGimmick::SetState(int state)
 		vy = GIMMICK_JUMP_SPEED_Y;
 		break;
 	case GIMMICK_STATE_IDLE:
-		vx = 0;
+		if (vx > 0)
+			ax = -GIMMICK_WALKING_FRICTION;
+		else if (vx < 0)
+			ax = GIMMICK_WALKING_FRICTION;
+		else ax = 0;
+			
+		//vx = 0;
 		break;
 	}
 }

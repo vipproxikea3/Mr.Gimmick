@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #define MAX_LEVEL               5
-#define MAX_OBJECT_IN_REGION    5
+#define MAX_OBJECT_IN_REGION    8
 
 class Quadtree
 {

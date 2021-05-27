@@ -6,8 +6,13 @@
 
 class CBrick : public CGameObject
 {
+	float w = 16;
+	float h = 16;
 public:
-	CBrick() : CGameObject() {}
+	CBrick(float w, float h) : CGameObject() {
+		this->w = w;
+		this->h = h;
+	}
 	~CBrick() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
