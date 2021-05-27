@@ -42,6 +42,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -126,6 +127,34 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny == 1)
 					this->onGround = true;
 			}
+
+			if (dynamic_cast<CSwing*>(e->obj)) {
+				CSwing* swing = dynamic_cast<CSwing*>(e->obj);
+
+				if (swing->GetState() == SWING_STATE_OPEN || swing->GetState() == SWING_STATE_STOP)
+				{
+					x += dx;
+					y += dy;
+				}
+				else
+				{
+					if (e->ny > 0)
+					{
+						if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
+							x = x0 + min_tx * dx + nx * 0.1f;
+						else
+							x = x0 + swing->dx * 2;
+						vy = 0;
+						if (x + GIMMICK_BBOX_WIDTH / 2 >= swing->x && x + GIMMICK_BBOX_WIDTH / 2 <= swing->x + SWING_BBOX_WIDTH)
+						{
+							if (swing->GetState() == SWING_STATE_STAND)
+								swing->SetState(SWING_STATE_MOVE);
+						}
+					}
+
+					y = y0 + min_ty * dy + ny * 0.1f;
+				}
+			}
 		}
 	}
 
@@ -164,7 +193,7 @@ void CGimmick::Render()
 
 	animation_set->at(ani)->Render(x, y + 3, alpha);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CGimmick::SetState(int state)
@@ -196,7 +225,6 @@ void CGimmick::SetState(int state)
 		else if (vx < 0)
 			ax = GIMMICK_WALKING_FRICTION;
 		else ax = 0;
-			
 		//vx = 0;
 		break;
 	}

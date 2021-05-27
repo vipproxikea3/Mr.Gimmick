@@ -45,6 +45,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WINDOW			10
 #define OBJECT_TYPE_BOOM			11
 #define OBJECT_TYPE_WORM			12
+#define OBJECT_TYPE_SWING			15
 
 #define MAX_SCENE_LINE 1024
 
@@ -236,6 +237,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOOM:
 		obj = new CBoom();
 		break;
+	case OBJECT_TYPE_SWING:
+		obj = new CSwing();
+		break;
 	case OBJECT_TYPE_WORM:
 		obj = new CWorm(atoi(tokens[4].c_str()));
 		break;
@@ -340,7 +344,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (!CGame::GetInstance()->InCamera(objects[i]))
 			continue;
-		if (dynamic_cast<CGimmick*>(objects[i]) || dynamic_cast<CBoom*>(objects[i]))
+		if (dynamic_cast<CGimmick*>(objects[i])
+			|| dynamic_cast<CBoom*>(objects[i])
+			|| dynamic_cast<CSwing*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
