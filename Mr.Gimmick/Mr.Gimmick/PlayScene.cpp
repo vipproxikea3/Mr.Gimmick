@@ -346,7 +346,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmick*>(objects[i])
 			|| dynamic_cast<CBoom*>(objects[i])
-			|| dynamic_cast<CSwing*>(objects[i]))
+			|| dynamic_cast<CSwing*>(objects[i])
+			|| dynamic_cast<CWorm*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
