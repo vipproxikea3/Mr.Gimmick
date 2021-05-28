@@ -7,7 +7,7 @@
 
 #define GIMMICK_WALKING_SPEED_BASE	0.075f 
 #define GIMMICK_WALKING_SPEED		0.1f
-#define GIMMICK_ACCELERATION		0.00015f
+#define GIMMICK_ACCELERATION		0.0002f
 #define GIMMICK_WALKING_FRICTION	0.00025f
 #define GIMMICK_JUMP_SPEED_Y		0.3f
 #define GIMMICK_GRAVITY				0.001f
@@ -45,6 +45,8 @@ class CGimmick : public CGameObject
 	
 public:
 	bool onInclinedBrick = false;
+
+	void CreateDieEffect();
 
 	CGimmick();
 	void CalculateSpeed(DWORD dt);

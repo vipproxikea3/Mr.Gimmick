@@ -3,7 +3,8 @@
 #include <assert.h>
 #include "Utils.h"
 #include "Game.h"
-
+#include "GimmickDieEffect.h"
+#include "PlayScene.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -25,6 +26,8 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->state == GIMMICK_STATE_DIE)
+		return;
 	CalculateSpeed(dt);
 
 	// Calculate dx, dy 
@@ -166,6 +169,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGimmick::Render()
 {
+	if (this->state == GIMMICK_STATE_DIE)
+		return;
 	int ani = -1;
 	if (state == GIMMICK_STATE_DIE)
 		ani = GIMMICK_ANI_DIE;
@@ -194,6 +199,17 @@ void CGimmick::Render()
 	animation_set->at(ani)->Render(x, y + 3, alpha);
 
 	RenderBoundingBox();
+}
+
+void CGimmick::CreateDieEffect() {
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(GIMMICKDIEEFFECT_ANI_SET);
+	for (int i = 0; i < 16; i++) {
+		CGimmickDieEffect* effect = new CGimmickDieEffect(i);
+		effect->SetPosition(x, y);
+		effect->SetAnimationSet(ani_set);
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->PushBackObj(effect);
+	}
 }
 
 void CGimmick::SetState(int state)
@@ -227,6 +243,11 @@ void CGimmick::SetState(int state)
 		else ax = 0;
 		//vx = 0;
 		break;
+	case GIMMICK_STATE_DIE:
+		CreateDieEffect();
+		vx = 0;
+		vy = 0;
+		ax = 0;
 	}
 }
 
