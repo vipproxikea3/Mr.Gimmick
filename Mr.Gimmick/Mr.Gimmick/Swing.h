@@ -25,7 +25,7 @@
 #define SWING_TIME_OPEN		300
 #define	SWING_TIME_STOP		200
 
-#define	SWING_LIMIT_X		1910
+#define	SWING_LIMIT_X		1920
 
 
 class CSwing : public CGameObject

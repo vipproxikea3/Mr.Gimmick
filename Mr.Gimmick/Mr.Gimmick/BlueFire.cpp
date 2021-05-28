@@ -1,6 +1,15 @@
 #include "BlueFire.h"
+#include "Gimmick.h"
+#include "PlayScene.h"
 
-void CBlueFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
+void CBlueFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (this->CheckAABB(gimmick)) {
+		if (gimmick->GetState() != GIMMICK_STATE_DIE) {
+			gimmick->SetState(GIMMICK_STATE_DIE);
+		}
+	}
+}
 
 void CBlueFire::Render()
 {

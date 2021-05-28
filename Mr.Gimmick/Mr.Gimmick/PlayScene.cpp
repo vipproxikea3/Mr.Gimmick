@@ -337,6 +337,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CWindow*>(objects[i]))
 			continue;
+		if (dynamic_cast<CGimmickDieEffect*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
@@ -346,7 +348,9 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmick*>(objects[i])
 			|| dynamic_cast<CBoom*>(objects[i])
-			|| dynamic_cast<CSwing*>(objects[i]))
+			|| dynamic_cast<CSwing*>(objects[i])
+			|| dynamic_cast<CBlueFire*>(objects[i])
+			|| dynamic_cast<CGimmickDieEffect*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -417,6 +421,10 @@ void CPlayScene::SetCamPos() {
 	CGame::GetInstance()->SetCamPos(cx, cy);
 }
 
+void CPlayScene::PushBackObj(CGameObject* obj) {
+	objects.push_back(obj);
+}
+
 void CPlayScene::Render()
 {
 	// Render Waterfall
@@ -477,6 +485,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	Sound* sound = Sound::GetInstance();
 
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
+
+	if (gimmick->GetState() == GIMMICK_STATE_DIE)
+		return;
+
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
@@ -490,6 +502,9 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
+
+	if (gimmick->GetState() == GIMMICK_STATE_DIE)
+		return;
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;

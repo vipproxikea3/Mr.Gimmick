@@ -19,6 +19,7 @@
 #include "Boom.h"
 #include "Swing.h"
 #include "Worm.h"
+#include "GimmickDieEffect.h"
 
 
 class CPlayScene : public CScene
@@ -64,6 +65,8 @@ public:
 
 	void UpdateZone();
 	void SetCamPos();
+
+	void PushBackObj(CGameObject* obj);
 
 	CGimmick* GetPlayer() { return player; }
 };
