@@ -316,7 +316,9 @@ void CPlayScene::Load()
 
 	// Create quadtree
 	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
-	Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+
+	// Play Soundtrack
+	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -487,14 +489,14 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE)
+	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
 		return;
 
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
 		gimmick->SetState(GIMMICK_STATE_JUMP);
-		sound->Play("SOUND_Effect_1", 0, 1);
+		//sound->Play("SOUND_Effect_1", 0, 1);
 		break;
 	}
 }
@@ -504,7 +506,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE)
+	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
 		return;
 
 	// disable control key when Mario die 
