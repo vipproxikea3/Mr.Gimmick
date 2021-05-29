@@ -42,7 +42,6 @@ class CGimmick : public CGameObject
 	DWORD untouchable_start;
 
 	DWORD stunning_start;
-
 	float ax = NULL;
 
 	bool onGround = false;

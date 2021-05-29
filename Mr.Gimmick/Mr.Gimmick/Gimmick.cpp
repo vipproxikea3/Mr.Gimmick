@@ -77,7 +77,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		stunning = false;
 		this->SetState(GIMMICK_STATE_IDLE);
 	}
-
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -157,7 +156,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny == 1)
 					this->onGround = true;
 			}
-
 			if (dynamic_cast<CSwing*>(e->obj)) {
 				CSwing* swing = dynamic_cast<CSwing*>(e->obj);
 

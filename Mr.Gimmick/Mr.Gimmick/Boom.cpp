@@ -59,7 +59,6 @@ void CBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (this->CheckAABB(gimmick) && this->state != BOOM_STATE_DIE)
 		gimmick->SetState(GIMMICK_STATE_STUN);
-
 	if (state == BOOM_STATE_ALIVE)
 	{
 		if (gimmick->y < this->y)
