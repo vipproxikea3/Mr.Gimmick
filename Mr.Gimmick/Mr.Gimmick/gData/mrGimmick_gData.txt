@@ -1,0 +1,6 @@
+[SETTINGS]
+start	1
+#scene list
+[SCENES]
+1	scene\scene1.txt
+999	scene\intro-scene.txt
