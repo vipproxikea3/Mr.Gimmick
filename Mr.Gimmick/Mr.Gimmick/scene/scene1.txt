@@ -10,6 +10,7 @@
 51	textures\Enemies.png	255	0	0
 52	textures\Enemies_flip.png	255	0	0
 53	textures\swing.png	203	102	185
+60	Map\Gimmick!(J)-Level1_bank.png	60	188	252
 
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
@@ -200,6 +201,9 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 140003	34	243	50	259	10
 140004	53	243	69	259	10
 
+#BRICK PINK
+160000	81	48	113	64	60
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== GIMMICK=========
@@ -278,7 +282,8 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 
 # ==== GIMMICK DIE EFFECT ======
 140001	140001	50	140002	50	140003	50	140004	50
-
+#=======BRICK PINK=========
+160000	160000	100
 #
 # id	ani1	ani2	ani3
 #
@@ -318,10 +323,11 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 
 # GIMMICK DIE EFFECT
 140001	140001
-
+#BRICK PINK
+160000	160000
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing,16= Brick pink
 
 # BRICK
 #zone 0
@@ -787,3 +793,8 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 
 # SWING
 15	1842	126	150001
+# BRICK PINK
+16	192	648	160000	192	648	256	648	-1
+16	304	688	160000	304	688	304	624	1
+16	384	688	160000	368	688	432	688	1
+16	480	672	160000	480	688	480	624	-1

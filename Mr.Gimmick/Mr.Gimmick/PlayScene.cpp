@@ -46,6 +46,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BOOM			11
 #define OBJECT_TYPE_WORM			12
 #define OBJECT_TYPE_SWING			15
+#define OBJECT_TYPE_PINK_BRICK			16
 
 #define MAX_SCENE_LINE 1024
 
@@ -222,6 +223,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CChain(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLUEFIRE: obj = new CBlueFire(); break;
+	case OBJECT_TYPE_PINK_BRICK:
+		obj = new CBrickPink(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()), atof(tokens[7].c_str()), atof(tokens[8].c_str()));
+		break;
 	case OBJECT_TYPE_INCLINEDBRICK:
 		obj = new CInclinedBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
 		break;
@@ -351,7 +355,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CSwing*>(objects[i])
 			|| dynamic_cast<CBlueFire*>(objects[i])
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
-			|| dynamic_cast<CWorm*>(objects[i]))
+			|| dynamic_cast<CWorm*>(objects[i])
+			|| dynamic_cast<CBrickPink*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
