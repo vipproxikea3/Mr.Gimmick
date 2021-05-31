@@ -343,13 +343,18 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		quadtree->Insert(objects[i]);
 	}
+
+	// Update player
+	vector<LPGAMEOBJECT> coObjects;
+	quadtree->Retrieve(&coObjects, player);
+	player->Update(dt, &coObjects);
+
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (!CGame::GetInstance()->InCamera(objects[i]))
 			continue;
-		if (dynamic_cast<CGimmick*>(objects[i])
-			|| dynamic_cast<CBoom*>(objects[i])
+		if (dynamic_cast<CBoom*>(objects[i])
 			|| dynamic_cast<CSwing*>(objects[i])
 			|| dynamic_cast<CBlueFire*>(objects[i])
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])

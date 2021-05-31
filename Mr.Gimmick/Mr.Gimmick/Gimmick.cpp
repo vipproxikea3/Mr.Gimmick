@@ -16,9 +16,9 @@ CGimmick::CGimmick() : CGameObject()
 void CGimmick::CalculateSpeed(DWORD dt) {
 	vx += ax * dt;
 
-	if (abs(vx) > GIMMICK_WALKING_SPEED) {
+	/*if (abs(vx) > GIMMICK_WALKING_SPEED) {
 		vx = nx * GIMMICK_WALKING_SPEED;
-	}
+	}*/
 
 	if ((vx * nx < 0) && this->state == GIMMICK_STATE_IDLE)
 		vx = 0;
@@ -250,11 +250,15 @@ void CGimmick::SetState(int state)
 	{
 	case GIMMICK_STATE_WALKING_RIGHT:
 		ax = GIMMICK_ACCELERATION;
+		if (vx > GIMMICK_WALKING_SPEED)
+			ax = 0;
 		nx = 1;
 		break;
 		break;
 	case GIMMICK_STATE_WALKING_LEFT:
 		ax = -GIMMICK_ACCELERATION;
+		if (vx < -GIMMICK_WALKING_SPEED)
+			ax = 0;
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:

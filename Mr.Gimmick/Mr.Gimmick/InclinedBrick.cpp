@@ -2,11 +2,11 @@
 #include "Gimmick.h"
 #include "Utils.h"
 
-void CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
+int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 	if (!this->CheckAABB(object))
-		return;
+		return 0;
 	if (object->x + 8 < this->x || object->x + 8 > this->x + 16)
-		return;
+		return 0;
 
 	float lx = this->x;
 	float ly = this->y - this->ly;
@@ -28,6 +28,7 @@ void CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 			gimmick->onInclinedBrick = true;
 		}
 	}
+	return this->direction;
 }
 
 void CInclinedBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
