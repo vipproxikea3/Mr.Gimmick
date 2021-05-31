@@ -137,6 +137,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						x = x0 + BrickPink->dx * 2 + BrickPink->nx * 0.01f;
 					y = y0 + min_ty * dy + ny * 0.1f;
 					this->onGround = true;
+					vy = 0;
 				}
 				if (e->nx != 0) {
 					vx = 0;
