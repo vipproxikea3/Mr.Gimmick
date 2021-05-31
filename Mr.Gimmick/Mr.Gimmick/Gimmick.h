@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Brick.h"
+#include "BrickPink.h"
 #include "InclinedBrick.h"
 #include "Conveyor.h"
 #include "Swing.h"
@@ -59,6 +60,7 @@ public:
 
 	void SetState(int state);
 	void StartUntouchable() { untouchable = 1; untouchable_start = DWORD(GetTickCount64()); }
+	void SetdifY(float y) { this->y += y; };
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

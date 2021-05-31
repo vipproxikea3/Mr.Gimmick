@@ -20,6 +20,7 @@
 #include "Swing.h"
 #include "Worm.h"
 #include "GimmickDieEffect.h"
+#include "BrickPink.h"
 
 
 class CPlayScene : public CScene
@@ -68,7 +69,7 @@ public:
 
 	void PushBackObj(CGameObject* obj);
 
-	CGimmick* GetPlayer() { return player; }
+	CGimmick* GetPlayer() { return player; };
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler

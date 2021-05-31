@@ -47,6 +47,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -118,6 +119,28 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (e->ny == 1)
 					this->onGround = true;
+			}
+
+			if (dynamic_cast<CBrickPink*>(e->obj)) {
+				CBrickPink* BrickPink = dynamic_cast<CBrickPink*>(e->obj);
+
+				x = x0 + min_tx * dx + nx * 0.1f;
+				y = y0 + min_ty * dy + ny * 0.1f;
+
+				if (e->ny < 0) vy = 0;
+				if (e->ny > 0)
+				{
+					vy = BrickPink->vy;
+					if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
+						x = x0 + min_tx * (dx+BrickPink->dx) + BrickPink->nx * 0.01f;
+					else
+						x = x0 + BrickPink->dx * 2 + BrickPink->nx * 0.01f;
+					y = y0 + min_ty * dy + ny * 0.1f;
+					this->onGround = true;
+				}
+				if (e->nx != 0) {
+					vx = 0;
+				}
 			}
 
 			if (dynamic_cast<CConveyor*>(e->obj)) {
