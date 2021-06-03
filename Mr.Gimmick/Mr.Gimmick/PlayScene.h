@@ -21,6 +21,7 @@
 #include "Worm.h"
 #include "GimmickDieEffect.h"
 #include "BrickPink.h"
+#include "BlackEnemy.h"
 
 
 class CPlayScene : public CScene
@@ -77,7 +78,7 @@ class CPlaySceneKeyHandler : public CSceneKeyHandler
 public:
 	virtual void KeyState(BYTE* states);
 	virtual void OnKeyDown(int KeyCode);
-	virtual void OnKeyUp(int KeyCode) {};
+	virtual void OnKeyUp(int KeyCode);
 	CPlaySceneKeyHandler(CScene* s) :CSceneKeyHandler(s) {};
 };
 

@@ -9,7 +9,9 @@
 #define GIMMICK_WALKING_SPEED		0.1f
 #define GIMMICK_ACCELERATION		0.0002f
 #define GIMMICK_WALKING_FRICTION	0.00025f
-#define GIMMICK_JUMP_SPEED_Y		0.3f
+#define GIMMICK_JUMP_SPEED_Y_MIN	0.15f
+#define GIMMICK_JUMP_SPEED_Y_MAX	0.35f	//0.25f
+#define GIMMICK_JUMP_ACCELERATION	0.001f	//0.001f
 #define GIMMICK_GRAVITY				0.001f
 #define GIMMICK_DEFLECT_SPEED_X		0.1f
 
@@ -45,11 +47,12 @@ class CGimmick : public CGameObject
 	DWORD stunning_start;
 	float ax = NULL;
 
-	bool onGround = false;
 	
 	bool updated = false;
 public:
-	bool onInclinedBrick = false;
+	float ay = 0;
+	bool onGround = false;
+	bool falling = false;
 	bool stunning;
 
 	void CreateDieEffect();
@@ -64,4 +67,5 @@ public:
 	void SetdifY(float y) { this->y += y; };
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	bool onTopOf(CGameObject* object);
 };

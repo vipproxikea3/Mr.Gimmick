@@ -45,6 +45,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WINDOW			10
 #define OBJECT_TYPE_BOOM			11
 #define OBJECT_TYPE_WORM			12
+#define OBJECT_TYPE_BLACKENEMY		13
 #define OBJECT_TYPE_SWING			15
 #define OBJECT_TYPE_PINK_BRICK			16
 
@@ -247,6 +248,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_WORM:
 		obj = new CWorm(atoi(tokens[4].c_str()));
 		break;
+	case OBJECT_TYPE_BLACKENEMY:
+		obj = new CBlackEnemy();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -363,6 +367,7 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBlueFire*>(objects[i])
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
 			|| dynamic_cast<CWorm*>(objects[i])
+			|| dynamic_cast<CBlackEnemy*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
@@ -505,7 +510,6 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		gimmick->SetState(GIMMICK_STATE_JUMP);
 		//sound->Play("SOUND_Effect_1", 0, 1);
 		break;
 	}
@@ -521,10 +525,28 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
+	if (game->IsKeyDown(DIK_SPACE)) {
+		if (!gimmick->falling || gimmick->onInclinedBrick)
+			gimmick->SetState(GIMMICK_STATE_JUMP);
+	}
 	if (game->IsKeyDown(DIK_RIGHT))
 		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
 		gimmick->SetState(GIMMICK_STATE_IDLE);
+}
+
+void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
+{
+	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
+	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
+		return;
+
+	switch (KeyCode)
+	{
+	case DIK_SPACE:
+		gimmick->falling = true;
+		break;
+	}
 }

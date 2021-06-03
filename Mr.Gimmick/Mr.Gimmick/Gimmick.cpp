@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "GimmickDieEffect.h"
 #include "PlayScene.h"
+#include "Brick.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -22,6 +23,13 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 	if ((vx * nx < 0) && this->state == GIMMICK_STATE_IDLE)
 		vx = 0;
+
+	//JUMP:
+	if (vy > GIMMICK_JUMP_SPEED_Y_MAX)
+	{
+		ay = -GIMMICK_GRAVITY;
+		falling = true;
+	}
 }
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -34,7 +42,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy -= GIMMICK_GRAVITY * dt;
+	vy += ay * dt;
+	ay = -GIMMICK_GRAVITY;
+
+	onGround = false;
 
 	onInclinedBrick = false;
 	onGround = false;
@@ -51,6 +62,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
 			brick->Collision(this, dy);
+		}
+		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
+			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
+			if (onTopOf(conveyor)) { this->onGround = true;}
+		}
+		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
+			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
+			if (onTopOf(brick)) this->onGround = true;
 		}
 	}
 
@@ -83,8 +102,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += dx;
 		if (!onInclinedBrick)
 			y += dy;
-
-		onGround = false;
 	}
 	else
 	{
@@ -109,6 +126,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (e->ny > 0) this->falling = false;
+			if (e->ny < 0) this->falling = true; //roi khi dung gach tren dau
 
 			if (dynamic_cast<CBrick*>(e->obj)) {
 				x = x0 + min_tx * dx + nx * 0.1f;
@@ -117,9 +136,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (e->nx != 0) vx = 0;
 				if (e->ny != 0) vy = 0;
-
-				if (e->ny == 1)
-					this->onGround = true;
+				if (e->ny == 1) this->onGround = true;
 			}
 
 			if (dynamic_cast<CBrickPink*>(e->obj)) {
@@ -231,21 +248,34 @@ void CGimmick::Render()
 		animation_set->at(ani)->Render(x - 3.0f, y + 9.0f, 255);
 	}
 	else {
-		if (this->onGround == false && this->onInclinedBrick == false) {
+		if (vy > 0) {
 			if (nx > 0)
 				ani = GIMMICK_ANI_JUMP_RIGHT;
 			else
 				ani = GIMMICK_ANI_JUMP_LEFT;
 		}
 		else {
-			if (vx == 0)
-			{
-				if (nx > 0) ani = GIMMICK_ANI_IDLE_RIGHT;
-				else ani = GIMMICK_ANI_IDLE_LEFT;
+			if (vx == 0) 
+			{ // IDLE AND FALL
+				if (nx > 0) {
+					if (this->onGround) ani = GIMMICK_ANI_IDLE_RIGHT;
+					else ani = GIMMICK_ANI_JUMP_RIGHT;
+				} 
+				else {
+					if (this->onGround) ani = GIMMICK_ANI_IDLE_LEFT;
+					else ani = GIMMICK_ANI_JUMP_LEFT;
+				}
 			}
 			else if (vx > 0)
-				ani = GIMMICK_ANI_WALKING_RIGHT;
-			else ani = GIMMICK_ANI_WALKING_LEFT;
+			{ //WALK RIGHT
+				if (this->onGround) ani = GIMMICK_ANI_WALKING_RIGHT;
+				else ani = GIMMICK_ANI_JUMP_RIGHT;
+			}
+			else
+			{ //WALK LEFT
+				if (this->onGround) ani = GIMMICK_ANI_WALKING_LEFT;
+				else ani = GIMMICK_ANI_JUMP_LEFT;
+			}
 		}
 
 		int alpha = 255;
@@ -287,7 +317,9 @@ void CGimmick::SetState(int state)
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
-		vy = GIMMICK_JUMP_SPEED_Y;
+		if (vy == 0 || this->onInclinedBrick)
+			vy = GIMMICK_JUMP_SPEED_Y_MIN;
+		ay = GIMMICK_JUMP_ACCELERATION;
 		break;
 	case GIMMICK_STATE_IDLE:
 		if (vx > 0)
@@ -316,5 +348,20 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 	top = y - 0.5f;
 	right = left + GIMMICK_BBOX_WIDTH - 0.5f;
 	bottom = top - GIMMICK_BBOX_HEIGHT + 0.5f;
+}
+
+bool CGimmick::onTopOf(CGameObject* object)
+{
+	float ol, ot, or , ob;
+	object->GetBoundingBox(ol, ot, or , ob);
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	/*if (((l < ol && r >= ol) || (r > or && l <= or)) && ((t > ot && b <= ot) || (b < ob && t >= ob)))
+		return true;
+	if (l >= ol && r <= or && t <= ot && b >= ob)
+		return true;*/
+	if (r >= ol && l <= or && abs(b - ot) < 1)
+		return true;
+	return false;
 }
 
