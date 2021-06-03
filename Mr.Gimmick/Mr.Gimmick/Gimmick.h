@@ -47,6 +47,7 @@ class CGimmick : public CGameObject
 
 	bool onGround = false;
 	
+	bool updated = false;
 public:
 	bool onInclinedBrick = false;
 	bool stunning;

@@ -36,9 +36,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy -= GIMMICK_GRAVITY * dt;
 
-	onGround = false;
-
 	onInclinedBrick = false;
+	onGround = false;
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -84,6 +83,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += dx;
 		if (!onInclinedBrick)
 			y += dy;
+
+		onGround = false;
 	}
 	else
 	{
@@ -230,7 +231,7 @@ void CGimmick::Render()
 		animation_set->at(ani)->Render(x - 3.0f, y + 9.0f, 255);
 	}
 	else {
-		if (vy > 0) {
+		if (this->onGround == false && this->onInclinedBrick == false) {
 			if (nx > 0)
 				ani = GIMMICK_ANI_JUMP_RIGHT;
 			else
