@@ -16,9 +16,9 @@ CGimmick::CGimmick() : CGameObject()
 void CGimmick::CalculateSpeed(DWORD dt) {
 	vx += ax * dt;
 
-	if (abs(vx) > GIMMICK_WALKING_SPEED) {
+	/*if (abs(vx) > GIMMICK_WALKING_SPEED) {
 		vx = nx * GIMMICK_WALKING_SPEED;
-	}
+	}*/
 
 	if ((vx * nx < 0) && this->state == GIMMICK_STATE_IDLE)
 		vx = 0;
@@ -36,9 +36,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy -= GIMMICK_GRAVITY * dt;
 
-	onGround = false;
-
 	onInclinedBrick = false;
+	onGround = false;
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -47,6 +46,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -83,6 +83,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += dx;
 		if (!onInclinedBrick)
 			y += dy;
+
+		onGround = false;
 	}
 	else
 	{
@@ -118,6 +120,29 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (e->ny == 1)
 					this->onGround = true;
+			}
+
+			if (dynamic_cast<CBrickPink*>(e->obj)) {
+				CBrickPink* BrickPink = dynamic_cast<CBrickPink*>(e->obj);
+
+				x = x0 + min_tx * dx + nx * 0.1f;
+				y = y0 + min_ty * dy + ny * 0.1f;
+
+				if (e->ny < 0) vy = 0;
+				if (e->ny > 0)
+				{
+					vy = BrickPink->vy;
+					if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
+						x = x0 + min_tx * (dx+BrickPink->dx) + BrickPink->nx * 0.01f;
+					else
+						x = x0 + BrickPink->dx * 2 + BrickPink->nx * 0.01f;
+					y = y0 + min_ty * dy + ny * 0.1f;
+					this->onGround = true;
+					vy = 0;
+				}
+				if (e->nx != 0) {
+					vx = 0;
+				}
 			}
 
 			if (dynamic_cast<CConveyor*>(e->obj)) {
@@ -206,7 +231,7 @@ void CGimmick::Render()
 		animation_set->at(ani)->Render(x - 3.0f, y + 9.0f, 255);
 	}
 	else {
-		if (vy > 0) {
+		if (this->onGround == false && this->onInclinedBrick == false) {
 			if (nx > 0)
 				ani = GIMMICK_ANI_JUMP_RIGHT;
 			else
@@ -250,11 +275,15 @@ void CGimmick::SetState(int state)
 	{
 	case GIMMICK_STATE_WALKING_RIGHT:
 		ax = GIMMICK_ACCELERATION;
+		if (vx > GIMMICK_WALKING_SPEED)
+			ax = 0;
 		nx = 1;
 		break;
 		break;
 	case GIMMICK_STATE_WALKING_LEFT:
 		ax = -GIMMICK_ACCELERATION;
+		if (vx < -GIMMICK_WALKING_SPEED)
+			ax = 0;
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
