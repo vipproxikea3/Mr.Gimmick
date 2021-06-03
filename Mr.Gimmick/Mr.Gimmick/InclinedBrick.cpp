@@ -22,10 +22,13 @@ int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 			object->y = oy + 18.0f;
 		else
 			object->y = oy + 16.0f;
-		object->vy = 0.0f;
+		/*if(object->vy < 0)*/ object->vy = 0.0f;
+		object->onInclinedBrick = true;
+
 		if (dynamic_cast<CGimmick*>(object)) {
 			CGimmick* gimmick = dynamic_cast<CGimmick*>(object);
-			gimmick->onInclinedBrick = true;
+			gimmick->onGround = true; 
+			gimmick->falling = false;
 		}
 	}
 	return this->direction;
