@@ -43,6 +43,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CMedicine*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -153,6 +154,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 
 					y = y0 + min_ty * dy + ny * 0.1f;
+				}
+			}
+
+			if (dynamic_cast<CMedicine*>(e->obj))
+			{
+				CMedicine* medicine = dynamic_cast<CMedicine*>(e->obj);
+				if (nx != 0)
+				{
+					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
+				}
+				if (ny != 0)
+				{
+					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
 				}
 			}
 		}

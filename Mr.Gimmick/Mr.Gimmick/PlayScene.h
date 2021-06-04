@@ -19,7 +19,7 @@
 #include "Boom.h"
 #include "Swing.h"
 #include "Worm.h"
-
+#include "Medicine.h"
 
 class CPlayScene : public CScene
 {
