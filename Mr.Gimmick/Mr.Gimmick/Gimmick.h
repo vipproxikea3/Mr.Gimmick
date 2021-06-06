@@ -53,7 +53,9 @@ public:
 	float ay = 0;
 	bool onGround = false;
 	bool falling = false;
+	bool jumping = false;
 	bool stunning;
+	bool onEnemy = false;
 
 	void CreateDieEffect();
 
@@ -67,5 +69,6 @@ public:
 	void SetdifY(float y) { this->y += y; };
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	bool onTopOf(CGameObject* object);
+	bool onTopOf(CGameObject* object, float equal = 1);
+	void standOn(CGameObject* object);
 };

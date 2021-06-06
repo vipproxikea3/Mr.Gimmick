@@ -14,6 +14,7 @@ public:
 	CConveyor(int direction) : CGameObject() {
 		this->direction = direction;
 	}
+	int GetDirection() { return this->direction; }
 	~CConveyor() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
