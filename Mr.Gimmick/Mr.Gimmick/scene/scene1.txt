@@ -234,6 +234,23 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 #BRICK PINK
 160000	81	48	113	64	60
 
+#GUN
+200001	85	3	101	18	50
+200002	102	3	118	18	50
+
+
+#GUN BULLET
+210001	86	23	100	37	50
+210002	103	23	117	37	50
+
+#GUN BULLET EXPLODE
+210003	78	142	94	158	20
+210004	61	142	77	158	20
+210005	42	142	58	158	20
+210006	23	142	39	158	20
+210007	8	142	24	158	20
+
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== GIMMICK=========
@@ -324,6 +341,14 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 140001	140001	50	140002	50	140003	50	140004	50
 #=======BRICK PINK=========
 160000	160000	100
+
+# ==== GUN ========
+200001	200001	750	200002	750
+
+# ===== GUN BULLET=======
+210001	210001	100	210002	100
+210003	210003	100	210004	100	210005	100	210006	100	210007	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -369,9 +394,16 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 140001	140001
 #BRICK PINK
 160000	160000
+
+# GUN
+200001	200001
+# GUN BULLET
+210001	210001	110003
+
+
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing,16= Brick pink
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing,16= Brick pink, 20 = Gun, 21 = GunBullet
 
 # BRICK
 #zone 0
@@ -500,7 +532,9 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 1	1072	640	20101	64	64
 1	1168	608	20101	112	32
 # GIMMICK
-2	64	448	20101
+#2	64	448	20101
+#2	560	320	20101
+2	1168	128	20101
 # COGWHEELSMALL				
 3	880	304	30001	
 3	800	288	30001	
@@ -845,3 +879,7 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 16	304	688	160000	304	688	304	624	1
 16	384	688	160000	368	688	432	688	1
 16	480	672	160000	480	688	480	624	-1
+
+#GUN
+20	560	350	200001
+20	1168	128	200001

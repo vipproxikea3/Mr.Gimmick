@@ -71,6 +71,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
 			if (onTopOf(brick)) this->onGround = true;
 		}
+		if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -224,6 +225,31 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					y = y0 + min_ty * dy + ny * 0.1f;
 				}
+			}
+			if (dynamic_cast<CGun*>(e->obj)) {
+
+
+				if (coEventsResult.size() == 1)
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+
+				}
+				if (e->nx != 0) {
+
+
+					if (!((CGun*)(e->obj))->onInclinedBrick) {
+						x += dx;
+						((CGun*)(e->obj))->updateX(dx);
+					}
+					else {
+						x = x0 + min_tx * dx + nx * 0.1f;
+					}
+
+				}
+				if (e->ny != 0) {
+					vy = 0;
+				}
+
 			}
 		}
 	}

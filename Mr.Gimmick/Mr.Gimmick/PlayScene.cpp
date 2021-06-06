@@ -48,6 +48,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BLACKENEMY		13
 #define OBJECT_TYPE_SWING			15
 #define OBJECT_TYPE_PINK_BRICK			16
+#define OBJECT_TYPE_GUN				20
 
 #define MAX_SCENE_LINE 1024
 
@@ -165,7 +166,6 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 		LPANIMATION ani = animations->Get(ani_id);
 		s->push_back(ani);
 	}
-
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
 
@@ -250,6 +250,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
 		obj = new CBlackEnemy();
+		break;
+	case OBJECT_TYPE_GUN:
+		obj = new CGun();
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -349,6 +352,9 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmickDieEffect*>(objects[i]))
 			continue;
+		if (dynamic_cast<CBullet*>(objects[i]))
+			if (((CBullet*)objects[i])->isDelete)
+				continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -368,11 +374,23 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
 			|| dynamic_cast<CWorm*>(objects[i])
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
-			|| dynamic_cast<CBrickPink*>(objects[i]))
+			|| dynamic_cast<CBrickPink*>(objects[i])
+			|| dynamic_cast<CGun*>(objects[i])
+			|| dynamic_cast<CBullet*>(objects[i]))
 		{
-			vector<LPGAMEOBJECT> coObjects;
-			quadtree->Retrieve(&coObjects, objects[i]);
-			objects[i]->Update(dt, &coObjects);
+			if (dynamic_cast<CBullet*>(objects[i]))
+			{
+				if (!((CBullet*)objects[i])->isDelete) {
+					vector<LPGAMEOBJECT> coObjects;
+					quadtree->Retrieve(&coObjects, objects[i]);
+					objects[i]->Update(dt, &coObjects);
+				}
+			}
+			else {
+				vector<LPGAMEOBJECT> coObjects;
+				quadtree->Retrieve(&coObjects, objects[i]);
+				objects[i]->Update(dt, &coObjects);
+			}
 		}
 	}
 	// Làm trống quadtree

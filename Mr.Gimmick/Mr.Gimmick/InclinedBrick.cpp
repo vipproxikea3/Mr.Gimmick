@@ -1,6 +1,7 @@
 #include "InclinedBrick.h"
 #include "Gimmick.h"
 #include "Utils.h"
+#include "Bullet.h"
 
 int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 	if (!this->CheckAABB(object))
@@ -29,6 +30,14 @@ int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 			CGimmick* gimmick = dynamic_cast<CGimmick*>(object);
 			gimmick->onGround = true; 
 			gimmick->falling = false;
+		}
+		if (dynamic_cast<CBullet*>(object)) {
+			CBullet* bullet = dynamic_cast<CBullet*>(object);
+			bullet->onInclinedBrick = true;
+		}
+		if (dynamic_cast<CGun*>(object)) {
+			CGun* gun = dynamic_cast<CGun*>(object);
+			gun->onInclinedBrick = true;
 		}
 	}
 	return this->direction;

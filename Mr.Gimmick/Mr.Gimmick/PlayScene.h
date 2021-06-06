@@ -22,6 +22,8 @@
 #include "GimmickDieEffect.h"
 #include "BrickPink.h"
 #include "BlackEnemy.h"
+#include "Gun.h"
+#include "Bullet.h"
 
 
 class CPlayScene : public CScene
@@ -71,6 +73,10 @@ public:
 	void PushBackObj(CGameObject* obj);
 
 	CGimmick* GetPlayer() { return player; };
+
+	vector<LPGAMEOBJECT>* GetListObject() {
+		return &objects;
+	}
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler

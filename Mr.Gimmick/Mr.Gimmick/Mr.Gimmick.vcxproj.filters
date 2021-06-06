@@ -32,6 +32,9 @@
     <ClCompile Include="Zone.cpp" />
     <ClCompile Include="GimmickDieEffect.cpp" />
     <ClCompile Include="BrickPink.cpp" />
+    <ClCompile Include="BlackEnemy.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -65,5 +68,8 @@
     <ClInclude Include="Zone.h" />
     <ClInclude Include="GimmickDieEffect.h" />
     <ClInclude Include="BrickPink.h" />
+    <ClInclude Include="BlackEnemy.h" />
+    <ClInclude Include="Gun.h" />
+    <ClInclude Include="Bullet.h" />
   </ItemGroup>
 </Project>
