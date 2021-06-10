@@ -41,20 +41,17 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state != WORM_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
-	float mLeft, mTop, mRight, mBottom;
-	float oLeft, oTop, oRight, oBottom;
-
 	if (coEvents.size() == 0)
 	{
 		if (x >= (rightLimit) || x <= (leftLimit))
 		{
 			vx = -vx;
-			x -= dx;
 		}
 		else
 		{
 			x += dx;
 		}
+		x -= dx;
 		y += dy;
 	}
 	else
@@ -65,42 +62,20 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		float x0 = x;
 		float y0 = y;
-		/*if (x >= (rightLimit) || x <= (leftLimit))
-		{
-			x = x0 - dx;
-		}
-		else
-		{
-			x = x0 + dx;
-		}*/
-		x = x0 + dx;
-		y = y0 + dy;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			GetBoundingBox(mLeft, mTop, mRight, mBottom);
-			e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
 			if (dynamic_cast<CBrick*>(e->obj)) 
 			{
-				x = x0 + min_tx * dx + nx * 0.1f;
 				y = y0 + min_ty * dy + ny * 0.1f;
-				if (e->nx != 0)
-				{	
-					if (ceil(mBottom) != oTop)
-					{
-						if (x >= rightLimit || x <= leftLimit)
-							vx = -vx;
-					}
-						
-				}
 				if (e->ny != 0)
 				{
 					vy = 0;
 				}
 			}
+			x = x0 + min_tx * dx + nx * 0.1f;
 		}
 	}
 
@@ -132,7 +107,6 @@ void CWorm::Render()
 
 	int alpha = 255;
 	animation_set->at(ani)->Render(x, y, alpha);
-	RenderBoundingBox();
 }
 
 void CWorm::SetState(int state)

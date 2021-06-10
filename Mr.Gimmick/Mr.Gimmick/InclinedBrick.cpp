@@ -2,11 +2,13 @@
 #include "Gimmick.h"
 #include "Utils.h"
 
-void CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
+int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 	if (!this->CheckAABB(object))
-		return;
+		return 0;
 	if (object->x + 8 < this->x || object->x + 8 > this->x + 16)
-		return;
+		return 0;
+	if (dynamic_cast<CGimmick*>(object) && ((CGimmick*)object)->jumping)
+		return 0;
 
 	float lx = this->x;
 	float ly = this->y - this->ly;
@@ -22,19 +24,23 @@ void CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 			object->y = oy + 18.0f;
 		else
 			object->y = oy + 16.0f;
-		object->vy = 0.0f;
+		/*if(object->vy < 0)*/ object->vy = 0.0f;
+		object->onInclinedBrick = true;
+
 		if (dynamic_cast<CGimmick*>(object)) {
 			CGimmick* gimmick = dynamic_cast<CGimmick*>(object);
-			gimmick->onInclinedBrick = true;
+			gimmick->onGround = true; 
+			gimmick->falling = false;
 		}
 	}
+	return this->direction;
 }
 
 void CInclinedBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
 
 void CInclinedBrick::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CInclinedBrick::SetState(int state) {}

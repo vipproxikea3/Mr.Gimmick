@@ -30,7 +30,12 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Medicine.cpp" />
+=======
+    <ClCompile Include="GimmickDieEffect.cpp" />
+    <ClCompile Include="BrickPink.cpp" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -62,6 +67,11 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Worm.h" />
     <ClInclude Include="Zone.h" />
+<<<<<<< HEAD
     <ClInclude Include="Medicine.h" />
+=======
+    <ClInclude Include="GimmickDieEffect.h" />
+    <ClInclude Include="BrickPink.h" />
+>>>>>>> master
   </ItemGroup>
 </Project>

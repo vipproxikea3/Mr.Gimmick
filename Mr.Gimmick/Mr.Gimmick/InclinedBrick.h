@@ -8,14 +8,20 @@ class CInclinedBrick : public CGameObject
 {
 	float ly, ry;
 	int isT;
+	int direction = 0;
 public:
 	CInclinedBrick(float ly, float ry, int isT) : CGameObject() {
 		this->ly = ly;
 		this->ry = ry;
 		this->isT = isT;
+
+		if (ly < ry)
+			direction = 1;
+		else
+			direction = -1;
 	}
 	~CInclinedBrick() {}
-	void Collision(LPGAMEOBJECT object, float dy);
+	int Collision(LPGAMEOBJECT object, float dy);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	void SetState(int state);

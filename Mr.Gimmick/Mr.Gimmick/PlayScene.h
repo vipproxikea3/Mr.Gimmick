@@ -20,6 +20,9 @@
 #include "Swing.h"
 #include "Worm.h"
 #include "Medicine.h"
+#include "GimmickDieEffect.h"
+#include "BrickPink.h"
+#include "BlackEnemy.h"
 
 class CPlayScene : public CScene
 {
@@ -65,7 +68,9 @@ public:
 	void UpdateZone();
 	void SetCamPos();
 
-	CGimmick* GetPlayer() { return player; }
+	void PushBackObj(CGameObject* obj);
+
+	CGimmick* GetPlayer() { return player; };
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler
@@ -73,7 +78,7 @@ class CPlaySceneKeyHandler : public CSceneKeyHandler
 public:
 	virtual void KeyState(BYTE* states);
 	virtual void OnKeyDown(int KeyCode);
-	virtual void OnKeyUp(int KeyCode) {};
+	virtual void OnKeyUp(int KeyCode);
 	CPlaySceneKeyHandler(CScene* s) :CSceneKeyHandler(s) {};
 };
 
