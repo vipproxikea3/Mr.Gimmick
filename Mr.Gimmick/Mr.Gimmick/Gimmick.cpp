@@ -56,6 +56,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CMedicine*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
@@ -236,6 +237,20 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y = y0 + min_ty * dy + ny * 0.1f;
 				}
 			}
+
+			if (dynamic_cast<CMedicine*>(e->obj))
+			{
+				CMedicine* medicine = dynamic_cast<CMedicine*>(e->obj);
+				if (nx != 0)
+				{
+					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
+				}
+				if (ny != 0)
+				{
+					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
+				}
+			}
+
 			if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 
 				CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(e->obj);
@@ -263,6 +278,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					this->SetState(GIMMICK_STATE_STUN);
 					StartUntouchable();
+
 				}
 			}
 		}

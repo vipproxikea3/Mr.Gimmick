@@ -47,7 +47,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WORM			12
 #define OBJECT_TYPE_BLACKENEMY		13
 #define OBJECT_TYPE_SWING			15
-#define OBJECT_TYPE_PINK_BRICK			16
+#define OBJECT_TYPE_MEDICINE		17
+#define OBJECT_TYPE_PINK_BRICK		16
 
 #define MAX_SCENE_LINE 1024
 
@@ -247,6 +248,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_WORM:
 		obj = new CWorm(atoi(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_MEDICINE:
+		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
 		obj = new CBlackEnemy();

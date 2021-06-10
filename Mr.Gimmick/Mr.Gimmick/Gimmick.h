@@ -5,6 +5,7 @@
 #include "InclinedBrick.h"
 #include "Conveyor.h"
 #include "Swing.h"
+#include "Medicine.h"
 
 #define GIMMICK_WALKING_SPEED		0.1f
 #define GIMMICK_ACCELERATION		0.0002f

@@ -19,10 +19,10 @@
 #include "Boom.h"
 #include "Swing.h"
 #include "Worm.h"
+#include "Medicine.h"
 #include "GimmickDieEffect.h"
 #include "BrickPink.h"
 #include "BlackEnemy.h"
-
 
 class CPlayScene : public CScene
 {
