@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="128" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="128" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="Gimmick!(J)-Level1_bank.png" tilewidth="16" tileheight="16" tilecount="495" columns="11">
-  <image source="Gimmick!(J)-Level1_bank.png" width="176" height="640"/>
+  <image source="Gimmick!(J)-Level1_bank.png" width="176" height="720"/>
  </tileset>
- <layer id="1" name="ShoeBox Tile Grab" width="128" height="48">
+ <layer id="1" name="ShoeBox Tile Grab" width="128" height="48" offsetx="48.3333" offsety="7.66667">
   <data>
    <tile gid="4"/>
    <tile gid="5"/>

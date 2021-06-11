@@ -114,7 +114,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny;
+		float min_tx, min_ty, nx, ny;
 		float rdx = 0;
 		float rdy = 0;
 
@@ -143,8 +143,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (onInclinedBrick) x = x0 + dx;
 				y = y0 + min_ty * dy + ny * 0.1f;
 
-				if (e->nx != 0) { vx = 0;}
-				if (e->ny != 0) { 
+				if (e->nx != 0) { vx = 0; }
+				if (e->ny != 0) {
 					vy = 0;
 					if (e->ny > 0) this->onGround = true;
 					if (e->ny < 0) onEnemy = false;
@@ -175,14 +175,45 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 			if (dynamic_cast<CConveyor*>(e->obj)) {
-				x = x0 + min_tx * dx + nx * 0.1f;
 				y = y0 + min_ty * dy + ny * 0.1f;
-
-				if (e->nx != 0) vx = 0;
-				if (e->ny != 0) vy = 0;
-
-				if (e->ny == 1)
-					this->onGround = true;
+				CConveyor* conveyor = dynamic_cast<CConveyor*>(e->obj);
+				if (e->ny > 0)
+				{
+					vy = 0;
+					if (conveyor->GetDirection() == RIGHT_CONVEYOR) //right conveyor
+					{
+						if (state == GIMMICK_STATE_WALKING_RIGHT)
+						{
+							x = x0 + min_tx * dx + 1.5f;
+							DebugOut(L"\nGimmick is touching right y");
+						}
+						if (state == GIMMICK_STATE_WALKING_LEFT)
+						{
+							DebugOut(L"\nGimmick is touching left y");
+							x = x0 + min_tx * dx + 2.0f;
+						}
+						if (state == GIMMICK_STATE_IDLE)
+						{
+							x = x0 + 2.0f;
+						}
+					}
+					if (conveyor->GetDirection() == LEFT_CONVEYOR) //left conveyor
+					{
+						if (state == GIMMICK_STATE_WALKING_RIGHT)
+						{
+							x = x0 + min_tx * dx - 2.0f;
+							DebugOut(L"\nGimmick is touching left y");
+						}
+						if (state == GIMMICK_STATE_WALKING_LEFT)
+						{
+							x = x0 + min_tx * dx - 1.5f;
+						}
+						if (state == GIMMICK_STATE_IDLE)
+						{
+							x = x0 - 2.0f;
+						}
+					}
+				}
 			}
 
 			if (dynamic_cast<CWorm*>(e->obj)) {
@@ -241,11 +272,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CMedicine*>(e->obj))
 			{
 				CMedicine* medicine = dynamic_cast<CMedicine*>(e->obj);
-				if (nx != 0)
+				if (e->nx != 0)
 				{
 					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
 				}
-				if (ny != 0)
+				if (e->ny != 0)
 				{
 					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
 				}

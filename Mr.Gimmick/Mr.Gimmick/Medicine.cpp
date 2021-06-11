@@ -43,13 +43,6 @@ void CMedicine::Render()
 void CMedicine::SetState(int state) 
 {
 	CGameObject::SetState(state);
-
-	switch (state)
-	{
-	case MEDICINE_STATE_APPEAR:
-		vy = -MEDICINE_GRAVITY;
-		break;
-	}
 }
 
 void CMedicine::GetBoundingBox(float& l, float& t, float& r, float& b)
