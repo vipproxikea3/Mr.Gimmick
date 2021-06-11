@@ -9,10 +9,10 @@ void CConveyor::Render()
 
 	switch (this->direction)
 	{
-	case 1:
+	case RIGHT_CONVEYOR:
 		ani = CONVEYOR_ANI_RIGHT;
 		break;
-	case -1:
+	case LEFT_CONVEYOR:
 		ani = CONVEYOR_ANI_LEFT;
 		break;
 	default:
@@ -22,7 +22,7 @@ void CConveyor::Render()
 
 	int alpha = 255;
 	animation_set->at(ani)->Render(x, y, alpha);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CConveyor::SetState(int state) {}

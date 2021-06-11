@@ -7,6 +7,9 @@
 #define CONVEYOR_BBOX_WIDTH		16
 #define CONVEYOR_BBOX_HEIGHT	16
 
+#define	RIGHT_CONVEYOR			1
+#define	LEFT_CONVEYOR			-1
+
 class CConveyor : public CGameObject
 {
 	int direction;
