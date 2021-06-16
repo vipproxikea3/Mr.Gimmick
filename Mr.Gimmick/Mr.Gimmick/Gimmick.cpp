@@ -29,6 +29,7 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 	{
 		ay = -GIMMICK_GRAVITY;
 		falling = true;
+		jumping = false;
 	}
 }
 
@@ -45,10 +46,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
 
-	onGround = false;
-
 	onInclinedBrick = false;
 	onGround = false;
+	onEnemy = false;
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -58,6 +58,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -65,13 +66,21 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
-			if (onTopOf(conveyor)) { this->onGround = true;}
+			if (onTopOf(conveyor)) { this->onGround = true; }
 		}
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
 			if (onTopOf(brick)) this->onGround = true;
 		}
+
 		if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) {
+			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
+			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK) {
+				this->onGround = true;
+				standOn(enemy);
+			}
+		}
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -135,9 +144,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (onInclinedBrick) x = x0 + dx;
 				y = y0 + min_ty * dy + ny * 0.1f;
 
-				if (e->nx != 0) vx = 0;
-				if (e->ny != 0) vy = 0;
-				if (e->ny == 1) this->onGround = true;
+				if (e->nx != 0) { vx = 0; }
+				if (e->ny != 0) {
+					vy = 0;
+					if (e->ny > 0) this->onGround = true;
+					if (e->ny < 0) onEnemy = false;
+				}
 			}
 
 			if (dynamic_cast<CBrickPink*>(e->obj)) {
@@ -151,7 +163,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					vy = BrickPink->vy;
 					if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
-						x = x0 + min_tx * (dx+BrickPink->dx) + BrickPink->nx * 0.01f;
+						x = x0 + min_tx * (dx + BrickPink->dx) + BrickPink->nx * 0.01f;
 					else
 						x = x0 + BrickPink->dx * 2 + BrickPink->nx * 0.01f;
 					y = y0 + min_ty * dy + ny * 0.1f;
@@ -190,7 +202,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						this->vx = -GIMMICK_DEFLECT_SPEED_X;
 						this->nx = -1.0;
-					}						
+					}
 					this->SetState(GIMMICK_STATE_STUN);
 				}
 				if (e->ny != 0) {
@@ -226,6 +238,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y = y0 + min_ty * dy + ny * 0.1f;
 				}
 			}
+
 			if (dynamic_cast<CGun*>(e->obj)) {
 
 
@@ -250,14 +263,43 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 				}
 
+				if (dynamic_cast<CBlackEnemy*>(e->obj)) {
+
+					CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(e->obj);
+					float l, t, r, b;
+					GetBoundingBox(l, t, r, b);
+					float ol, ot, or , ob;
+					e->obj->GetBoundingBox(ol, ot, or , ob);
+
+					if (e->ny > 0 && enemy->state == BLACKENEMY_STATE_WALK) {
+						vy = 0;
+						this->y = y0 + min_ty * dy + ny * 0.3f;
+						standOn(enemy);
+					}
+					else
+					{
+						if (enemy->x < this->x)
+						{
+							//this->vx = GIMMICK_DEFLECT_SPEED_X;
+							this->nx = 1.0;
+						}
+						else
+						{
+							//this->vx = -GIMMICK_DEFLECT_SPEED_X;
+							this->nx = -1.0;
+						}
+						this->SetState(GIMMICK_STATE_STUN);
+						StartUntouchable();
+					}
+				}
 			}
 		}
-	}
 
-	// clean up newCoObjects
-	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
-	// clean up collision events
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+		// clean up newCoObjects
+		for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
+		// clean up collision events
+		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	}
 }
 
 void CGimmick::Render()
@@ -335,7 +377,6 @@ void CGimmick::SetState(int state)
 			ax = 0;
 		nx = 1;
 		break;
-		break;
 	case GIMMICK_STATE_WALKING_LEFT:
 		ax = -GIMMICK_ACCELERATION;
 		if (vx < -GIMMICK_WALKING_SPEED)
@@ -343,7 +384,8 @@ void CGimmick::SetState(int state)
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
-		if (vy == 0 || this->onInclinedBrick)
+		jumping = true;
+		if (vy == 0 || this->onInclinedBrick || this->onGround) 
 			vy = GIMMICK_JUMP_SPEED_Y_MIN;
 		ay = GIMMICK_JUMP_ACCELERATION;
 		break;
@@ -376,18 +418,35 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 	bottom = top - GIMMICK_BBOX_HEIGHT + 0.5f;
 }
 
-bool CGimmick::onTopOf(CGameObject* object)
+bool CGimmick::onTopOf(CGameObject* object, float equal)
 {
 	float ol, ot, or , ob;
 	object->GetBoundingBox(ol, ot, or , ob);
 	float l, t, r, b;
 	GetBoundingBox(l, t, r, b);
-	/*if (((l < ol && r >= ol) || (r > or && l <= or)) && ((t > ot && b <= ot) || (b < ob && t >= ob)))
-		return true;
-	if (l >= ol && r <= or && t <= ot && b >= ob)
-		return true;*/
-	if (r >= ol && l <= or && abs(b - ot) < 1)
+	if (dynamic_cast<CBlackEnemy*>(object))
+	{
+		l = l + 2;
+		r = r - 2;
+	}
+	if (r >= ol && l <= or && abs(b - ot) < equal)
 		return true;
 	return false;
+}
+
+void CGimmick::standOn(CGameObject* object)
+{
+	onEnemy = true;
+	
+	if (dynamic_cast<CBlackEnemy*>(object))
+	{
+		((CBlackEnemy*)object)->carry_player = true;
+		this->x += object->dx;
+		if (!jumping) { 
+			this->y = object->y + GIMMICK_BBOX_HEIGHT;
+			this->vy = 0; 
+		}
+	}
+	
 }
 

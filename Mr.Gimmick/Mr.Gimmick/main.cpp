@@ -76,7 +76,7 @@ void Render()
 
 		CGame::GetInstance()->GetCurrentScene()->Render();
 
-		spriteHandler->End();
+   		spriteHandler->End();
 		d3ddv->EndScene();
 	}
 
@@ -164,7 +164,7 @@ int Run()
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);
+ 			Sleep(tickPerFrame - dt);
 	}
 
 	return 1;

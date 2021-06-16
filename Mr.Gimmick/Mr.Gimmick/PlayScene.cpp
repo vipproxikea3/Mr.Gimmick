@@ -376,7 +376,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CGun*>(objects[i])
-			|| dynamic_cast<CBullet*>(objects[i]))
+			|| dynamic_cast<CBullet*>(objects[i])
+			|| dynamic_cast<CBrick*>(objects[i])
+			|| dynamic_cast<CBrickPink*>(objects[i]))
 		{
 			if (dynamic_cast<CBullet*>(objects[i]))
 			{
@@ -544,7 +546,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_SPACE)) {
-		if (!gimmick->falling || gimmick->onInclinedBrick)
+		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
 	if (game->IsKeyDown(DIK_RIGHT))
@@ -565,6 +567,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	{
 	case DIK_SPACE:
 		gimmick->falling = true;
+		gimmick->jumping = false;
 		break;
 	}
 }

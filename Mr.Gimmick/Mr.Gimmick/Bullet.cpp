@@ -92,15 +92,16 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 
+	//DebugOut(L"Direct %d\n", direction);
 	if (onInclinedBrick)
 		if (direction == 0)
 			vx = vx <= -0.1 ? -0.1 : vx -= 0.001;
 		else if (direction == 1)
 			vx = vx >= 0.1 ? 0.1 : vx += 0.001;
 
-	timeDelete -= dt;
+	/*timeDelete -= dt;
 	if (timeDelete <= 0)
-		isDelete = true;
+		isDelete = true;*/
 }
 
 void CBullet::SetState(int state)
