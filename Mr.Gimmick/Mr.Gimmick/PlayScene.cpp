@@ -330,7 +330,7 @@ void CPlayScene::Load()
 	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
 
 	// Play Soundtrack
-	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+	Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -515,7 +515,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		//sound->Play("SOUND_Effect_1", 0, 1);
+		sound->Play("SOUND_Effect_1", 0, 1); // Jump
 		break;
 	}
 }
