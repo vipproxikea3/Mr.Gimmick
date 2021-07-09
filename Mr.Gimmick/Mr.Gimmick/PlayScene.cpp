@@ -253,7 +253,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
-		obj = new CBlackEnemy();
+		obj = new CBlackEnemy(atoi(tokens[4].c_str()));
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -331,6 +331,7 @@ void CPlayScene::Load()
 
 	// Play Soundtrack
 	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+	
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -516,6 +517,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		//sound->Play("SOUND_Effect_1", 0, 1);
+		break;
+	case DIK_4:
+		gimmick->x = 1868;
+		gimmick->y = 440;
 		break;
 	}
 }

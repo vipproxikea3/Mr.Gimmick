@@ -57,6 +57,8 @@ public:
 	bool jumping = false;
 	bool stunning;
 	bool onEnemy = false;
+	bool facingBrick = false; //fix loi dung tren lung quai bi xuyen gach
+	bool underBrick = false;
 
 	void CreateDieEffect();
 
@@ -71,5 +73,7 @@ public:
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	bool onTopOf(CGameObject* object, float equal = 1);
+	bool onSideOf(CGameObject* object, float equal = 1);
 	void standOn(CGameObject* object);
+	bool isUnder(CGameObject* object, float equal = 1);
 };
