@@ -49,6 +49,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	onInclinedBrick = false;
 	onGround = false;
 	onEnemy = false;
+	facingBrick = false;
+	underBrick = false;
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -72,13 +74,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
 			if (onTopOf(brick)) this->onGround = true;
+			if (isUnder(brick, 2.0f)) this->underBrick = true;
+			if (onSideOf(brick)) this->facingBrick = true;
 		}
 		if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) {
 			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
-			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK) { 
+			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK && this->vy < 0 ) { 
 				this->onGround = true;
-				standOn(enemy);
+				if(!onEnemy) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
+			/*if (isUnder(enemy)) { 
+				this->SetState(GIMMICK_STATE_STUN);
+				StartUntouchable();
+			}*/
 		}
 	}
 
@@ -136,18 +144,20 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (e->ny > 0) this->falling = false;
-			if (e->ny < 0) this->falling = true; //roi khi dung gach tren dau
+			if (e->ny < 0) { this->falling = true; jumping = false; } //roi khi dung gach tren dau
 
 			if (dynamic_cast<CBrick*>(e->obj)) {
 				x = x0 + min_tx * dx + nx * 0.1f;
 				if (onInclinedBrick) x = x0 + dx;
 				y = y0 + min_ty * dy + ny * 0.1f;
 
-				if (e->nx != 0) { vx = 0; }
+				if (e->nx != 0) { 
+					vx = 0; 
+					if (!onInclinedBrick) facingBrick = true;
+				}
 				if (e->ny != 0) {
 					vy = 0;
 					if (e->ny > 0) this->onGround = true;
-					if (e->ny < 0) onEnemy = false;
 				}
 			}
 
@@ -185,11 +195,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (state == GIMMICK_STATE_WALKING_RIGHT)
 						{
 							x = x0 + min_tx * dx + 1.5f;
-							DebugOut(L"\nGimmick is touching right y");
 						}
 						if (state == GIMMICK_STATE_WALKING_LEFT)
 						{
-							DebugOut(L"\nGimmick is touching left y");
 							x = x0 + min_tx * dx + 2.0f;
 						}
 						if (state == GIMMICK_STATE_IDLE)
@@ -202,7 +210,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (state == GIMMICK_STATE_WALKING_RIGHT)
 						{
 							x = x0 + min_tx * dx - 2.0f;
-							DebugOut(L"\nGimmick is touching left y");
 						}
 						if (state == GIMMICK_STATE_WALKING_LEFT)
 						{
@@ -214,6 +221,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 					}
 				}
+				if (e->ny < 0)
+					vy = 0;
 			}
 
 			if (dynamic_cast<CWorm*>(e->obj)) {
@@ -443,9 +452,9 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 	object->GetBoundingBox(ol, ot, or , ob);
 	float l, t, r, b;
 	GetBoundingBox(l, t, r, b);
-	if (dynamic_cast<CBlackEnemy*>(object))
+	if (dynamic_cast<CBlackEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
 	{
-		l = l + 2;
+		l = l + 2; //x pixel
 		r = r - 2;
 	}
 	if (r >= ol && l <= or && abs(b - ot) < equal)
@@ -453,16 +462,56 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 	return false;
 }
 
+bool CGimmick::isUnder(CGameObject* object, float equal)
+{
+	float ol, ot, or , ob;
+	object->GetBoundingBox(ol, ot, or , ob);
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	if (dynamic_cast<CBrick*>(object) || dynamic_cast<CConveyor*>(object))
+	{
+		if (r >= ol && l <= or && (abs(ob - t) < equal))
+			return true;
+	}
+	return false;
+}
+
+bool CGimmick::onSideOf(CGameObject* object, float equal)
+{
+	float ol, ot, or , ob;
+	object->GetBoundingBox(ol, ot, or , ob);
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	if (dynamic_cast<CBrick*>(object))
+	{
+		if (b <= ot && t >= ob && ((abs(l - or ) < equal && l >= or) || (abs(r - ol) < equal && r <= ol)))
+			return true;
+	}
+	return false;
+}
+
 void CGimmick::standOn(CGameObject* object)
 {
-	onEnemy = true;
-	
+	if (underBrick) return;
+
 	if (dynamic_cast<CBlackEnemy*>(object))
 	{
-		((CBlackEnemy*)object)->carry_player = true;
-		this->x += object->dx;
+		CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(object);
+
+		onEnemy = true;
+		enemy->carry_player = true;
+
+		if (!facingBrick) {
+			if (enemy->onFastConveyor)
+				this->x += object->dx + 1.0f;
+			else if(enemy->onSlowConveyor)
+				this->x += object->dx - 1.0f;
+			else
+				this->x += object->dx;
+		}
+
 		if (!jumping) { 
-			this->y = object->y + GIMMICK_BBOX_HEIGHT;
+			this->y = object->y + GIMMICK_BBOX_HEIGHT - 2;
 			this->vy = 0; 
 		}
 	}
