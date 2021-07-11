@@ -402,6 +402,8 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	SetCamPos();
+
+	hud->Update(dt);
 }
 
 void CPlayScene::UpdateZone() {
@@ -443,6 +445,8 @@ void CPlayScene::SetCamPos() {
 	if (cy - game->GetScreenHeight() < lb) cy = lb + game->GetScreenHeight();
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+
+	hud->SetPosition(cx, cy - game->GetScreenHeight());
 }
 
 void CPlayScene::PushBackObj(CGameObject* obj) {
@@ -479,6 +483,8 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		if ((dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
+
+	hud->Render();
 }
 
 /*
