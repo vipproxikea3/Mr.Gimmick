@@ -169,6 +169,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="Swing.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tube.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="Swing.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tube.cpp" />

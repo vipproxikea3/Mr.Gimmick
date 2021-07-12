@@ -55,7 +55,7 @@ public:
 	bool onGround = false;
 	bool falling = false;
 	bool jumping = false;
-	bool stunning;
+	bool stunning = false;
 	bool onEnemy = false;
 
 	void CreateDieEffect();

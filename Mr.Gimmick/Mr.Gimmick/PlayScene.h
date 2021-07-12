@@ -23,6 +23,7 @@
 #include "GimmickDieEffect.h"
 #include "BrickPink.h"
 #include "BlackEnemy.h"
+#include "Star.h"
 
 class CPlayScene : public CScene
 {

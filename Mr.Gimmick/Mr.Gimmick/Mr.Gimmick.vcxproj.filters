@@ -2,9 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="BlueFire.cpp" />
     <ClCompile Include="Boom.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="BrickPink.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
@@ -12,12 +14,14 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
+    <ClCompile Include="GimmickDieEffect.cpp" />
     <ClCompile Include="InclinedBrick.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Medicine.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -30,18 +34,15 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="Medicine.cpp" />
-=======
-    <ClCompile Include="GimmickDieEffect.cpp" />
-    <ClCompile Include="BrickPink.cpp" />
->>>>>>> master
+    <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="BlueFire.h" />
     <ClInclude Include="Boom.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="BrickPink.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
@@ -50,11 +51,13 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
+    <ClInclude Include="GimmickDieEffect.h" />
     <ClInclude Include="InclinedBrick.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="Medicine.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Scene.h" />
@@ -67,11 +70,6 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Worm.h" />
     <ClInclude Include="Zone.h" />
-<<<<<<< HEAD
-    <ClInclude Include="Medicine.h" />
-=======
-    <ClInclude Include="GimmickDieEffect.h" />
-    <ClInclude Include="BrickPink.h" />
->>>>>>> master
+    <ClInclude Include="Star.h" />
   </ItemGroup>
 </Project>
