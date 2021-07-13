@@ -44,6 +44,8 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"[UNTOUCHABLE] %d!\n", untouchable);
+
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	CalculateSpeed(dt);
@@ -54,11 +56,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
-
-	if (untouchable == true && (GetTickCount64() - untouchable_start >= GIMMICK_UNTOUCHABLE_TIME)) {
-		untouchable = false;
-		untouchable_start = NULL;
-	}
 
 	onInclinedBrick = false;
 	onGround = false;
@@ -114,7 +111,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CalcPotentialCollisions(&newCoObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME)
+	if (GetTickCount64() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME && untouchable == 1)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -123,7 +120,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// reset stunnung timer if stunnung time has passed
 	if (GetTickCount64() - stunning_start > GIMMICK_STUNNING_TIME && stunning == true)
 	{
-		untouchable_start = 0;
+		stunning_start = 0;
 		stunning = false;
 		this->SetState(GIMMICK_STATE_IDLE);
 	}
@@ -330,9 +327,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						//this->vx = -GIMMICK_DEFLECT_SPEED_X;
 						this->nx = -1.0;
 					}
-					this->SetState(GIMMICK_STATE_STUN);
-					StartUntouchable();
-
+					if (untouchable == 0) {
+						this->SetState(GIMMICK_STATE_STUN);
+						StartUntouchable();
+					}
 				}
 			}
 		}
@@ -355,7 +353,7 @@ void CGimmick::Render()
 		else
 			ani = GIMMICK_ANI_STUN_LEFT;
 
-		animation_set->at(ani)->Render(x - 3.0f, y + 9.0f, 255);
+		animation_set->at(ani)->Render(x - 3.0f, y + 9.0f, 128);
 	}
 	else {
 		if (vy > 0) {
