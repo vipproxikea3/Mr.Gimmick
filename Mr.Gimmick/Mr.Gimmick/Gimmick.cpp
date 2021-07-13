@@ -15,14 +15,23 @@ CGimmick::CGimmick() : CGameObject()
 }
 
 void CGimmick::CalculateSpeed(DWORD dt) {
-	vx += ax * dt;
-
-	/*if (abs(vx) > GIMMICK_WALKING_SPEED) {
-		vx = nx * GIMMICK_WALKING_SPEED;
-	}*/
-
-	if ((vx * nx < 0) && this->state == GIMMICK_STATE_IDLE)
-		vx = 0;
+	if (this->state == GIMMICK_STATE_IDLE) {
+		if (vx > 0 && vx + ax * dt < 0) {
+			vx = 0;
+			ax = 0;
+		}
+		else if (vx < 0 && vx + ax * dt > 0)
+		{
+			vx = 0;
+			ax = 0;
+		}
+		else {
+			vx += ax * dt;
+		}
+	}
+	else {
+		vx += ax * dt;
+	}
 
 	//JUMP:
 	if (vy > GIMMICK_JUMP_SPEED_Y_MAX)
@@ -45,6 +54,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
+
+	if (untouchable == true && (GetTickCount64() - untouchable_start >= GIMMICK_UNTOUCHABLE_TIME)) {
+		untouchable = false;
+		untouchable_start = NULL;
+	}
 
 	onInclinedBrick = false;
 	onGround = false;

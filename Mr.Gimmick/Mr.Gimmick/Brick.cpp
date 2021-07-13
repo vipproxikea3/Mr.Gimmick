@@ -1,5 +1,5 @@
 #include "Brick.h"
-
+#include "Star.h"
 #include "PlayScene.h"
 #include "Game.h"
 #include "Gimmick.h"
@@ -52,7 +52,7 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CBrick::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBrick::SetState(int state) {}

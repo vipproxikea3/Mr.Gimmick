@@ -24,11 +24,13 @@
 #include "BrickPink.h"
 #include "BlackEnemy.h"
 #include "Hud.h"
+#include "Star.h"
 
 class CPlayScene : public CScene
 {
 protected:
 	CGimmick* player = nullptr;					// A play scene has to have player, right?
+	CStar* star = nullptr;
 	
 	CHud* hud = new CHud();
 	//Map* map = nullptr;
@@ -74,6 +76,7 @@ public:
 	void PushBackObj(CGameObject* obj);
 
 	CGimmick* GetPlayer() { return player; };
+	CStar* GetStar() { return star; };
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler
