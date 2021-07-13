@@ -1,9 +1,14 @@
 #include "BlackEnemy.h"
 #include "Utils.h"
 #include "InclinedBrick.h"
-CBlackEnemy::CBlackEnemy()
+CBlackEnemy::CBlackEnemy(int direction)
 {
 	SetState(BLACKENEMY_STATE_WALK);
+	if (direction == 1) //chinh huong di ban dau
+		ax = BLACKENEMY_ACCELERATION; // moi vo di sang Phai 1
+	else
+		ax = -BLACKENEMY_ACCELERATION; // moi vo di sang trai -1
+
 	this->canTurnAround = false; //tranh truong hop moi vao da quay dau
 }
 
@@ -15,7 +20,11 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy -= BLACKENEMY_GRAVITY * dt;
 
 	onInclinedBrick = false;
+	detectedStraighRoad = false;
 	onGround = false;
+	facingBrick = false;
+	onFastConveyor = false;
+	onSlowConveyor = false;
 
 	CalculateSpeed();
 	DetectPlayer();
@@ -31,15 +40,18 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
+			if (onTopOf(brick)) this->detectedStraighRoad = true;
 			brick->Collision(this, dy);
 		}
 		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
-			if (onTopOf(conveyor)) { this->onGround = true; }
+			if (onTopOf(conveyor)) { this->onGround = true; this->detectedStraighRoad = true;}
 		}
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
 			if (onTopOf(brick)) this->onGround = true;
+			if (onSideOf(brick)) { this->facingBrick = true;
+			}
 		}
 	}
 
@@ -83,23 +95,22 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CBrick *brick = dynamic_cast<CBrick*>(e->obj);
 				x = x0 + min_tx * dx + nx * 0.1f;
-				//y = y0 + min_ty * dy + ny * 0.1f;
-				y += min_ty * dy + ny * 0.1f;
+				y = y0 + min_ty * dy + ny * 0.1f;
 				if (onInclinedBrick) x = x0 + dx;
 				if (e->nx != 0)
 				{
 					vx = 0;
 					if (state == BLACKENEMY_STATE_WALK) {
-						if (this->onGround)
+						if (this->onGround && InJumpablePosition())
 							Jump();
 					}
 				}
 				if (e->ny > 0)
 				{
 					vy = 0;
-					if ((l < ol && vx < 0) || (r > or && vx > 0)) Jump();
+					if (((l < ol - 3 && vx < 0) || (r > or + 3 && vx > 0)) && InJumpablePosition() && !detectedStraighRoad) Jump(); //bien detectedStraighRoad phat hien duong thang khong cho nhay
 				}
-				if (e->ny < 0)
+				if (e->ny < 0 && !facingBrick && !onGround)
 					vy = -BLACKENEMY_GRAVITY;
 			}
 			if (dynamic_cast<CConveyor*>(e->obj))
@@ -113,10 +124,14 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						vy = -BLACKENEMY_GRAVITY;
 				}
 				if (e->ny > 0) {
-					if (conveyor->GetDirection() > 0)
-						x += 0.5f;
-					else
-						x -= 0.5f;
+					if (conveyor->GetDirection() > 0) {
+						x += 1.0f;
+						onFastConveyor = true;
+					}
+					else {
+						x -= 1.0f;
+						onSlowConveyor = true;
+					}
 				}
 			}
 		}
@@ -125,14 +140,13 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	DebugOut(L"%d \n", jump_count);
 }
 
 void CBlackEnemy::Render()
 {
 	int ani = 0;
 	if (state == BLACKENEMY_STATE_WALK) { //==============WALK
-		if (vx > 0)
+		if (ax > 0)
 			ani = BLACKENEMY_ANI_WALK_RIGHT;
 		else
 			ani = BLACKENEMY_ANI_WALK_LEFT;
@@ -144,7 +158,7 @@ void CBlackEnemy::Render()
 			ani = BLACKENEMY_ANI_FLY_LEFT;
 	}
 	else if (state == BLACKENEMY_STATE_FLY) { //==============FLY
-		if (vx > 0) {
+		if (ax > 0) {
 			if (this->onGround)
 				ani = BLACKENEMY_ANI_FLY_ONGROUND_RIGHT;
 			else
@@ -302,7 +316,7 @@ void CBlackEnemy::DetectPlayer()
 	// Duoi theo gimmick:
 	if (state == BLACKENEMY_STATE_WALK)
 	{
-		if (!player->onEnemy)
+		if (!player->onEnemy) //ko dc quay dau tren khong trung
 		{
 			if (this->canTurnAround && this->x > player->x + PLAYER_MAX_RANGE_WALK && this->ax > 0)
 			{
@@ -366,6 +380,7 @@ void CBlackEnemy::Transform()
 		SetState(BLACKENEMY_STATE_TRANSFORM);
 		this->transform_start = GetTickCount64();
 		this->transforming = true;
+		this->y += 1; // day len 1 chut tranh loi rot xuyen gach
 	} //BAT DAU BIEN HINH
 
 	if (state == BLACKENEMY_STATE_TRANSFORM && this->transforming && GetTickCount64() - this->transform_start >= BLACKENEMY_TRANSFORM_TIME)
@@ -375,4 +390,42 @@ void CBlackEnemy::Transform()
 		this->transforming = false;
 	}
 
+}
+
+bool CBlackEnemy::onSideOf(CGameObject* object, float equal)
+{
+	float ol, ot, or , ob;
+	object->GetBoundingBox(ol, ot, or , ob);
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	if (dynamic_cast<CBrick*>(object))
+	{
+		if (b <= ot && t >= ob && ((abs(l - or ) < equal && l >= or) || (abs(r - ol) < equal && r <= ol)))
+			return true;
+	}
+	return false;
+}
+
+bool CBlackEnemy::isUnder(CGameObject* object, float equal)
+{
+	float ol, ot, or , ob;
+	object->GetBoundingBox(ol, ot, or , ob);
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	if (dynamic_cast<CBrick*>(object) || dynamic_cast<CConveyor*>(object))
+	{
+		if (r >= ol && l <= or && (abs(ob - t) < equal))
+			return true;
+	}
+	return false;
+}
+
+bool CBlackEnemy::InJumpablePosition()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	if (y - BLACKENEMY_HEIGHT <= player->y)
+		return true;
+	return false;
 }

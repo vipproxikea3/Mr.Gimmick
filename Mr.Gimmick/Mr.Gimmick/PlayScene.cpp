@@ -254,10 +254,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
-		obj = new CBlackEnemy();
+		obj = new CBlackEnemy(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_STAR:
+		if (star != NULL)
+		{
+			DebugOut(L"[ERROR] STAR object was created before!\n");
+			return;
+		}
 		obj = new CStar();
+		this->star = (CStar*)obj;
+
+		DebugOut(L"[INFO] Srar object created!\n");
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -335,6 +343,7 @@ void CPlayScene::Load()
 
 	// Play Soundtrack
 	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+	
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -364,6 +373,14 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	quadtree->Retrieve(&coObjects, player);
 	player->Update(dt, &coObjects);
+
+	if (star->GetState() == STAR_STATE_HIDE || star->GetState() == STAR_STATE_PENDING || star->GetState() == STAR_STATE_CREATED || star->GetState() == STAR_STATE_READY) {
+		star->SetPosition(player->x, player->y + 16);
+	}
+
+	vector<LPGAMEOBJECT> tmp_coObjects;
+	quadtree->Retrieve(&tmp_coObjects, star);
+	star->Update(dt, &tmp_coObjects);
 
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
@@ -405,6 +422,8 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	SetCamPos();
+
+	hud->Update(dt);
 }
 
 void CPlayScene::UpdateZone() {
@@ -446,6 +465,8 @@ void CPlayScene::SetCamPos() {
 	if (cy - game->GetScreenHeight() < lb) cy = lb + game->GetScreenHeight();
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+
+	hud->SetPosition(cx, cy - game->GetScreenHeight());
 }
 
 void CPlayScene::PushBackObj(CGameObject* obj) {
@@ -482,6 +503,8 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		if ((dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
+
+	hud->Render();
 }
 
 /*
@@ -512,14 +535,28 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	Sound* sound = Sound::GetInstance();
 
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
+	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
 		return;
 
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_Z:
+		DebugOut(L"[STAR] x %f, y %f \n", star->x, star->y);
+		break;
+	case DIK_K:
 		//sound->Play("SOUND_Effect_1", 0, 1);
+		break;
+	case DIK_J:
+		if (star != nullptr) {
+			if (star->GetState() == STAR_STATE_HIDE)
+				star->SetState(STAR_STATE_PENDING);
+		}
+		break;
+	case DIK_4:
+		gimmick->x = 1868;
+		gimmick->y = 440;
 		break;
 	}
 }
@@ -534,13 +571,13 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false) {
+	if (game->IsKeyDown(DIK_K) && gimmick->stunning == false) {
 		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
-	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false)
+	if (game->IsKeyDown(DIK_D) && gimmick->stunning == false)
 		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT) && gimmick->stunning == false)
+	else if (game->IsKeyDown(DIK_A) && gimmick->stunning == false)
 		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
 		gimmick->SetState(GIMMICK_STATE_IDLE);
@@ -551,10 +588,28 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
 		return;
+	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_J:
+		if (star != nullptr) {
+			if (star->GetState() == STAR_STATE_PENDING) {
+				star->SetState(STAR_STATE_HIDE);
+			}
+			else if (star->GetState() == STAR_STATE_READY) {
+				if (gimmick->nx > 0) {
+					star->SetState(STAR_STATE_WALKING_RIGHT);
+				}
+				else {
+					star->SetState(STAR_STATE_WALKING_LEFT);
+				}
+				star->vy = gimmick->vy;
+				star->vx += 0.5 * gimmick->vx;
+			}
+		}
+		break;
+	case DIK_K:
 		gimmick->falling = true;
 		gimmick->jumping = false;
 		break;
