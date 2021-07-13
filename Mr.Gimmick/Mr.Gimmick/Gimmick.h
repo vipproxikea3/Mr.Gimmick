@@ -70,10 +70,6 @@ public:
 	void SetState(int state);
 	void StartUntouchable() { untouchable = 1; untouchable_start = DWORD(GetTickCount64()); }
 	void SetdifY(float y) { this->y += y; };
-	void SetUnTouchable() {
-		untouchable = true;
-		untouchable_start = GetTickCount64();
-	}
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	bool onTopOf(CGameObject* object, float equal = 1);
