@@ -75,6 +75,8 @@ class CStar : public CGameObject
 public:
 	CStar();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void Ready();
+	void Shot();
 	virtual void Render();
 	void SetState(int state);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

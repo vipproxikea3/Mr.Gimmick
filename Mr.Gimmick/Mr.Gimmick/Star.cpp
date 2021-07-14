@@ -3,6 +3,9 @@
 #include "InclinedBrick.h"
 #include "Game.h"
 #include "Conveyor.h"
+#include "Gimmick.h"
+#include "Game.h"
+#include "PlayScene.h"
 
 CStar::CStar() : CGameObject()
 {
@@ -177,6 +180,28 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		// clean up collision events
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	}
+}
+
+void CStar::Ready() {
+	if (this->GetState() == STAR_STATE_HIDE)
+		this->SetState(STAR_STATE_PENDING);
+}
+
+void CStar::Shot() {
+	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (this->GetState() == STAR_STATE_PENDING || this->GetState() == STAR_STATE_HIDE) {
+		this->SetState(STAR_STATE_HIDE);
+	}
+	else if (this->GetState() == STAR_STATE_READY) {
+		if (gimmick->nx > 0) {
+			this->SetState(STAR_STATE_WALKING_RIGHT);
+		}
+		else {
+			this->SetState(STAR_STATE_WALKING_LEFT);
+		}
+		this->vy = gimmick->vy;
+		this->vx += 0.5 * gimmick->vx;
 	}
 }
 

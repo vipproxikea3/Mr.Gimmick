@@ -437,10 +437,16 @@ void CGimmick::SetState(int state)
 		else ax = 0;
 		break;
 	case GIMMICK_STATE_STUN:
+	{
 		stunning = true;
 		stunning_start = GetTickCount64();
 		this->SetState(GIMMICK_STATE_IDLE);
+
+		CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
+		star->Shot();
+
 		break;
+	}
 	case GIMMICK_STATE_DIE:
 		CreateDieEffect();
 		vx = 0;
