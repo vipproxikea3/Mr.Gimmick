@@ -50,6 +50,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_PINK_BRICK		16
 #define OBJECT_TYPE_MEDICINE		17
 #define OBJECT_TYPE_STAR			18
+#define OBJECT_TYPE_DOOR			19
 
 #define MAX_SCENE_LINE 1024
 
@@ -267,6 +268,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Srar object created!\n");
 		break;
+	case OBJECT_TYPE_DOOR:
+		obj = new CDoor();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -394,7 +398,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CWorm*>(objects[i])
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
-			|| dynamic_cast<CBrickPink*>(objects[i]))
+			|| dynamic_cast<CBrickPink*>(objects[i])
+			|| dynamic_cast<CDoor*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
