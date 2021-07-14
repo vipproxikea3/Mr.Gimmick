@@ -542,16 +542,12 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_Z:
-		DebugOut(L"[STAR] x %f, y %f \n", star->x, star->y);
-		break;
 	case DIK_K:
 		//sound->Play("SOUND_Effect_1", 0, 1);
 		break;
 	case DIK_J:
 		if (star != nullptr) {
-			if (star->GetState() == STAR_STATE_HIDE)
-				star->SetState(STAR_STATE_PENDING);
+			star->Ready();
 		}
 		break;
 	case DIK_4:
@@ -594,19 +590,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	{
 	case DIK_J:
 		if (star != nullptr) {
-			if (star->GetState() == STAR_STATE_PENDING) {
-				star->SetState(STAR_STATE_HIDE);
-			}
-			else if (star->GetState() == STAR_STATE_READY) {
-				if (gimmick->nx > 0) {
-					star->SetState(STAR_STATE_WALKING_RIGHT);
-				}
-				else {
-					star->SetState(STAR_STATE_WALKING_LEFT);
-				}
-				star->vy = gimmick->vy;
-				star->vx += 0.5 * gimmick->vx;
-			}
+			star->Shot();
 		}
 		break;
 	case DIK_K:
