@@ -52,10 +52,10 @@ void CDoor::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CDoor::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CDoor::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	l = x;
-	t = y;
-	r = l + DOOR_BBOX_WIDTH;
-	b = t - DOOR_BBOX_HEIGHT;
+	left = x;
+	top = y;
+	right = left + DOOR_BBOX_WIDTH;
+	bottom = top - DOOR_BBOX_HEIGHT;
 }

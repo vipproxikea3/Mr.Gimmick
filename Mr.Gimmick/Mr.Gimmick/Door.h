@@ -27,6 +27,6 @@ public:
 	virtual void Render();
 	void StartOpen() { open_start = GetTickCount64(); }
 	void SetState(int state);
-	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
 
