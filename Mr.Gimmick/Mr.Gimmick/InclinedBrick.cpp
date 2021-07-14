@@ -21,7 +21,7 @@ int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 
 	if (object->y - 16 + dy < oy + 2.0f) {
 		if (((ly > ry && lx + 8.0f > ox) && isT == -1) || ((ly < ry && rx - 8.0f < ox) && isT == 1))
-			object->y = oy + 18.0f;
+			object->y = oy + 21.0f;
 		else
 			object->y = oy + 16.0f;
 		/*if(object->vy < 0)*/ object->vy = 0.0f;

@@ -1,4 +1,4 @@
-#include "Gimmick.h"
+﻿#include "Gimmick.h"
 #include <algorithm>
 #include <assert.h>
 #include "Utils.h"
@@ -60,6 +60,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	onEnemy = false;
 	facingBrick = false;
 	underBrick = false;
+	// hướng của gạch nghiêng
+	int direction = 0;
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -75,7 +77,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
-			brick->Collision(this, dy);
+				int tmp = brick->Collision(this, dy);
+				if (tmp != 0)
+					direction = tmp;
 		}
 		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
@@ -101,6 +105,21 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrickPink*>(coObjects->at(i))) {
 			CBrickPink* brick = dynamic_cast<CBrickPink*>(coObjects->at(i));
 			if (onTopOf(brick, 3.5f)) { this->onGround = true; }
+		}
+	}
+
+	if (onInclinedBrick == true && direction != 0) {
+		if (direction == -1) {
+			this->x -= 0.5;
+		}
+		if (direction == 1) {
+			this->x += 0.5;
+		}
+		if (direction == -2) {
+			this->x -= 1;
+		}
+		if (direction == 2) {
+			this->x += 1;
 		}
 	}
 
@@ -412,7 +431,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {

@@ -15,10 +15,18 @@ public:
 		this->ry = ry;
 		this->isT = isT;
 
-		if (ly < ry)
-			direction = 1;
-		else
-			direction = -1;
+		if (ly < ry) {
+			if (ly - ry == -8)
+				this->direction = 1;
+			else
+				this->direction = 2;
+		}
+		else {
+			if (ly - ry == 8)
+				this->direction = -1;
+			else
+				this->direction = -2;
+		}
 	}
 	~CInclinedBrick() {}
 	int Collision(LPGAMEOBJECT object, float dy);
