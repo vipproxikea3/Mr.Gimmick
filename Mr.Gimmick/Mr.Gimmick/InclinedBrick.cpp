@@ -7,8 +7,8 @@ int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 		return 0;
 	if (object->x + 8 < this->x || object->x + 8 > this->x + 16)
 		return 0;
-	/*if (dynamic_cast<CGimmick*>(object) && ((CGimmick*)object)->jumping)
-		return 0;*/
+	if (dynamic_cast<CGimmick*>(object) && ((CGimmick*)object)->jumping)
+		return 0;
 
 	float lx = this->x;
 	float ly = this->y - this->ly;
@@ -21,7 +21,7 @@ int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 
 	if (object->y - 16 + dy < oy + 2.0f) {
 		if (((ly > ry && lx + 8.0f > ox) && isT == -1) || ((ly < ry && rx - 8.0f < ox) && isT == 1))
-			object->y = oy + 18.0f;
+			object->y = oy + 21.0f;
 		else
 			object->y = oy + 16.0f;
 		/*if(object->vy < 0)*/ object->vy = 0.0f;

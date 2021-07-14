@@ -1,4 +1,4 @@
-#include "Star.h"
+﻿#include "Star.h"
 #include "Utils.h"
 #include "InclinedBrick.h"
 #include "Game.h"
@@ -86,12 +86,31 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (state != STAR_STATE_EXPLOSIVE)
 			vy -= STAR_GRAVITY * dt;
 
+		// hướng của gạch nghiêng
+		int direction = 0;
 		onInclinedBrick = false;
 		for (UINT i = 0; i < coObjects->size(); i++)
 		{
 			if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 				CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
-				brick->Collision(this, dy);
+				int tmp = brick->Collision(this, dy);
+				if (tmp != 0)
+					direction = tmp;
+			}
+		}
+
+		if (onInclinedBrick == true && direction != 0) {
+			if (direction == -1) {
+				this->x -= 0.5;
+			}
+			if (direction == 1) {
+				this->x += 0.5;
+			}
+			if (direction == -2) {
+				this->x -= 1;
+			}
+			if (direction == 2) {
+				this->x += 1;
 			}
 		}
 
