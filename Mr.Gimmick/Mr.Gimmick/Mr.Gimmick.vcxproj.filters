@@ -34,9 +34,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
-    <ClCompile Include="Hud.cpp" />
-    <ClCompile Include="Star.cpp" />
-    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="BlackBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -72,8 +70,6 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Worm.h" />
     <ClInclude Include="Zone.h" />
-    <ClInclude Include="Hud.h" />
-    <ClInclude Include="Star.h" />
-    <ClInclude Include="Door.h" />
+    <ClInclude Include="BlackBoss.h" />
   </ItemGroup>
 </Project>
