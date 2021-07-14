@@ -154,6 +154,7 @@
     <ClInclude Include="CogwheelSmall.h" />
     <ClInclude Include="Conveyor.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
     <ClCompile Include="Conveyor.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
