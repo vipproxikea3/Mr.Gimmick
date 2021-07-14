@@ -76,4 +76,5 @@ public:
 	bool onSideOf(CGameObject* object, float equal = 1);
 	void standOn(CGameObject* object);
 	bool isUnder(CGameObject* object, float equal = 1);
+	int getUntouchable() { return untouchable; }
 };

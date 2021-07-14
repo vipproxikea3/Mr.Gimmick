@@ -44,8 +44,6 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"[UNTOUCHABLE] %d!\n", untouchable);
-
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	CalculateSpeed(dt);
@@ -73,6 +71,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -92,12 +91,16 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
 			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK && this->vy < 0 ) { 
 				this->onGround = true;
-				if(!onEnemy) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
+				if(!onEnemy && !stunning) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
-			/*if (isUnder(enemy)) { 
+			if (isUnder(enemy)) { 
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
-			}*/
+			}
+		}
+		if (dynamic_cast<CBrickPink*>(coObjects->at(i))) {
+			CBrickPink* brick = dynamic_cast<CBrickPink*>(coObjects->at(i));
+			if (onTopOf(brick, 3.5f)) { this->onGround = true; }
 		}
 	}
 
@@ -286,6 +289,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 
 					y = y0 + min_ty * dy + ny * 0.1f;
+					onGround = true;
 				}
 			}
 
@@ -305,17 +309,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 
 				CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(e->obj);
-				float l, t, r, b;
-				GetBoundingBox(l, t, r, b);
-				float ol, ot, or , ob;
-				e->obj->GetBoundingBox(ol, ot, or , ob);
 
 				if (e->ny > 0 && enemy->state == BLACKENEMY_STATE_WALK) {
 					vy = 0;
 					this->y = y0 + min_ty * dy + ny * 0.3f;
 					standOn(enemy); 
 				}
-				else 
+				else if(!untouchable)
 				{
 					if (enemy->x < this->x)
 					{
@@ -332,6 +332,27 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						StartUntouchable();
 					}
 				}
+			}
+			if (dynamic_cast<CBlackBoss*>(e->obj)) {
+
+				CBlackBoss* boss = dynamic_cast<CBlackBoss*>(e->obj);
+				float l, t, r, b;
+				GetBoundingBox(l, t, r, b);
+				float ol, ot, or , ob;
+				e->obj->GetBoundingBox(ol, ot, or , ob);
+
+				if (boss->x < this->x)
+				{
+					//this->vx = GIMMICK_DEFLECT_SPEED_X;
+					this->nx = 1.0;
+				}
+				else
+				{
+					//this->vx = -GIMMICK_DEFLECT_SPEED_X;
+					this->nx = -1.0;
+				}
+				this->SetState(GIMMICK_STATE_STUN);
+				StartUntouchable();
 			}
 		}
 	}
@@ -529,7 +550,7 @@ void CGimmick::standOn(CGameObject* object)
 		}
 
 		if (!jumping) { 
-			this->y = object->y + GIMMICK_BBOX_HEIGHT - 2;
+			this->y = object->y + GIMMICK_BBOX_HEIGHT ; //-2 pixel thi bi va cham voi quai khac
 			this->vy = 0; 
 		}
 	}

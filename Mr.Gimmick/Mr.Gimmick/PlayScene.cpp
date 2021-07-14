@@ -51,6 +51,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_MEDICINE		17
 #define OBJECT_TYPE_STAR			18
 #define OBJECT_TYPE_DOOR			19
+#define OBJECT_TYPE_BLACK_BOSS		22
 
 #define MAX_SCENE_LINE 1024
 
@@ -271,6 +272,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_DOOR:
 		obj = new CDoor();
 		break;
+	case OBJECT_TYPE_BLACK_BOSS:
+		obj = new CBlackBoss();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -397,6 +401,7 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
 			|| dynamic_cast<CWorm*>(objects[i])
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
+			|| dynamic_cast<CBlackBoss*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i]))
@@ -547,10 +552,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_K:
+	case DIK_SPACE:
 		//sound->Play("SOUND_Effect_1", 0, 1);
 		break;
-	case DIK_J:
+	case DIK_S:
 		if (star != nullptr) {
 			star->Ready();
 		}
@@ -558,6 +563,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_4:
 		gimmick->x = 1868;
 		gimmick->y = 440;
+		break;
+	case DIK_5:
+		gimmick->x = 1206;
+		gimmick->y = 650;
 		break;
 	}
 }
@@ -572,13 +581,13 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_K) && gimmick->stunning == false) {
+	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false) {
 		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
-	if (game->IsKeyDown(DIK_D) && gimmick->stunning == false)
+	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false)
 		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_A) && gimmick->stunning == false)
+	else if (game->IsKeyDown(DIK_LEFT) && gimmick->stunning == false)
 		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
 		gimmick->SetState(GIMMICK_STATE_IDLE);
@@ -593,12 +602,12 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_J:
+	case DIK_S:
 		if (star != nullptr) {
 			star->Shot();
 		}
 		break;
-	case DIK_K:
+	case DIK_SPACE:
 		gimmick->falling = true;
 		gimmick->jumping = false;
 		break;
