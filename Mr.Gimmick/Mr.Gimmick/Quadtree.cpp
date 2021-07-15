@@ -25,7 +25,7 @@ bool Quadtree::IsContain(CGameObject* entity)
     float ol,ot,or,ob;
     entity->GetBoundingBox(ol,ot,or,ob);
 
-    return ! (or < l || ot < b || ol > r || ob > t );
+    return !(or < l || ot < b || ol > r || ob > t);
 }
 
 void Quadtree::Split()
