@@ -15,13 +15,13 @@ int CInclinedBrick::Collision(LPGAMEOBJECT object, float dy) {
 	float rx = this->x + INCLINEDBRICK_BBOX_WIDTH;
 	float ry = this->y - this->ry;
 
-	float ox = object->x + 8.0f;
+	float ox = object->x + 8;
 
 	float oy = (((ox - lx) * (ry - ly)) / (rx - lx)) + ly;
 
 	if (object->y - 16 + dy < oy + 2.0f) {
 		if (((ly > ry && lx + 8.0f > ox) && isT == -1) || ((ly < ry && rx - 8.0f < ox) && isT == 1))
-			object->y = oy + 18.0f;
+			object->y = oy + 21.0f;
 		else
 			object->y = oy + 16.0f;
 		/*if(object->vy < 0)*/ object->vy = 0.0f;
@@ -40,7 +40,7 @@ void CInclinedBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
 
 void CInclinedBrick::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CInclinedBrick::SetState(int state) {}

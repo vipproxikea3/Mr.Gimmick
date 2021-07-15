@@ -47,8 +47,11 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WORM			12
 #define OBJECT_TYPE_BLACKENEMY		13
 #define OBJECT_TYPE_SWING			15
-#define OBJECT_TYPE_MEDICINE		17
 #define OBJECT_TYPE_PINK_BRICK		16
+#define OBJECT_TYPE_MEDICINE		17
+#define OBJECT_TYPE_STAR			18
+#define OBJECT_TYPE_DOOR			19
+#define OBJECT_TYPE_BLACK_BOSS		22
 #define OBJECT_TYPE_SEWER			99
 
 #define MAX_SCENE_LINE 1024
@@ -257,7 +260,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
-		obj = new CBlackEnemy();
+		obj = new CBlackEnemy(atoi(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_STAR:
+		if (star != NULL)
+		{
+			DebugOut(L"[ERROR] STAR object was created before!\n");
+			return;
+		}
+		obj = new CStar();
+		this->star = (CStar*)obj;
+
+		DebugOut(L"[INFO] Srar object created!\n");
+		break;
+	case OBJECT_TYPE_DOOR:
+		obj = new CDoor();
+		break;
+	case OBJECT_TYPE_BLACK_BOSS:
+		obj = new CBlackBoss();
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -334,7 +354,8 @@ void CPlayScene::Load()
 	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
 
 	// Play Soundtrack
-	Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+	
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -365,6 +386,14 @@ void CPlayScene::Update(DWORD dt)
 	quadtree->Retrieve(&coObjects, player);
 	player->Update(dt, &coObjects);
 
+	if (star->GetState() == STAR_STATE_HIDE || star->GetState() == STAR_STATE_PENDING || star->GetState() == STAR_STATE_CREATED || star->GetState() == STAR_STATE_READY) {
+		star->SetPosition(player->x, player->y + 16);
+	}
+
+	vector<LPGAMEOBJECT> tmp_coObjects;
+	quadtree->Retrieve(&tmp_coObjects, star);
+	star->Update(dt, &tmp_coObjects);
+
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -376,8 +405,10 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
 			|| dynamic_cast<CWorm*>(objects[i])
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
+			|| dynamic_cast<CBlackBoss*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
-			|| dynamic_cast<CBrickPink*>(objects[i]))
+			|| dynamic_cast<CBrickPink*>(objects[i])
+			|| dynamic_cast<CDoor*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -405,6 +436,8 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	SetCamPos();
+
+	hud->Update(dt);
 }
 
 void CPlayScene::UpdateZone() {
@@ -446,6 +479,8 @@ void CPlayScene::SetCamPos() {
 	if (cy - game->GetScreenHeight() < lb) cy = lb + game->GetScreenHeight();
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+
+	hud->SetPosition(cx, cy - game->GetScreenHeight());
 }
 
 void CPlayScene::PushBackObj(CGameObject* obj) {
@@ -482,6 +517,8 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
+
+	hud->Render();
 }
 
 /*
@@ -512,6 +549,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	Sound* sound = Sound::GetInstance();
 
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
+	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
 		return;
@@ -521,6 +559,19 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_SPACE:
 		sound->Play("SOUND_Effect_1", 0, 1); // Jump
 		break;
+	case DIK_S:
+		if (star != nullptr) {
+			star->Ready();
+		}
+		break;
+	case DIK_4:
+		gimmick->x = 1868;
+		gimmick->y = 440;
+		break;
+	case DIK_5:
+		gimmick->x = 1206;
+		gimmick->y = 650;
+		break;
 	}
 }
 
@@ -529,18 +580,18 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true )
+	if (gimmick->GetState() == GIMMICK_STATE_DIE)
 		return;
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_SPACE) && ! gimmick->inSewer) {
+	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false && !gimmick->inSewer) {
 		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
-	if (game->IsKeyDown(DIK_RIGHT) && !gimmick->inSewer)
+	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false && !gimmick->inSewer)
 		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT) && !gimmick->inSewer)
+	else if (game->IsKeyDown(DIK_LEFT) && gimmick->stunning == false && !gimmick->inSewer)
 		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
 		gimmick->SetState(GIMMICK_STATE_IDLE);
@@ -551,9 +602,15 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
 		return;
+	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	switch (KeyCode)
 	{
+	case DIK_S:
+		if (star != nullptr) {
+			star->Shot();
+		}
+		break;
 	case DIK_SPACE:
 		gimmick->falling = true;
 		gimmick->jumping = false;

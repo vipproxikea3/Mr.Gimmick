@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Gimmick.h"
 
 #define	SWING_BBOX_WIDTH	38
 #define	SWING_BBOX_HEIGHT	68

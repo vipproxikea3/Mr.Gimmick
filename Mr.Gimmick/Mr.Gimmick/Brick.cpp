@@ -1,5 +1,5 @@
 #include "Brick.h"
-
+#include "Star.h"
 #include "PlayScene.h"
 #include "Game.h"
 #include "Gimmick.h"

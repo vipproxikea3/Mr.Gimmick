@@ -40,7 +40,7 @@
 #define GIMMICK_BBOX_WIDTH			16
 #define GIMMICK_BBOX_HEIGHT			16
 
-#define GIMMICK_UNTOUCHABLE_TIME	5000
+#define GIMMICK_UNTOUCHABLE_TIME	2000
 #define GIMMICK_STUNNING_TIME		500
 
 
@@ -59,8 +59,10 @@ public:
 	bool onGround = false;
 	bool falling = false;
 	bool jumping = false;
-	bool stunning;
+	bool stunning = false;
 	bool onEnemy = false;
+	bool facingBrick = false; //fix loi dung tren lung quai bi xuyen gach
+	bool underBrick = false;
 	bool inSewer = false;// check in sewer
 	bool equalinSewer = false; // check in sewer3
 	float XSewer, YSewer, nSewer; // check out sewer 
@@ -78,5 +80,8 @@ public:
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	bool onTopOf(CGameObject* object, float equal = 1);
+	bool onSideOf(CGameObject* object, float equal = 1);
 	void standOn(CGameObject* object);
+	bool isUnder(CGameObject* object, float equal = 1);
+	int getUntouchable() { return untouchable; }
 };

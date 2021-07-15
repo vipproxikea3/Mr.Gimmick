@@ -1,4 +1,5 @@
 #include "Swing.h"
+#include "Gimmick.h"
 #include "PlayScene.h"
 #include "algorithm"
 

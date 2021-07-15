@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="BlackBoss.h" />
     <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="BlueFire.h" />
     <ClInclude Include="Boom.h" />
@@ -154,10 +155,12 @@
     <ClInclude Include="CogwheelSmall.h" />
     <ClInclude Include="Conveyor.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
     <ClInclude Include="GimmickDieEffect.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="InclinedBrick.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="KeyEventHandler.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Sewer.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="Swing.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tube.h" />
@@ -180,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="BlackBoss.cpp" />
     <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="BlueFire.cpp" />
     <ClCompile Include="Boom.cpp" />
@@ -189,10 +194,12 @@
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
     <ClCompile Include="Conveyor.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
     <ClCompile Include="GimmickDieEffect.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="InclinedBrick.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
@@ -206,6 +213,7 @@
     <ClCompile Include="Sewer.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="Swing.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tube.cpp" />
