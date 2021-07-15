@@ -168,6 +168,7 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Medicine.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sewer.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Medicine.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sewer.cpp" />
