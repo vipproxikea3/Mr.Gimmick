@@ -30,6 +30,7 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalculateSpeed();
 	DetectPlayer();
 	Transform();
+	SpecialCollisionWithPlayer();
 	DetectStar();
 
 	vector<LPGAMEOBJECT> newCoObjects;
@@ -477,4 +478,49 @@ int CBlackEnemy::CheckSideOfStar() // -1 left, 1 right dung de xac dinh huong di
 		return -1;
 	else
 		return 1;
+}
+
+void CBlackEnemy::SpecialCollisionWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	if (player->state != GIMMICK_STATE_DIE && player->getUntouchable() != 1
+		&& state != BLACKENEMY_STATE_DIE)
+	{
+		if (IsCollidingWithPlayer())
+		{
+			if (x < player->x)
+			{
+				//player->vx = GIMMICK_DEFLECT_SPEED_X;
+				player->nx = 1.0;
+			}
+			else
+			{
+				//player->vx = -GIMMICK_DEFLECT_SPEED_X;
+				player->nx = -1.0;
+			}
+
+			player->SetState(GIMMICK_STATE_STUN);
+			player->StartUntouchable();
+		}
+	}
+}
+
+bool CBlackEnemy::IsCollidingWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	t -= 5;
+
+	float ol, ot, or , ob;
+	player->GetBoundingBox(ol, ot, or , ob);
+
+	if (or >= l && ol <= r
+		&& ot >= b && ob <= t)
+		return true;
+	return false;
 }
