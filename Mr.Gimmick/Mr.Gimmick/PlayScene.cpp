@@ -490,6 +490,9 @@ void CPlayScene::PushBackObj(CGameObject* obj) {
 void CPlayScene::Render()
 {
 	// Render Waterfall
+	CScene* Scene2 = CGame::GetInstance()->GetCurrentScene();
+	if (Scene2->Getid() == 2)
+		fps = 3;
 	if (countfps == fps)
 	{
 		if (this->maptt == this->spritemap - 1)

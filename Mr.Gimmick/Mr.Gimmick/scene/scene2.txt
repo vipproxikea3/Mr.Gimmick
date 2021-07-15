@@ -1,6 +1,6 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
-0	Map\Gimmick!(J)-Level2_bank.png	255	0	0
+0	Map\Gimmick!(J)-Level2_bank_new.png	255	0	0
 10	textures\gimmick_right.png	0	0	255
 20	textures\gimmick_left.png	0	0	255
 30	textures\stage1.png	215	121	214
@@ -21,10 +21,10 @@
 
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2a_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2b_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2c_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2d_map.txt
 [ZONES]
 0	960	2048	0
 
