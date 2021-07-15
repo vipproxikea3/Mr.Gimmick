@@ -35,6 +35,12 @@
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
     <ClCompile Include="BlackBoss.cpp" />
+    <ClCompile Include="Sewer.cpp" />
+    <ClCompile Include="Medicine.cpp" />
+=======
+    <ClCompile Include="GimmickDieEffect.cpp" />
+    <ClInclude Include="BlackEnemy.h" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -65,11 +71,12 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Swing.h" />
     <ClInclude Include="Textures.h" />
-    <ClInclude Include="Tube.h" />
-    <ClInclude Include="Utils.h" />
-    <ClInclude Include="Window.h" />
-    <ClInclude Include="Worm.h" />
-    <ClInclude Include="Zone.h" />
+    <ClInclude Include="Sewer.h" />
     <ClInclude Include="BlackBoss.h" />
+    <ClInclude Include="Medicine.h" />
+=======
+    <ClInclude Include="GimmickDieEffect.h" />
+    <ClInclude Include="BrickPink.h" />
+>>>>>>> master
   </ItemGroup>
 </Project>

@@ -33,6 +33,13 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 		vx += ax * dt;
 	}
 
+	/*if (abs(vx) > GIMMICK_WALKING_SPEED) {
+		vx = nx * GIMMICK_WALKING_SPEED;
+	}*/
+
+	if ((vx * nx < 0) && this->state == GIMMICK_STATE_IDLE && inSewer == false)
+		vx = 0;
+
 	//JUMP:
 	if (vy > GIMMICK_JUMP_SPEED_Y_MAX)
 	{
@@ -44,15 +51,57 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"\nVao day %d", vy);
+
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
+	// Set in sewer
+	/*if (onGround)
+	{
+		if (nx * vx < 0 && inSewer == true)
+			inSewer = true; 
+		else 
+			inSewer = false;
+	}// set if onground not inSewer
+	if (equalinSewer == true)
+	{
+		inSewer = true;
+	}//if in sewer3 insewer*/
+	//equalinSewer = false; // check in sewer 3
+	if (inSewer == true)
+	{
+		if (YSewer != 0)
+		{
+			if (nSewer == 1 && (y>YSewer+ 0.25))
+			{
+				inSewer = false;
+			}
+			if (nSewer == -1 && (y < YSewer- 0.25))
+			{
+				inSewer = false;
+			}
+		}
+		if (XSewer != 0)
+		{
+			if (nSewer == 1 && (x > XSewer+ 0.25))
+			{
+				inSewer = false;
+			}
+			if (nSewer == -1 && (x < XSewer-0.25))
+			{
+				inSewer = false;
+			}
+		}
+	}
 	CalculateSpeed(dt);
 
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += ay * dt;
+	
+	if(inSewer==false) //|| equalinSewer == true
+		vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
 
 	onInclinedBrick = false;
@@ -75,6 +124,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
+		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
 				int tmp = brick->Collision(this, dy);
@@ -162,6 +212,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float x0 = x;
 		float y0 = y;
 
+		float tempy = vy;
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
@@ -184,7 +235,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (onInclinedBrick) x = x0 + dx;
 				y = y0 + min_ty * dy + ny * 0.1f;
 
-				if (e->nx != 0) { 
+				if (e->nx != 0 && inSewer == false) {
 					vx = 0; 
 					if (!onInclinedBrick) facingBrick = true;
 				}
@@ -192,6 +243,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					if (e->ny > 0) this->onGround = true;
 				}
+
 			}
 
 			if (dynamic_cast<CBrickPink*>(e->obj)) {
@@ -373,7 +425,112 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
 			}
+
+			if (dynamic_cast<CSewer*>(e->obj)) {
+				CSewer* Sewer = dynamic_cast<CSewer*>(e->obj);
+				if (e->nx != 0 || e->ny != 0)
+				{
+					equalinSewer = false;
+					inSewer = true;
+				}
+				if (e->nx < 0 && Sewer->type == 1)
+				{
+					XSewer = Sewer->GetX()+16;
+					YSewer = 0;
+					nSewer = 1; 
+					y = Sewer->GetY() + 0.01;
+					vx = 0.2f;
+					vy = 0.0f;
+				}
+				else if (e->nx > 0 && Sewer->type == 1)
+				{
+					XSewer = Sewer->GetX() - 16;
+					YSewer = 0;
+					nSewer = -1;
+					y = Sewer->GetY() + 0.01;
+					vx = -0.13f;
+					vy = 0.0f;
+				}
+				if (e->ny < 0 && Sewer->type == 2) {
+					XSewer = 0;
+					YSewer = Sewer->GetY()+ 16;
+					nSewer = 1;
+					x = Sewer->GetX()-0.01;
+					vy = 0.2f;
+					vx = 0.0f;
+				}
+				else if (e->ny > 0 && Sewer->type == 2)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() - 16;
+					nSewer = -1;
+					x = Sewer->GetX();
+					vy = -0.2f;
+					vx = 0.0f;
+				}
+				if (e->nx < 0 && Sewer->type == 3)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() - 16;
+					nSewer = -1;
+					equalinSewer = true;
+					vx = 0.1f;
+					vy = -0.2f;
+				}
+				else if (e->ny < 0 && Sewer->type == 3)
+				{
+					XSewer = Sewer->GetX() - 16;
+					YSewer = 0;
+					nSewer = -1;
+					equalinSewer = true;
+					x = Sewer->GetX()+1;
+					vx = -0.15f;
+					vy = 0.1f;
+				}
+				if (e->nx < 0 && Sewer->type == 6)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() + 16;
+					nSewer = 1;
+					equalinSewer = true;
+					vx = 0.1f;
+					vy = 0.3f;
+				}
+				else if (e->ny > 0 && Sewer->type == 6)
+				{
+					XSewer = Sewer->GetX() - 16;
+					YSewer = 0;
+					nSewer = -1;
+					equalinSewer = true;
+					x = Sewer->GetX() - 0.01;
+					vx = -0.2f;
+					vy = -0.2f;
+				}
+				if (e->nx > 0 && Sewer->type == 4)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() - 16;
+					nSewer = -1;
+					equalinSewer = true;
+					vx = -0.1f;
+					vy = -0.2f;
+				}
+				else if (e->ny < 0 && Sewer->type == 4)
+				{
+					XSewer = Sewer->GetX() + 16;
+					YSewer = 0;
+					nSewer = 1;
+					equalinSewer = true;
+					x = Sewer->GetX() - 0.01;
+					vx = 0.3f;
+					vy = 0.2f;
+				}
+				x = x + min_tx * dx;
+				y = y + min_ty * dy;
+			}
 		}
+		if (equalinSewer && tempy != 0)
+			vy = tempy;
 	}
 
 	// clean up newCoObjects
@@ -387,7 +544,16 @@ void CGimmick::Render()
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	int ani = -1;
-	if (this->stunning == true) {
+	if (this->inSewer)
+	{
+		if (nx > 0)
+			ani = GIMMICK_ANI_IN_SEWER_RIGHT;
+		else
+			ani = GIMMICK_ANI_IN_SEWER_LEFT;
+		animation_set->at(ani)->Render(x , y - 1.0f , 255);
+	}
+	else if (this->stunning == true) 
+	{
 		if (nx > 0)
 			ani = GIMMICK_ANI_STUN_RIGHT;
 		else
@@ -451,6 +617,8 @@ void CGimmick::SetState(int state)
 
 	switch (state)
 	{
+	case GIMMICK_STATE_IN_SEWER:
+		break;
 	case GIMMICK_STATE_WALKING_RIGHT:
 		ax = GIMMICK_ACCELERATION;
 		if (vx > GIMMICK_WALKING_SPEED)

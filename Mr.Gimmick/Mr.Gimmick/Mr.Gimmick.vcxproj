@@ -170,6 +170,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sewer.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Star.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sewer.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Star.cpp" />

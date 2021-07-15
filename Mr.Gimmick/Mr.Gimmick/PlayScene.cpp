@@ -52,6 +52,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_STAR			18
 #define OBJECT_TYPE_DOOR			19
 #define OBJECT_TYPE_BLACK_BOSS		22
+#define OBJECT_TYPE_SEWER			99
 
 #define MAX_SCENE_LINE 1024
 
@@ -221,6 +222,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
+	case OBJECT_TYPE_SEWER: 
+		obj = new CSewer(atof(tokens[4].c_str()));
+		break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
 		break;
@@ -511,7 +515,7 @@ void CPlayScene::Render()
 
 	// Render top layer
 	for (int i = 0; i < objects.size(); i++)
-		if ((dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
+		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
 
 	hud->Render();
@@ -553,7 +557,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		//sound->Play("SOUND_Effect_1", 0, 1);
+		sound->Play("SOUND_Effect_1", 0, 1); // Jump
 		break;
 	case DIK_S:
 		if (star != nullptr) {
@@ -581,13 +585,13 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false) {
+	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false && !gimmick->inSewer) {
 		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
-	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false)
+	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false && !gimmick->inSewer)
 		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT) && gimmick->stunning == false)
+	else if (game->IsKeyDown(DIK_LEFT) && gimmick->stunning == false && !gimmick->inSewer)
 		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
 		gimmick->SetState(GIMMICK_STATE_IDLE);
@@ -596,7 +600,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
+	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
 		return;
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 

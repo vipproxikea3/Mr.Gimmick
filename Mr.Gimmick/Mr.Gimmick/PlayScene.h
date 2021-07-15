@@ -27,6 +27,7 @@
 #include "Star.h"
 #include "Door.h"
 #include "BlackBoss.h"
+#include "Sewer.h"
 
 class CPlayScene : public CScene
 {
