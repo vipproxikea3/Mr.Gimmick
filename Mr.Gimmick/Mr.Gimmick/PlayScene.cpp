@@ -49,7 +49,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SWING			15
 #define OBJECT_TYPE_MEDICINE		17
 #define OBJECT_TYPE_PINK_BRICK		16
-#define OBJECT_TYPE_SEWER			18
+#define OBJECT_TYPE_SEWER			99
 
 #define MAX_SCENE_LINE 1024
 
