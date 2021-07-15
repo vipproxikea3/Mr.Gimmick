@@ -53,6 +53,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_DOOR			19
 #define OBJECT_TYPE_BLACK_BOSS		22
 #define OBJECT_TYPE_SEWER			99
+#define OBJECT_TYPE_PORTAL			42
 
 #define OBJECT_TYPE_GREEN_BOSS		50
 
@@ -281,6 +282,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLACK_BOSS:
 		obj = new CBlackBoss();
 		break;
+	case OBJECT_TYPE_PORTAL:
+		obj = new CPortal(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		DebugOut(L"[PORTAL] Portal object created!\n");
+		break;
 	case OBJECT_TYPE_GREEN_BOSS:
 		obj = new CGreenBoss();
 		break;
@@ -414,7 +419,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
-			|| dynamic_cast<CGreenBoss*>(objects[i]))
+			|| dynamic_cast<CGreenBoss*>(objects[i])
+			|| dynamic_cast<CPortal*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);

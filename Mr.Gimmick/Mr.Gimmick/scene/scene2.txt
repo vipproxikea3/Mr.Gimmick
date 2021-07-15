@@ -26,7 +26,15 @@
 60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
 60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
 [ZONES]
-0	960	2048	0
+#0	960	2048	0
+0	384	1792	192
+1792	384	2048	192
+0	576	1792	384
+1024	192	1536	0
+0	768	256	576
+256	768	1792	576
+1792	576	2048	384
+0	960	384	768
 
 [SOUNDS]
 #Audio/01_Good-Morning.wav	SOUND_Stage1_Background
@@ -613,10 +621,9 @@
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 42 = Portal
 
 # BRICK
-#zone 0
 1	32	256	20101	96	48
 1	160	256	20101	32	48
 1	224	256	20101	32	48
@@ -626,7 +633,6 @@
 1	1744	240	20101	128	32
 
 1	0	192	20101	1232	16
-1	1248	192	20101	64	16
 1	1328	192	20101	720	16
 
 1	1568	400	20101	32	16
@@ -698,12 +704,23 @@
 1	1424	64	20101	16	32
 1	1408	48	20101	16	16
 
+1	752	496	20101	64	32
+1	1248	512	20101	96	32
+
 # GIMMICK
 2	64	288	20101
-#2	128	850	20101
 
 # STAR
 18	64	288	180001
+
+# PORTAL
+42	1300	432	20101	1312	176
+
+42	1244	432	20101	1231	176
+
+42	1312	192	20101	1328	432
+
+42	1232	192	20101	1216	432
 
 # GREEN MINI BOSS
 

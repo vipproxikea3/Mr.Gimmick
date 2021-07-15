@@ -6,7 +6,7 @@
 
 #define	STAR_GRAVITY			0.001f
 #define STAR_VX					0.15f
-#define STAR_WALKING_FRICTION	0.0003f
+#define STAR_WALKING_FRICTION	0.0008f
 
 #define	STAR_BBOX_WIDTH			16
 #define	STAR_BBOX_HEIGHT		16

@@ -51,8 +51,6 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"\nVao day %d", vy);
-
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	// Set in sewer
