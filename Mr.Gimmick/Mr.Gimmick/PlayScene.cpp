@@ -55,6 +55,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SEWER			99
 #define OBJECT_TYPE_PORTAL			42
 
+#define OBJECT_TYPE_GREEN_BOSS		50
+
 #define MAX_SCENE_LINE 1024
 
 
@@ -284,6 +286,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
 		DebugOut(L"[PORTAL] Portal object created!\n");
 		break;
+	case OBJECT_TYPE_GREEN_BOSS:
+		obj = new CGreenBoss();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -414,6 +419,7 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
+			|| dynamic_cast<CGreenBoss*>(objects[i])
 			|| dynamic_cast<CPortal*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
@@ -570,6 +576,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 			star->Ready();
 		}
 		break;
+	case DIK_1:
+		gimmick->x = 100;
+		gimmick->y = 650;
+		break;
 	case DIK_4:
 		gimmick->x = 1868;
 		gimmick->y = 440;
@@ -592,7 +602,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false && !gimmick->inSewer) {
-		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
+		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->onStar || gimmick->jumping) // onEnemy de fix loi ko nhay dc tren quai
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
 	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false && !gimmick->inSewer)

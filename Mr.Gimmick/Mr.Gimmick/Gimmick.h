@@ -66,6 +66,7 @@ public:
 	bool inSewer = false;// check in sewer
 	bool equalinSewer = false; // check in sewer3
 	float XSewer, YSewer, nSewer; // check out sewer 
+	bool onStar = false;
 
 	void CreateDieEffect();
 
@@ -84,4 +85,5 @@ public:
 	void standOn(CGameObject* object);
 	bool isUnder(CGameObject* object, float equal = 1);
 	int getUntouchable() { return untouchable; }
+	void DetectStar();
 };

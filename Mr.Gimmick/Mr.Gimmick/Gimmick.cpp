@@ -102,9 +102,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
 
+	DetectStar();
+
 	onInclinedBrick = false;
 	onGround = false;
 	onEnemy = false;
+	onStar = false;
 	facingBrick = false;
 	underBrick = false;
 	// hướng của gạch nghiêng
@@ -153,6 +156,17 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrickPink*>(coObjects->at(i))) {
 			CBrickPink* brick = dynamic_cast<CBrickPink*>(coObjects->at(i));
 			if (onTopOf(brick, 3.5f)) { this->onGround = true; }
+		}
+		if (dynamic_cast<CSwing*>(coObjects->at(i))) {
+			CSwing* swing = dynamic_cast<CSwing*>(coObjects->at(i));
+			if (onTopOf(swing)) this->onGround = true; 
+		}
+		if (dynamic_cast<CGreenBoss*>(coObjects->at(i))) {
+			CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(coObjects->at(i));
+			if (onTopOf(enemy, 7) && enemy->state == GREENBOSS_STATE_WALK && this->vy < 0) {
+				this->onGround = true;
+				standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
+			}
 		}
 	}
 
@@ -384,7 +398,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->y = y0 + min_ty * dy + ny * 0.3f;
 					standOn(enemy); 
 				}
-				else if(!untouchable)
+				else if(!untouchable && state != BLACKENEMY_STATE_DIE)
 				{
 					if (enemy->x < this->x)
 					{
@@ -700,6 +714,18 @@ bool CGimmick::isUnder(CGameObject* object, float equal)
 	return false;
 }
 
+void CGimmick::DetectStar()
+{
+	if (state == GIMMICK_STATE_DIE)
+		return;
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CStar* star = ((CPlayScene*)scene)->GetStar();
+	if (star->state == STAR_STATE_WALKING_LEFT || star->state == STAR_STATE_WALKING_RIGHT) {
+		if (onTopOf(star, 4.0f) && vy < 0)
+			standOn(star);
+	}
+}
+
 bool CGimmick::onSideOf(CGameObject* object, float equal)
 {
 	float ol, ot, or , ob;
@@ -737,6 +763,36 @@ void CGimmick::standOn(CGameObject* object)
 		if (!jumping) { 
 			this->y = object->y + GIMMICK_BBOX_HEIGHT ; //-2 pixel thi bi va cham voi quai khac
 			this->vy = 0; 
+		}
+	}
+
+	if (dynamic_cast<CGreenBoss*>(object))
+	{
+		CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(object);
+
+		onEnemy = true;
+		if (!facingBrick) {
+				this->x += object->dx;
+		}
+
+		if (!jumping) {
+			this->y = object->y + GIMMICK_BBOX_HEIGHT; 
+			this->vy = 0;
+		}
+	}
+
+	if (dynamic_cast<CStar*>(object))
+	{
+		CStar* star = dynamic_cast<CStar*>(object);
+
+		onStar = true;
+		if (!facingBrick) {
+			this->x += object->dx;
+		}
+
+		if (!jumping) {
+			this->y = object->y + GIMMICK_BBOX_HEIGHT;
+			this->vy = 0;
 		}
 	}
 	

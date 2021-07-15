@@ -160,6 +160,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
     <ClInclude Include="GimmickDieEffect.h" />
+    <ClInclude Include="GreenBoss.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="InclinedBrick.h" />
     <ClInclude Include="IntroScene.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
     <ClCompile Include="GimmickDieEffect.cpp" />
+    <ClCompile Include="GreenBoss.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="InclinedBrick.cpp" />
     <ClCompile Include="IntroScene.cpp" />

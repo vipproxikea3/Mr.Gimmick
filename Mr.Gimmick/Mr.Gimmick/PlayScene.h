@@ -28,6 +28,7 @@
 #include "Door.h"
 #include "BlackBoss.h"
 #include "Sewer.h"
+#include "GreenBoss.h"
 #include "Portal.h"
 
 class CPlayScene : public CScene
