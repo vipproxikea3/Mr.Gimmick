@@ -39,6 +39,10 @@
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="GreenBoss.cpp" />
+    <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Sewer.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -79,5 +83,9 @@
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="GreenBoss.h" />
+    <ClInclude Include="Portal.h" />
+    <ClInclude Include="Sewer.h" />
+    <ClInclude Include="Gun.h" />
+    <ClInclude Include="Bullet.h" />
   </ItemGroup>
 </Project>
