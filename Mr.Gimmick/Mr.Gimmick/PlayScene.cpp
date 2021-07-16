@@ -56,6 +56,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_PORTAL			42
 
 #define OBJECT_TYPE_GREEN_BOSS		50
+#define OBJECT_TYPE_GUN				20
 
 #define MAX_SCENE_LINE 1024
 
@@ -289,6 +290,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GREEN_BOSS:
 		obj = new CGreenBoss();
 		break;
+	case OBJECT_TYPE_GUN:
+		obj = new CGun();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -420,7 +424,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
 			|| dynamic_cast<CGreenBoss*>(objects[i])
-			|| dynamic_cast<CPortal*>(objects[i]))
+			|| dynamic_cast<CPortal*>(objects[i])
+			|| dynamic_cast<CGun*>(objects[i])
+			|| dynamic_cast<CBullet*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -444,6 +450,17 @@ void CPlayScene::Update(DWORD dt)
 			objects[i]->Update(dt, &coObjects);
 	}*/
 
+
+	for (int i = objects.size() - 1; i >= 0; i--)
+		if (dynamic_cast<CBullet*>(objects[i])) 
+		{
+			CBullet* bullet = (CBullet*)(objects[i]);
+			if (bullet->isDelete == true)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 

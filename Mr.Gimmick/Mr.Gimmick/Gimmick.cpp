@@ -124,6 +124,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
@@ -539,6 +541,44 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				x = x + min_tx * dx;
 				y = y + min_ty * dy;
+			}
+
+			if (dynamic_cast<CGun*>(e->obj)) 
+			{
+
+				if (coEventsResult.size() == 1)
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+				}
+				if (e->nx != 0) 
+				{
+
+					if (!((CGun*)(e->obj))->onInclinedBrick)
+					{
+						x += dx;
+						((CGun*)(e->obj))->updateX(dx);
+					}
+					else 
+					{
+						x = x0 + min_tx * dx + nx * 0.1f;
+					}
+				}
+
+				if (e->ny != 0) 
+				{
+					vy = 0;
+					this->onGround = true;
+				}
+			}
+			if (dynamic_cast<CBullet*>(e->obj)) 
+			{
+				if (e->ny > 0) 
+				{
+					this->onGround = true;
+					float vx1 = 0, vy1 = 0;
+					(e->obj)->GetSpeed(vx1, vy1);
+					this->vx = vx1;
+				}
 			}
 		}
 		if (equalinSewer && tempy != 0)
