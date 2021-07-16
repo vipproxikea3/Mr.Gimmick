@@ -111,6 +111,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	facingBrick = false;
 	underBrick = false;
 	// hướng của gạch nghiêng
+	onBoat = false;
 	int direction = 0;
 
 	vector<LPGAMEOBJECT> newCoObjects;
@@ -126,6 +127,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBoat*>(coObjects->at(i))) {
+			CBoat* Boat = dynamic_cast<CBoat*>(coObjects->at(i));
+			if (onTopOf(Boat)) { this->onBoat = true; }
+			newCoObjects.push_back(coObjects->at(i));
+		}
 
 		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
@@ -243,6 +249,27 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (e->ny > 0) this->falling = false;
 			if (e->ny < 0) { this->falling = true; jumping = false; } //roi khi dung gach tren dau
+
+			if (dynamic_cast<CBoat*>(e->obj)) {
+				CBoat* Boat = dynamic_cast<CBoat*>(e->obj);
+				//x = x0 + min_tx * dx + nx * 0.1f;
+				//y = y0 + min_ty * dy + ny * 0.01f;
+
+				if (e->nx != 0 ) {
+					vx = 0;
+				}
+				if (e->ny > 0) {
+					vy = 0;
+					if(Boat->x <= Boat->GetFinish())
+						Boat->run = true;
+					//DebugOut(L"\nVao day %d", Boat->run);
+					if (Boat->run == true)
+					{
+						x = x0 + min_tx * (dx + Boat->dx) + Boat->nx *0.76f ;
+					}
+				}
+
+			}
 
 			if (dynamic_cast<CBrick*>(e->obj)) {
 				x = x0 + min_tx * dx + nx * 0.1f;
@@ -584,7 +611,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (equalinSewer && tempy != 0)
 			vy = tempy;
 	}
-
 	// clean up newCoObjects
 	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
 	// clean up collision events
@@ -624,22 +650,22 @@ void CGimmick::Render()
 			if (vx == 0) 
 			{ // IDLE AND FALL
 				if (nx > 0) {
-					if (this->onGround) ani = GIMMICK_ANI_IDLE_RIGHT;
+					if (this->onGround||this->onBoat) ani = GIMMICK_ANI_IDLE_RIGHT;
 					else ani = GIMMICK_ANI_JUMP_RIGHT;
 				} 
 				else {
-					if (this->onGround) ani = GIMMICK_ANI_IDLE_LEFT;
+					if (this->onGround || this->onBoat) ani = GIMMICK_ANI_IDLE_LEFT;
 					else ani = GIMMICK_ANI_JUMP_LEFT;
 				}
 			}
 			else if (vx > 0)
 			{ //WALK RIGHT
-				if (this->onGround) ani = GIMMICK_ANI_WALKING_RIGHT;
+				if (this->onGround || this->onBoat) ani = GIMMICK_ANI_WALKING_RIGHT;
 				else ani = GIMMICK_ANI_JUMP_RIGHT;
 			}
 			else
 			{ //WALK LEFT
-				if (this->onGround) ani = GIMMICK_ANI_WALKING_LEFT;
+				if (this->onGround || this->onBoat) ani = GIMMICK_ANI_WALKING_LEFT;
 				else ani = GIMMICK_ANI_JUMP_LEFT;
 			}
 		}

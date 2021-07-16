@@ -1,6 +1,6 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
-0	Map\Gimmick!(J)-Level2_bank.png	255	0	0
+0	Map\Gimmick!(J)-Level2_bank_new.png	255	0	0
 10	textures\gimmick_right.png	0	0	255
 20	textures\gimmick_left.png	0	0	255
 30	textures\stage1.png	215	121	214
@@ -21,10 +21,10 @@
 
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
-60	128	23	11	0	Map\Gimmick!(J)-Level2_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2a_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2b_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2c_map.txt
+60	128	25	11	0	Map\Gimmick!(J)-Level2d_map.txt
 [ZONES]
 #0	960	2048	0
 0	384	1792	192
@@ -390,6 +390,8 @@
 # DIE RIGHT
 500012	566	480	590	506	56
 
+# BOAT
+700000	210	65	258	81	50
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== GIMMICK=========
@@ -554,6 +556,10 @@
 # die right
 500008	500012	100
 
+
+#====== BOAT ========
+700000	700000	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -619,9 +625,12 @@
 # GREEN MINI BOSS
 500001	500001	500002	500003	500004	500005	500006	500007	500008
 
+#BOAT
+700000	700000
+
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 42 = Portal
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 42 = Portal, 700 = Boat, 750 = WaterDie
 
 # BRICK
 1	32	256	20101	96	48
@@ -725,3 +734,8 @@
 # GREEN MINI BOSS
 
 50	841	515	500001
+
+#BOAT
+700	496	224	700000
+#WATERDIE
+750	0	208	20101	2048	16

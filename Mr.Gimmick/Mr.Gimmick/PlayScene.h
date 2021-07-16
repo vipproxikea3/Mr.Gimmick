@@ -33,6 +33,8 @@
 #include "Gun.h"
 #include "Bullet.h"
 
+#include "Boat.h"
+#include "WaterDie.h"
 
 class CPlayScene : public CScene
 {

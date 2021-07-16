@@ -34,6 +34,8 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
+    <ClCompile Include="Boat.cpp" />
+    <ClCompile Include="WaterDie.cpp" />
     <ClCompile Include="BlackBoss.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -87,5 +89,8 @@
     <ClInclude Include="Sewer.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="Bullet.h" />
+
+    <ClInclude Include="Boat.h" />
+    <ClInclude Include="WaterDie.h" />
   </ItemGroup>
 </Project>

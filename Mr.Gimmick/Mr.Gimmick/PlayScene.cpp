@@ -57,6 +57,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define OBJECT_TYPE_GREEN_BOSS		50
 #define OBJECT_TYPE_GUN				20
+#define OBJECT_TYPE_BOAT			700
+#define OBJECT_TYPE_WATER_DIE		750
 
 #define MAX_SCENE_LINE 1024
 
@@ -214,6 +216,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_BRICK: obj = new CBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
+	case OBJECT_TYPE_WATER_DIE: obj = new CWaterDie(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
 	case OBJECT_TYPE_GIMMICK:
 		if (player != NULL)
 		{
@@ -228,6 +231,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
 	case OBJECT_TYPE_SEWER: 
 		obj = new CSewer(atof(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_BOAT:
+		obj = new CBoat();
 		break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
@@ -392,6 +398,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmickDieEffect*>(objects[i]))
 			continue;
+		if (dynamic_cast<CWaterDie*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -426,7 +434,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGreenBoss*>(objects[i])
 			|| dynamic_cast<CPortal*>(objects[i])
 			|| dynamic_cast<CGun*>(objects[i])
-			|| dynamic_cast<CBullet*>(objects[i]))
+			|| dynamic_cast<CBullet*>(objects[i])
+			|| dynamic_cast<CBoat*>(objects[i])
+			|| dynamic_cast<CWaterDie*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -519,6 +529,9 @@ void CPlayScene::PushBackObj(CGameObject* obj) {
 void CPlayScene::Render()
 {
 	// Render Waterfall
+	CScene* Scene2 = CGame::GetInstance()->GetCurrentScene();
+	if (Scene2->Getid() == 2)
+		fps = 3;
 	if (countfps == fps)
 	{
 		if (this->maptt == this->spritemap - 1)

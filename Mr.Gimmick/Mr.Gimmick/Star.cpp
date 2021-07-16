@@ -6,6 +6,8 @@
 #include "Gimmick.h"
 #include "Game.h"
 #include "PlayScene.h"
+#include "WaterDie.h"
+#include "Boat.h"
 
 CStar::CStar() : CGameObject()
 {
@@ -127,6 +129,11 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (this->CheckAABB(conveyor))
 						this->SetState(STAR_STATE_EXPLOSIVE);
 				}
+				if (dynamic_cast<CBoat*>(coObjects->at(i))) {
+					CBoat* boat = dynamic_cast<CBoat*>(coObjects->at(i));
+					if (this->CheckAABB(boat))
+						this->SetState(STAR_STATE_EXPLOSIVE);
+				}
 			}
 		}
 
@@ -180,6 +187,19 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 
 				if (dynamic_cast<CConveyor*>(e->obj))
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+					x = x0 + min_tx * dx + nx * 0.1f;
+
+					if (e->ny != 0) {
+						vy = -0.75 * vy;
+						if (abs(vy) < 0.1f) vy = 0;
+					}
+					if (e->nx != 0)
+						vx = -vx;
+				}
+
+				if (dynamic_cast<CBoat*>(e->obj))
 				{
 					y = y0 + min_ty * dy + ny * 0.1f;
 					x = x0 + min_tx * dx + nx * 0.1f;
