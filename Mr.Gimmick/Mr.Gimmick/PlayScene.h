@@ -28,6 +28,8 @@
 #include "Door.h"
 #include "BlackBoss.h"
 #include "Sewer.h"
+#include "Boat.h"
+#include "WaterDie.h"
 
 class CPlayScene : public CScene
 {

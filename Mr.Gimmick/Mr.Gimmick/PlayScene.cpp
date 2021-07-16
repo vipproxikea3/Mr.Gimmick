@@ -53,6 +53,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_DOOR			19
 #define OBJECT_TYPE_BLACK_BOSS		22
 #define OBJECT_TYPE_SEWER			99
+#define OBJECT_TYPE_BOAT			700
+#define OBJECT_TYPE_WATER_DIE		750
 
 #define MAX_SCENE_LINE 1024
 
@@ -210,6 +212,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_BRICK: obj = new CBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
+	case OBJECT_TYPE_WATER_DIE: obj = new CWaterDie(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
 	case OBJECT_TYPE_GIMMICK:
 		if (player != NULL)
 		{
@@ -224,6 +227,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
 	case OBJECT_TYPE_SEWER: 
 		obj = new CSewer(atof(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_BOAT:
+		obj = new CBoat();
 		break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
@@ -378,6 +384,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmickDieEffect*>(objects[i]))
 			continue;
+		if (dynamic_cast<CWaterDie*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -408,7 +416,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBlackBoss*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
-			|| dynamic_cast<CDoor*>(objects[i]))
+			|| dynamic_cast<CDoor*>(objects[i])
+			|| dynamic_cast<CBoat*>(objects[i])
+			|| dynamic_cast<CWaterDie*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);

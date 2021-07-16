@@ -66,6 +66,7 @@ public:
 	bool inSewer = false;// check in sewer
 	bool equalinSewer = false; // check in sewer3
 	float XSewer, YSewer, nSewer; // check out sewer 
+	bool onBoat = false; // check on boat
 
 	void CreateDieEffect();
 

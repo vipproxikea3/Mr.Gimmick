@@ -361,7 +361,8 @@
 220013	42	66	74	97	95
 220014	78	65	110	97	95
 220015	114	66	146	97	95
-
+# BOAT
+700000	210	65	258	81	50
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== GIMMICK=========
@@ -507,6 +508,10 @@
 190002	190002	50	190003	1000
 # stop
 190003	190004	50
+
+#====== BOAT ========
+700000	700000	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -569,9 +574,12 @@
 # BLACK BOSS
 220001	220001	220002	220003	220004	220005	220006
 
+#BOAT
+700000	700000
+
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 700 = Boat
 
 # BRICK
 #zone 0
@@ -662,3 +670,7 @@
 
 # STAR
 18	64	288	180001
+#BOAT
+700	496	224	700000
+#WATERDIE
+750	0	208	20101	2048	16
