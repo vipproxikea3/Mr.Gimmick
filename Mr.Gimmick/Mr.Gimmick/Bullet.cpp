@@ -4,11 +4,25 @@
 #include "BlueFire.h"
 #include "Gun.h"
 #include "Gimmick.h"
+#include "Star.h"
 
 void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->GetState() == BULLET_STATE_EXPLODE && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
+		this->visible = false;
+	}
+	if (!visible)
+		return;
 	if (state != BULLET_STATE_EXPLODE) 
 	{
+		CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
+
+		if (this->CheckAABB(star) && this->state != BULLET_STATE_EXPLODE && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT))
+			this->SetState(BULLET_STATE_EXPLODE);
+
+		if (this->CheckAABB(gimmick) && this->state != BULLET_STATE_EXPLODE)
+			gimmick->SetState(GIMMICK_STATE_STUN);
 
 		vy -= GIMMICK_GRAVITY * dt;
 		CGameObject::Update(dt);
@@ -125,6 +139,7 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (timePreDelete <= 0)
 		{
 			isDelete = true;
+			visible = false;
 		}
 	}
 
@@ -147,6 +162,9 @@ void CBullet::SetState(int state)
 
 void CBullet::Render()
 {
+	if (!visible)
+		return;
+
 	int ani = -1;
 	if (state == BULLET_STATE_MOVE)
 	{
