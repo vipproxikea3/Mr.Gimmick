@@ -30,6 +30,9 @@
 #include "Sewer.h"
 #include "GreenBoss.h"
 #include "Portal.h"
+#include "Gun.h"
+#include "Bullet.h"
+
 
 class CPlayScene : public CScene
 {

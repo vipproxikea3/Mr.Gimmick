@@ -8,6 +8,7 @@
 #include "Medicine.h"
 #include "Sewer.h"
 
+
 #define GIMMICK_WALKING_SPEED		0.1f
 #define GIMMICK_ACCELERATION		0.0002f
 #define GIMMICK_WALKING_FRICTION	0.00025f
