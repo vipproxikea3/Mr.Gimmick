@@ -658,13 +658,14 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
-		stunning = true;
-		stunning_start = GetTickCount64();
-		this->SetState(GIMMICK_STATE_IDLE);
+		if (stunning == false) {
+			stunning = true;
+			stunning_start = GetTickCount64();
+			this->SetState(GIMMICK_STATE_IDLE);
 
-		CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
-		star->Shot();
-
+			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
+			star->Shot();
+		}
 		break;
 	}
 	case GIMMICK_STATE_DIE:
