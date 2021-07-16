@@ -585,9 +585,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
-		sound->Play("SOUND_Effect_1", 0, 1); // Jump
-		break;
+	//case DIK_SPACE:
+	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
+	//	break;
 	case DIK_S:
 		if (star != nullptr) {
 			star->Ready();
