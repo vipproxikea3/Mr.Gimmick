@@ -8,13 +8,14 @@
 CWorm::CWorm() : CGameObject()
 {
 	
-	SetState(WORM_STATE_WALKING_RIGHT);
+	//SetState(WORM_STATE_DIE);
 }
 
 CWorm::CWorm(int l) : CGameObject()
 {
 	length = l;
-	SetState(WORM_STATE_WALKING_RIGHT);
+	SetState(WORM_STATE_DIE);
+	nx = 1;
 }
 
 void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -36,50 +37,52 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-
 	// turn off collision when die 
 	if (state != WORM_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
-	if (coEvents.size() == 0)
+	if (state == WORM_STATE_DIE)
 	{
-		if (x >= (rightLimit) || x <= (leftLimit))
-		{
-			vx = -vx;
-		}
-		else
-		{
-			x += dx;
-		}
-		x -= dx;
+		x += dx;
 		y += dy;
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny = 0;
-		float rdx = 0;
-		float rdy = 0;
-
-		float x0 = x;
-		float y0 = y;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		for (UINT i = 0; i < coEventsResult.size(); i++)
+		if (coEvents.size() == 0)
 		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CBrick*>(e->obj)) 
-			{
-				y = y0 + min_ty * dy + ny * 0.1f;
-				if (e->ny != 0)
-				{
-					vy = 0;
-				}
-			}
-			x = x0 + min_tx * dx + nx * 0.1f;
+			x += dx;
+			y += dy;
 		}
-	}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny = 0;
+			float rdx = 0;
+			float rdy = 0;
 
-	// clean up collision events
+			float x0 = x;
+			float y0 = y;
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (dynamic_cast<CBrick*>(e->obj))
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+					if (e->ny != 0)
+					{
+						vy = 0;
+					}
+				}
+				x = x0 + min_tx * dx + nx * 0.1f;
+			}
+		}
+
+		if ((x <= leftLimit && vx < 0) || (x >= rightLimit && vx > 0))
+			vx = -vx;
+	}
+	
+	//// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
@@ -115,16 +118,12 @@ void CWorm::SetState(int state)
 
 	switch (state)
 	{
-	case WORM_STATE_WALKING_RIGHT:
+	case WORM_STATE_WALKING:
 		vx = WORM_WALKING_SPEED;
-		nx = 1;
-		break;
-	case WORM_STATE_WALKING_LEFT:
-		vx = -WORM_WALKING_SPEED;
-		nx = -1;
 		break;
 	case WORM_STATE_DIE:
-		vx = 0;
+		vx = -nx*0.025;
+		vy = WORM_DIE_DEFLECT_SPEED;
 		break;
 	}
 }

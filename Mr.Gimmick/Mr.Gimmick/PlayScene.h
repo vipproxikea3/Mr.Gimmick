@@ -28,6 +28,11 @@
 #include "Door.h"
 #include "BlackBoss.h"
 #include "Sewer.h"
+#include "GreenBoss.h"
+#include "Portal.h"
+#include "Gun.h"
+#include "Bullet.h"
+
 #include "Boat.h"
 #include "WaterDie.h"
 

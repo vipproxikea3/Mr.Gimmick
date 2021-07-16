@@ -15,6 +15,13 @@ CBlackEnemy::CBlackEnemy(int direction)
 
 void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->GetState() == BLACKENEMY_STATE_DIE && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
+		this->visible = false;
+		DebugOut(L"[BLACKENEMY] visible \n");
+	}
+	if (!visible)
+		return;
+
 	CGameObject::Update(dt, coObjects);
 
 	vx += ax * dt;
@@ -30,6 +37,7 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalculateSpeed();
 	DetectPlayer();
 	Transform();
+	SpecialCollisionWithPlayer();
 	DetectStar();
 
 	vector<LPGAMEOBJECT> newCoObjects;
@@ -147,6 +155,9 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBlackEnemy::Render()
 {
+	if (!visible)
+		return;
+
 	int ani = 0;
 	if (state == BLACKENEMY_STATE_WALK || state == BLACKENEMY_STATE_BULLET) { //==============WALK
 		if (ax > 0)
@@ -477,4 +488,49 @@ int CBlackEnemy::CheckSideOfStar() // -1 left, 1 right dung de xac dinh huong di
 		return -1;
 	else
 		return 1;
+}
+
+void CBlackEnemy::SpecialCollisionWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	if (player->state != GIMMICK_STATE_DIE && player->getUntouchable() != 1
+		&& state != BLACKENEMY_STATE_DIE)
+	{
+		if (IsCollidingWithPlayer())
+		{
+			if (x < player->x)
+			{
+				//player->vx = GIMMICK_DEFLECT_SPEED_X;
+				player->nx = 1.0;
+			}
+			else
+			{
+				//player->vx = -GIMMICK_DEFLECT_SPEED_X;
+				player->nx = -1.0;
+			}
+
+			player->SetState(GIMMICK_STATE_STUN);
+			player->StartUntouchable();
+		}
+	}
+}
+
+bool CBlackEnemy::IsCollidingWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	t -= 5;
+
+	float ol, ot, or , ob;
+	player->GetBoundingBox(ol, ot, or , ob);
+
+	if (or >= l && ol <= r
+		&& ot >= b && ob <= t)
+		return true;
+	return false;
 }

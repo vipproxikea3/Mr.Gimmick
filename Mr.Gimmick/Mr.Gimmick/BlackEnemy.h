@@ -86,5 +86,7 @@ public:
 	bool InJumpablePosition();
 	void DetectStar();
 	int CheckSideOfStar();
+	void SpecialCollisionWithPlayer();
+	bool IsCollidingWithPlayer();
 };
 

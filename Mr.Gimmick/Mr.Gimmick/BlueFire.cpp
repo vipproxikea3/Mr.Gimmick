@@ -1,6 +1,7 @@
 #include "BlueFire.h"
 #include "Gimmick.h"
 #include "PlayScene.h"
+#include "Star.h"
 
 void CBlueFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -9,6 +10,11 @@ void CBlueFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			gimmick->SetState(GIMMICK_STATE_DIE);
 		}
 	}
+
+	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
+
+	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT))
+		star->SetState(STAR_STATE_EXPLOSIVE);
 }
 
 void CBlueFire::Render()

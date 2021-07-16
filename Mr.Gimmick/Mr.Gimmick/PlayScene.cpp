@@ -53,6 +53,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_DOOR			19
 #define OBJECT_TYPE_BLACK_BOSS		22
 #define OBJECT_TYPE_SEWER			99
+#define OBJECT_TYPE_PORTAL			42
+
+#define OBJECT_TYPE_GREEN_BOSS		50
+#define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BOAT			700
 #define OBJECT_TYPE_WATER_DIE		750
 
@@ -285,6 +289,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLACK_BOSS:
 		obj = new CBlackBoss();
 		break;
+	case OBJECT_TYPE_PORTAL:
+		obj = new CPortal(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		DebugOut(L"[PORTAL] Portal object created!\n");
+		break;
+	case OBJECT_TYPE_GREEN_BOSS:
+		obj = new CGreenBoss();
+		break;
+	case OBJECT_TYPE_GUN:
+		obj = new CGun();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -405,7 +419,7 @@ void CPlayScene::Update(DWORD dt)
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (!CGame::GetInstance()->InCamera(objects[i]))
+		if (!CGame::GetInstance()->InLargeCamera(objects[i]))
 			continue;
 		if (dynamic_cast<CBoom*>(objects[i])
 			|| dynamic_cast<CSwing*>(objects[i])
@@ -417,6 +431,10 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
+			|| dynamic_cast<CGreenBoss*>(objects[i])
+			|| dynamic_cast<CPortal*>(objects[i])
+			|| dynamic_cast<CGun*>(objects[i])
+			|| dynamic_cast<CBullet*>(objects[i])
 			|| dynamic_cast<CBoat*>(objects[i])
 			|| dynamic_cast<CWaterDie*>(objects[i]))
 		{
@@ -442,6 +460,17 @@ void CPlayScene::Update(DWORD dt)
 			objects[i]->Update(dt, &coObjects);
 	}*/
 
+
+	for (int i = objects.size() - 1; i >= 0; i--)
+		if (dynamic_cast<CBullet*>(objects[i])) 
+		{
+			CBullet* bullet = (CBullet*)(objects[i]);
+			if (bullet->isDelete == true)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -569,13 +598,17 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
-		sound->Play("SOUND_Effect_1", 0, 1); // Jump
-		break;
+	//case DIK_SPACE:
+	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
+	//	break;
 	case DIK_S:
 		if (star != nullptr) {
 			star->Ready();
 		}
+		break;
+	case DIK_1:
+		gimmick->x = 100;
+		gimmick->y = 650;
 		break;
 	case DIK_4:
 		gimmick->x = 1868;
@@ -599,7 +632,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false && !gimmick->inSewer) {
-		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
+		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->onStar || gimmick->jumping) // onEnemy de fix loi ko nhay dc tren quai
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
 	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false && !gimmick->inSewer)

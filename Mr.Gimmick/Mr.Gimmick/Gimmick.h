@@ -8,6 +8,7 @@
 #include "Medicine.h"
 #include "Sewer.h"
 
+
 #define GIMMICK_WALKING_SPEED		0.1f
 #define GIMMICK_ACCELERATION		0.0002f
 #define GIMMICK_WALKING_FRICTION	0.00025f
@@ -66,6 +67,7 @@ public:
 	bool inSewer = false;// check in sewer
 	bool equalinSewer = false; // check in sewer3
 	float XSewer, YSewer, nSewer; // check out sewer 
+	bool onStar = false;
 	bool onBoat = false; // check on boat
 
 	void CreateDieEffect();
@@ -85,4 +87,5 @@ public:
 	void standOn(CGameObject* object);
 	bool isUnder(CGameObject* object, float equal = 1);
 	int getUntouchable() { return untouchable; }
+	void DetectStar();
 };
