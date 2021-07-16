@@ -407,7 +407,7 @@ void CPlayScene::Update(DWORD dt)
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (!CGame::GetInstance()->InCamera(objects[i]))
+		if (!CGame::GetInstance()->InLargeCamera(objects[i]))
 			continue;
 		if (dynamic_cast<CBoom*>(objects[i])
 			|| dynamic_cast<CSwing*>(objects[i])

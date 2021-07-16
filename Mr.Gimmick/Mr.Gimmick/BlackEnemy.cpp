@@ -15,6 +15,13 @@ CBlackEnemy::CBlackEnemy(int direction)
 
 void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->GetState() == BLACKENEMY_STATE_DIE && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
+		this->visible = false;
+		DebugOut(L"[BLACKENEMY] visible \n");
+	}
+	if (!visible)
+		return;
+
 	CGameObject::Update(dt, coObjects);
 
 	vx += ax * dt;
@@ -148,6 +155,9 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBlackEnemy::Render()
 {
+	if (!visible)
+		return;
+
 	int ani = 0;
 	if (state == BLACKENEMY_STATE_WALK || state == BLACKENEMY_STATE_BULLET) { //==============WALK
 		if (ax > 0)
