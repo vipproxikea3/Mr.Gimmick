@@ -53,6 +53,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_DOOR			19
 #define OBJECT_TYPE_BLACK_BOSS		22
 #define OBJECT_TYPE_SEWER			99
+#define OBJECT_TYPE_ENEMYBOOM		40
 #define OBJECT_TYPE_PORTAL			42
 
 #define OBJECT_TYPE_GREEN_BOSS		50
@@ -291,7 +292,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_PORTAL:
 		obj = new CPortal(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
-		DebugOut(L"[PORTAL] Portal object created!\n");
+		break;
+	case OBJECT_TYPE_ENEMYBOOM:
+		obj = new CEnemyBoom(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
 	case OBJECT_TYPE_GREEN_BOSS:
 		obj = new CGreenBoss();
@@ -408,6 +411,7 @@ void CPlayScene::Update(DWORD dt)
 	quadtree->Retrieve(&coObjects, player);
 	player->Update(dt, &coObjects);
 
+	// Set position star follow player
 	if (star->GetState() == STAR_STATE_HIDE || star->GetState() == STAR_STATE_PENDING || star->GetState() == STAR_STATE_CREATED || star->GetState() == STAR_STATE_READY) {
 		star->SetPosition(player->x, player->y + 16);
 	}
@@ -436,7 +440,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGun*>(objects[i])
 			|| dynamic_cast<CBullet*>(objects[i])
 			|| dynamic_cast<CBoat*>(objects[i])
-			|| dynamic_cast<CWaterDie*>(objects[i]))
+			|| dynamic_cast<CWaterDie*>(objects[i])
+			|| dynamic_cast<CEnemyBoom*>(objects[i])
+			|| dynamic_cast<CMiniBoom*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);

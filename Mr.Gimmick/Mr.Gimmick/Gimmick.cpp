@@ -265,7 +265,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					//DebugOut(L"\nVao day %d", Boat->run);
 					if (Boat->run == true)
 					{
-						x = x0 + min_tx * (dx + Boat->dx) + Boat->nx *0.76f ;
+						x = x0 + min_tx * (dx + Boat->dx) + Boat->nx *0.7f ;
 					}
 				}
 
@@ -675,7 +675,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {
@@ -724,10 +724,12 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
-		if (stunning == false) {
+		if (stunning == false && untouchable == 0) {
 			stunning = true;
 			stunning_start = GetTickCount64();
 			this->SetState(GIMMICK_STATE_IDLE);
+
+			StartUntouchable();
 
 			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 			star->Shot();

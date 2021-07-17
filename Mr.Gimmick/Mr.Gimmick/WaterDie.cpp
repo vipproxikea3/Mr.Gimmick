@@ -20,7 +20,7 @@ void CWaterDie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CWaterDie::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CWaterDie::SetState(int state) {}

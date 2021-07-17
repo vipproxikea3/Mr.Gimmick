@@ -4,7 +4,6 @@
 #include "Gimmick.h"
 #include "Utils.h"
 void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	DebugOut(L"[PORTAL] Updating \n");
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (this->CheckAABB(gimmick)) {
 		if (gimmick->GetState() != GIMMICK_STATE_DIE) {
