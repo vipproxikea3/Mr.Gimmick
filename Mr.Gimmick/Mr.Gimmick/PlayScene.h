@@ -26,6 +26,7 @@
 #include "Hud.h"
 #include "Star.h"
 #include "Door.h"
+#include "ElectricBlackEnemy.h"
 
 class CPlayScene : public CScene
 {

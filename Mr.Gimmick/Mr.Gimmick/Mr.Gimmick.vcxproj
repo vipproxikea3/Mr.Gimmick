@@ -155,6 +155,7 @@
     <ClInclude Include="Conveyor.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="ElectricBlackEnemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="CogwheelSmall.cpp" />
     <ClCompile Include="Conveyor.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="ElectricBlackEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />

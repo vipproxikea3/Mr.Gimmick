@@ -13,7 +13,7 @@ void CDoor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	if (state != DOOR_STATE_STOP)
 	{
-		if (gimmick->x - x <= 56 && y - gimmick->y <= 70) {
+		if (gimmick->x - x <= DISTANCE_X && y - gimmick->y <= DISTANCE_Y) {
 			SetState(DOOR_STATE_OPEN);
 		}
 	}
@@ -44,7 +44,7 @@ void CDoor::Render()
 	}
 	int alpha = 255;
 	animation_set->at(ani)->Render(x, y, alpha);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CDoor::SetState(int state)

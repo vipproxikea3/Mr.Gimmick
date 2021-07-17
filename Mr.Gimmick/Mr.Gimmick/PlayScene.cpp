@@ -51,6 +51,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_MEDICINE		17
 #define OBJECT_TYPE_STAR			18
 #define OBJECT_TYPE_DOOR			19
+#define OBJECT_TYPE_ELECTRIC_BLACKENEMY		23
+#define OBJECT_TYPE_THUNDER			24
 
 #define MAX_SCENE_LINE 1024
 
@@ -271,6 +273,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_DOOR:
 		obj = new CDoor();
 		break;
+	case OBJECT_TYPE_ELECTRIC_BLACKENEMY:
+		obj = new CElectricBlackEnemy();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -399,7 +404,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
-			|| dynamic_cast<CDoor*>(objects[i]))
+			|| dynamic_cast<CDoor*>(objects[i])
+			|| dynamic_cast<CElectricBlackEnemy*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -558,6 +564,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_4:
 		gimmick->x = 1868;
 		gimmick->y = 440;
+		break;
+	case DIK_L:
+		gimmick->SetPosition(64, 448);
 		break;
 	}
 }

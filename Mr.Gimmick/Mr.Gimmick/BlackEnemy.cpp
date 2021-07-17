@@ -174,7 +174,7 @@ void CBlackEnemy::Render()
 
 	animation_set->at(ani)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CBlackEnemy::SetState(int state)
