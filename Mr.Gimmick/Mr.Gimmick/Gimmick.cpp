@@ -139,7 +139,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->SetState(GIMMICK_STATE_IDLE);
 	}
 
-	DebugOut(L"onGround = %d\n", onGround);
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{

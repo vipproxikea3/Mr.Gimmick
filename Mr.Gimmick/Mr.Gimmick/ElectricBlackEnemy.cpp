@@ -19,11 +19,6 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		DetectStar();
 	}
 
-	/*DebugOut(L"[INFO] appear = %d/n", appear);
-	DebugOut(L"[INFO] state = %d/n", state);
-	DebugOut(L"[INFO] canTurnAround = %d/n", canTurnAround);
-	DebugOut(L"[INFO] ax = %d/n", ax);*/
-
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
