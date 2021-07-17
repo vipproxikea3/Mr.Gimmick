@@ -32,6 +32,8 @@
 #include "Portal.h"
 #include "Gun.h"
 #include "Bullet.h"
+#include "EnemyBoom.h"
+#include "MiniBoom.h"
 
 #include "Boat.h"
 #include "WaterDie.h"

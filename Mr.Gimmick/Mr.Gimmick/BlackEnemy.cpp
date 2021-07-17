@@ -17,7 +17,6 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->GetState() == BLACKENEMY_STATE_DIE && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
 		this->visible = false;
-		DebugOut(L"[BLACKENEMY] visible \n");
 	}
 	if (!visible)
 		return;
