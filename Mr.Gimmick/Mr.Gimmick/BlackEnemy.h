@@ -13,6 +13,7 @@
 #define BLACKENEMY_STATE_WALK	1
 #define BLACKENEMY_STATE_TRANSFORM	2
 #define BLACKENEMY_STATE_FLY		3
+#define BLACKENEMY_STATE_BULLET		4
 
 #define BLACKENEMY_WIDTH		16
 #define BLACKENEMY_HEIGHT		16
@@ -21,6 +22,9 @@
 #define BLACKENEMY_WALK_SPEED		0.075f	//0.075f
 #define BLACKENEMY_GRAVITY			0.0008f //0.001f giam trong luc xuong 1 chut de khi roi khong bi xuyen qua gach
 #define BLACKENEMY_JUMP_SPEED		0.23f
+#define BLACK_ENEMY_BULLET_SPEED	0.15f
+#define BLACKENEMY_DEFLECT_SPEED_X		0.075f	
+#define BLACKENEMY_DEFLECT_SPEED_Y		0.12f	
 
 #define BLACKENEMY_FLY_ACCELERATION	0.0004f //0.0004f
 #define BLACKENEMY_FLY_SPEED		0.165f  //0.165f
@@ -34,12 +38,16 @@
 
 #define BLACKENEMY_TRANSFORM_TIME		1500
 
+#define BLACKENEMY_ANISET_ID				130001
+
 #define BLACKENEMY_ANI_WALK_RIGHT				0
 #define BLACKENEMY_ANI_WALK_LEFT				1
 #define BLACKENEMY_ANI_FLY_RIGHT				2
 #define BLACKENEMY_ANI_FLY_LEFT					3
 #define BLACKENEMY_ANI_FLY_ONGROUND_RIGHT		4
 #define BLACKENEMY_ANI_FLY_ONGROUND_LEFT		5
+#define BLACKENEMY_ANI_DIE_LEFT					6
+#define BLACKENEMY_ANI_DIE_RIGHT				7
 
 
 class CBlackEnemy : public CGameObject
@@ -76,5 +84,9 @@ public:
 	void Transform();
 	bool onSideOf(CGameObject* object, float equal = 1);
 	bool InJumpablePosition();
+	void DetectStar();
+	int CheckSideOfStar();
+	void SpecialCollisionWithPlayer();
+	bool IsCollidingWithPlayer();
 };
 

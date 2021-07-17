@@ -6,6 +6,8 @@
 #include "Conveyor.h"
 #include "Swing.h"
 #include "Medicine.h"
+#include "Sewer.h"
+
 
 #define GIMMICK_WALKING_SPEED		0.1f
 #define GIMMICK_ACCELERATION		0.0002f
@@ -22,6 +24,7 @@
 #define GIMMICK_STATE_JUMP			300
 #define GIMMICK_STATE_STUN			400
 #define GIMMICK_STATE_DIE			500
+#define GIMMICK_STATE_IN_SEWER		600
 
 #define GIMMICK_ANI_IDLE_RIGHT		0
 #define GIMMICK_ANI_IDLE_LEFT		1
@@ -32,6 +35,8 @@
 #define GIMMICK_ANI_STUN_RIGHT		6
 #define GIMMICK_ANI_STUN_LEFT		7
 #define GIMMICK_ANI_DIE				8
+#define GIMMICK_ANI_IN_SEWER_LEFT	9
+#define GIMMICK_ANI_IN_SEWER_RIGHT	10
 
 #define GIMMICK_BBOX_WIDTH			16
 #define GIMMICK_BBOX_HEIGHT			16
@@ -59,6 +64,11 @@ public:
 	bool onEnemy = false;
 	bool facingBrick = false; //fix loi dung tren lung quai bi xuyen gach
 	bool underBrick = false;
+	bool inSewer = false;// check in sewer
+	bool equalinSewer = false; // check in sewer3
+	float XSewer, YSewer, nSewer; // check out sewer 
+	bool onStar = false;
+	bool onBoat = false; // check on boat
 
 	void CreateDieEffect();
 
@@ -77,4 +87,5 @@ public:
 	void standOn(CGameObject* object);
 	bool isUnder(CGameObject* object, float equal = 1);
 	int getUntouchable() { return untouchable; }
+	void DetectStar();
 };

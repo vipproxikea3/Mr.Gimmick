@@ -34,10 +34,21 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
+    <ClCompile Include="Boat.cpp" />
+    <ClCompile Include="WaterDie.cpp" />
+    <ClCompile Include="BlackBoss.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Star.cpp" />
-    <ClCompile Include="Door.cpp" />
-    <ClCompile Include="ElectricBlackEnemy.cpp" />
+    <ClCompile Include="GreenBoss.cpp" />
+    <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Sewer.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="EnemyBoom.cpp" />
+    <ClCompile Include="MiniBoom.cpp" />
+    <ClCompile Include="Boomboat.cpp" />
+    <ClCompile Include="BigBoatWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -73,9 +84,10 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Worm.h" />
     <ClInclude Include="Zone.h" />
+    <ClInclude Include="BlackBoss.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Door.h" />
-    <ClInclude Include="ElectricBlackEnemy.h" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include "BlackEnemy.h"
 #include "Utils.h"
 #include "InclinedBrick.h"
+
 CBlackEnemy::CBlackEnemy(int direction)
 {
 	SetState(BLACKENEMY_STATE_WALK);
@@ -14,6 +15,12 @@ CBlackEnemy::CBlackEnemy(int direction)
 
 void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->GetState() == BLACKENEMY_STATE_DIE && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
+		this->visible = false;
+	}
+	if (!visible)
+		return;
+
 	CGameObject::Update(dt, coObjects);
 
 	vx += ax * dt;
@@ -29,6 +36,8 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalculateSpeed();
 	DetectPlayer();
 	Transform();
+	SpecialCollisionWithPlayer();
+	DetectStar();
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -41,7 +50,7 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
 			if (onTopOf(brick)) this->detectedStraighRoad = true;
-			brick->Collision(this, dy);
+			if (state != BLACKENEMY_STATE_DIE) brick->Collision(this, dy); //fix loi chet roi van leo doc duoc
 		}
 		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
@@ -89,6 +98,7 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			e->obj->GetBoundingBox(ol, ot, or , ob);
 			
 
+			if (state == BLACKENEMY_STATE_BULLET) state = BLACKENEMY_STATE_WALK;
 			if (e->ny > 0) onGround = true;
 
 			if (dynamic_cast<CBrick*>(e->obj))
@@ -144,8 +154,11 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBlackEnemy::Render()
 {
+	if (!visible)
+		return;
+
 	int ani = 0;
-	if (state == BLACKENEMY_STATE_WALK) { //==============WALK
+	if (state == BLACKENEMY_STATE_WALK || state == BLACKENEMY_STATE_BULLET) { //==============WALK
 		if (ax > 0)
 			ani = BLACKENEMY_ANI_WALK_RIGHT;
 		else
@@ -171,7 +184,12 @@ void CBlackEnemy::Render()
 				ani = BLACKENEMY_ANI_FLY_LEFT;
 		}
 	}
-
+	else if (state == BLACKENEMY_STATE_DIE) { //============== DIE
+		if (nx > 0)
+			ani = BLACKENEMY_ANI_DIE_RIGHT;
+		else
+			ani = BLACKENEMY_ANI_DIE_LEFT;
+	}
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox();
@@ -199,6 +217,19 @@ void CBlackEnemy::SetState(int state)
 		else
 			ax = -BLACKENEMY_FLY_ACCELERATION;
 		break;
+	case BLACKENEMY_STATE_BULLET:
+		ax = BLACKENEMY_ACCELERATION;
+		break;
+	case BLACKENEMY_STATE_DIE:
+		ax = 0;
+		if (CheckSideOfStar() == -1){
+			vx = BLACKENEMY_DEFLECT_SPEED_X;
+		}
+		else {
+			vx = -BLACKENEMY_DEFLECT_SPEED_X;
+		}
+		vy = BLACKENEMY_DEFLECT_SPEED_Y;
+		break;
 	}
 }
 
@@ -217,6 +248,7 @@ void CBlackEnemy::Jump()
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
 
 	vy = BLACKENEMY_JUMP_SPEED;
+	
 	player->onEnemy = true; 
 	
 	if (this->carry_player && vx == 0)
@@ -256,6 +288,11 @@ void CBlackEnemy::CalculateSpeed()
 		if (this->y > player->y) vy = -BLACKENEMY_FLY_SPEED_Y;
 		if (this->y == player->y) vy = 0; //fix loi giat giat
 	}
+	// ===== BULLET:
+	if (state == BLACKENEMY_STATE_BULLET && vx > BLACK_ENEMY_BULLET_SPEED)
+		vx = BLACK_ENEMY_BULLET_SPEED;
+	if (state == BLACKENEMY_STATE_BULLET && vx < -BLACK_ENEMY_BULLET_SPEED)
+		vx = -BLACK_ENEMY_BULLET_SPEED;
 }
 
 void CBlackEnemy::TurnAroundSlowly()
@@ -426,6 +463,73 @@ bool CBlackEnemy::InJumpablePosition()
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
 
 	if (y - BLACKENEMY_HEIGHT <= player->y)
+		return true;
+	return false;
+}
+
+void CBlackEnemy::DetectStar()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CStar* star = ((CPlayScene*)scene)->GetStar();
+
+	if (CheckAABB(star) && state != BLACKENEMY_STATE_DIE && star->state != STAR_STATE_HIDE 
+		&& star->state != STAR_STATE_EXPLOSIVE && star->state != STAR_STATE_PENDING && star->state != STAR_STATE_READY)
+	{
+		SetState(BLACKENEMY_STATE_DIE);
+	}
+}
+
+int CBlackEnemy::CheckSideOfStar() // -1 left, 1 right dung de xac dinh huong die
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CStar* star = ((CPlayScene*)scene)->GetStar();
+	if (star->x < x)
+		return -1;
+	else
+		return 1;
+}
+
+void CBlackEnemy::SpecialCollisionWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	if (player->state != GIMMICK_STATE_DIE && player->getUntouchable() != 1
+		&& state != BLACKENEMY_STATE_DIE)
+	{
+		if (IsCollidingWithPlayer())
+		{
+			if (x < player->x)
+			{
+				//player->vx = GIMMICK_DEFLECT_SPEED_X;
+				player->nx = 1.0;
+			}
+			else
+			{
+				//player->vx = -GIMMICK_DEFLECT_SPEED_X;
+				player->nx = -1.0;
+			}
+
+			player->SetState(GIMMICK_STATE_STUN);
+			player->StartUntouchable();
+		}
+	}
+}
+
+bool CBlackEnemy::IsCollidingWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	t -= 5;
+
+	float ol, ot, or , ob;
+	player->GetBoundingBox(ol, ot, or , ob);
+
+	if (or >= l && ol <= r
+		&& ot >= b && ob <= t)
 		return true;
 	return false;
 }
