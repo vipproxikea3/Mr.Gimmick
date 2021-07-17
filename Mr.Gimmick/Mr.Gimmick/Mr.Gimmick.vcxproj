@@ -144,10 +144,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="BigBoatWindow.h" />
     <ClInclude Include="BlackBoss.h" />
     <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="BlueFire.h" />
     <ClInclude Include="Boat.h" />
+    <ClInclude Include="Boomboat.h" />
     <ClInclude Include="Boom.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickPink.h" />
@@ -192,10 +194,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="BigBoatWindow.cpp" />
     <ClCompile Include="BlackBoss.cpp" />
     <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="BlueFire.cpp" />
     <ClCompile Include="Boat.cpp" />
+    <ClCompile Include="Boomboat.cpp" />
     <ClCompile Include="Boom.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="BrickPink.cpp" />

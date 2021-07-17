@@ -47,6 +47,8 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="EnemyBoom.cpp" />
     <ClCompile Include="MiniBoom.cpp" />
+    <ClCompile Include="Boomboat.cpp" />
+    <ClCompile Include="BigBoatWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -95,5 +97,7 @@
     <ClInclude Include="WaterDie.h" />
     <ClInclude Include="EnemyBoom.h" />
     <ClInclude Include="MiniBoom.h" />
+    <ClInclude Include="Boomboat.h" />
+    <ClInclude Include="BigBoatWindow.h" />
   </ItemGroup>
 </Project>
