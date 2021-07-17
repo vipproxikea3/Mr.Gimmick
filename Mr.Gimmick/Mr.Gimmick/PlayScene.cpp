@@ -59,6 +59,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BOAT			700
 #define OBJECT_TYPE_WATER_DIE		750
+#define OBJECT_TYPE_BOOM_BOAT		777
+#define OBJECT_TYPE_BIG_BOAT_WINDOW	778
 
 #define MAX_SCENE_LINE 1024
 
@@ -235,6 +237,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOAT:
 		obj = new CBoat();
 		break;
+	case OBJECT_TYPE_BIG_BOAT_WINDOW:
+		obj = new CBigBoatWindow();
+		break;
+	case OBJECT_TYPE_BOOM_BOAT:
+		obj = new CBomboat();
+		break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
 		break;
@@ -398,7 +406,7 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmickDieEffect*>(objects[i]))
 			continue;
-		if (dynamic_cast<CWaterDie*>(objects[i]))
+		if (dynamic_cast<CBomboat*>(objects[i]))
 			continue;
 		quadtree->Insert(objects[i]);
 	}
@@ -436,7 +444,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGun*>(objects[i])
 			|| dynamic_cast<CBullet*>(objects[i])
 			|| dynamic_cast<CBoat*>(objects[i])
-			|| dynamic_cast<CWaterDie*>(objects[i]))
+			|| dynamic_cast<CWaterDie*>(objects[i])
+			|| dynamic_cast<CBomboat*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -557,8 +566,16 @@ void CPlayScene::Render()
 
 	// Render top layer
 	for (int i = 0; i < objects.size(); i++)
+	{
 		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
+		if (dynamic_cast<CBomboat*>(objects[i])) // render Boomboat falling
+		{
+			CBomboat* boomboat = dynamic_cast<CBomboat*>(objects[i]);
+			if(boomboat->vy<0)
+				objects[i]->Render();
+		}
+	}
 
 	hud->Render();
 }

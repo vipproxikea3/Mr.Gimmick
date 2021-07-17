@@ -35,6 +35,8 @@
 
 #include "Boat.h"
 #include "WaterDie.h"
+#include "Boomboat.h"
+#include "BigBoatWindow.h"
 
 class CPlayScene : public CScene
 {

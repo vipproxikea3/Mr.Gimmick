@@ -18,7 +18,7 @@
 80	textures\star.png	0	0	255
 90	textures\door.png	203	102	185
 95	textures\NES - Gimmick Mr Gimmick - Bosses.png	0	0	255
-
+778	textures\map2.png	0	0	0
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
 60	128	25	11	0	Map\Gimmick!(J)-Level2a_map.txt
@@ -392,6 +392,10 @@
 
 # BOAT
 700000	210	65	258	81	50
+#BOM BOAT
+777000	102	22	118	38	50
+#BIG BOAT WINDOW
+778000	902	759	934	807	778
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== GIMMICK=========
@@ -556,10 +560,13 @@
 # die right
 500008	500012	100
 
-
 #====== BOAT ========
 700000	700000	100
-
+#=======BOM BOAT======
+777000	777000	100
+777001	110006	50	110007	50	110008	50	110009	50	110010	50
+#======BIG BOAT WINDOW====
+778000	778000	50
 #
 # id	ani1	ani2	ani3
 #
@@ -627,10 +634,13 @@
 
 #BOAT
 700000	700000
-
+#BOMBOAT
+777000	777000	777001
+#BIG BOAT WINDOW
+778000	778000
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 42 = Portal, 700 = Boat, 750 = WaterDie
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 42 = Portal, 700 = Boat, 750 = WaterDie, 777 = BOMBOAT
 
 # BRICK
 1	32	256	20101	96	48
@@ -739,3 +749,23 @@
 700	496	224	700000
 #WATERDIE
 750	0	208	20101	2048	16
+#BOMBOAT
+777	904	280	777000
+777	984	280	777000
+777	1064	280	777000
+777	1144	280	777000
+777	1224	280	777000
+777	1304	280	777000
+777	1384	280	777000
+777	1464	280	777000
+777	1544	280	777000
+#BIG BOAT WINDOW
+778	896	304	778000
+778	976	304	778000
+778	1056	304	778000
+778	1136	304	778000
+778	1216	304	778000
+778	1296	304	778000
+778	1376	304	778000
+778	1456	304	778000
+778	1536	304	778000
