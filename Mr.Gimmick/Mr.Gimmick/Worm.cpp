@@ -4,6 +4,9 @@
 #include "InclinedBrick.h"
 #include "Utils.h"
 #include "Gimmick.h"
+#include "Game.h"
+#include "Star.h"
+#include "PlayScene.h"
 
 CWorm::CWorm() : CGameObject()
 {
@@ -14,12 +17,23 @@ CWorm::CWorm() : CGameObject()
 CWorm::CWorm(int l) : CGameObject()
 {
 	length = l;
-	SetState(WORM_STATE_DIE);
+	SetState(WORM_STATE_WALKING);
 	nx = 1;
 }
 
 void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->GetState() == WORM_STATE_DIE && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
+		this->visible = false;
+	}
+	if (!visible)
+		return;
+
+	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
+
+	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && this->GetState() == WORM_STATE_WALKING)
+		this->SetState(WORM_STATE_DIE);
+
 	if (firstLocation)
 	{
 		float tmp = y;
@@ -88,6 +102,9 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CWorm::Render()
 {
+	if (!visible)
+		return;
+
 	int ani = -1;
 	if (state == WORM_STATE_DIE)
 	{
