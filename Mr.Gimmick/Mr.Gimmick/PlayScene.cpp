@@ -51,8 +51,19 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_MEDICINE		17
 #define OBJECT_TYPE_STAR			18
 #define OBJECT_TYPE_DOOR			19
+#define OBJECT_TYPE_BLACK_BOSS		22
+#define OBJECT_TYPE_SEWER			99
+#define OBJECT_TYPE_ENEMYBOOM		40
+#define OBJECT_TYPE_PORTAL			42
 #define OBJECT_TYPE_ELECTRIC_BLACKENEMY		23
 #define OBJECT_TYPE_THUNDER			24
+
+#define OBJECT_TYPE_GREEN_BOSS		50
+#define OBJECT_TYPE_GUN				20
+#define OBJECT_TYPE_BOAT			700
+#define OBJECT_TYPE_WATER_DIE		750
+#define OBJECT_TYPE_BOOM_BOAT		777
+#define OBJECT_TYPE_BIG_BOAT_WINDOW	778
 
 #define MAX_SCENE_LINE 1024
 
@@ -210,6 +221,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_BRICK: obj = new CBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
+	case OBJECT_TYPE_WATER_DIE: obj = new CWaterDie(atof(tokens[4].c_str()), atof(tokens[5].c_str())); break;
 	case OBJECT_TYPE_GIMMICK:
 		if (player != NULL)
 		{
@@ -222,6 +234,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_COGWHEELSMALL: obj = new CCogwheelSmall(); break;
+	case OBJECT_TYPE_SEWER: 
+		obj = new CSewer(atof(tokens[4].c_str()));
+		break;
+	case OBJECT_TYPE_BOAT:
+		obj = new CBoat();
+		break;
+	case OBJECT_TYPE_BIG_BOAT_WINDOW:
+		obj = new CBigBoatWindow();
+		break;
+	case OBJECT_TYPE_BOOM_BOAT:
+		obj = new CBomboat();
+		break;
 	case OBJECT_TYPE_COGWHEEL:
 		obj = new CCogwheel(atoi(tokens[4].c_str()));
 		break;
@@ -272,6 +296,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_DOOR:
 		obj = new CDoor();
+		break;
+	case OBJECT_TYPE_BLACK_BOSS:
+		obj = new CBlackBoss();
+		break;
+	case OBJECT_TYPE_PORTAL:
+		obj = new CPortal(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
+	case OBJECT_TYPE_ENEMYBOOM:
+		obj = new CEnemyBoom(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
+	case OBJECT_TYPE_GREEN_BOSS:
+		obj = new CGreenBoss();
+		break;
+	case OBJECT_TYPE_GUN:
+		obj = new CGun();
 		break;
 	case OBJECT_TYPE_ELECTRIC_BLACKENEMY:
 		obj = new CElectricBlackEnemy();
@@ -375,6 +414,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CGimmickDieEffect*>(objects[i]))
 			continue;
+		if (dynamic_cast<CBomboat*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -383,6 +424,7 @@ void CPlayScene::Update(DWORD dt)
 	quadtree->Retrieve(&coObjects, player);
 	player->Update(dt, &coObjects);
 
+	// Set position star follow player
 	if (star->GetState() == STAR_STATE_HIDE || star->GetState() == STAR_STATE_PENDING || star->GetState() == STAR_STATE_CREATED || star->GetState() == STAR_STATE_READY) {
 		star->SetPosition(player->x, player->y + 16);
 	}
@@ -394,7 +436,7 @@ void CPlayScene::Update(DWORD dt)
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (!CGame::GetInstance()->InCamera(objects[i]))
+		if (!CGame::GetInstance()->InLargeCamera(objects[i]))
 			continue;
 		if (dynamic_cast<CBoom*>(objects[i])
 			|| dynamic_cast<CSwing*>(objects[i])
@@ -402,10 +444,21 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
 			|| dynamic_cast<CWorm*>(objects[i])
 			|| dynamic_cast<CBlackEnemy*>(objects[i])
+			|| dynamic_cast<CBlackBoss*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
-			|| dynamic_cast<CElectricBlackEnemy*>(objects[i]))
+			|| dynamic_cast<CElectricBlackEnemy*>(objects[i])
+			|| dynamic_cast<CDoor*>(objects[i])
+			|| dynamic_cast<CGreenBoss*>(objects[i])
+			|| dynamic_cast<CPortal*>(objects[i])
+			|| dynamic_cast<CGun*>(objects[i])
+			|| dynamic_cast<CBullet*>(objects[i])
+			|| dynamic_cast<CBoat*>(objects[i])
+			|| dynamic_cast<CWaterDie*>(objects[i])
+			|| dynamic_cast<CEnemyBoom*>(objects[i])
+			|| dynamic_cast<CMiniBoom*>(objects[i])
+			|| dynamic_cast<CBomboat*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -429,6 +482,17 @@ void CPlayScene::Update(DWORD dt)
 			objects[i]->Update(dt, &coObjects);
 	}*/
 
+
+	for (int i = objects.size() - 1; i >= 0; i--)
+		if (dynamic_cast<CBullet*>(objects[i])) 
+		{
+			CBullet* bullet = (CBullet*)(objects[i]);
+			if (bullet->isDelete == true)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -487,6 +551,9 @@ void CPlayScene::PushBackObj(CGameObject* obj) {
 void CPlayScene::Render()
 {
 	// Render Waterfall
+	CScene* Scene2 = CGame::GetInstance()->GetCurrentScene();
+	if (Scene2->Getid() == 2)
+		fps = 3;
 	if (countfps == fps)
 	{
 		if (this->maptt == this->spritemap - 1)
@@ -512,8 +579,16 @@ void CPlayScene::Render()
 
 	// Render top layer
 	for (int i = 0; i < objects.size(); i++)
-		if ((dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
+	{
+		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
+		if (dynamic_cast<CBomboat*>(objects[i])) // render Boomboat falling
+		{
+			CBomboat* boomboat = dynamic_cast<CBomboat*>(objects[i]);
+			if(boomboat->vy<0)
+				objects[i]->Render();
+		}
+	}
 
 	hud->Render();
 }
@@ -553,17 +628,25 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_K:
-		//sound->Play("SOUND_Effect_1", 0, 1);
-		break;
-	case DIK_J:
+	//case DIK_SPACE:
+	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
+	//	break;
+	case DIK_S:
 		if (star != nullptr) {
 			star->Ready();
 		}
 		break;
+	case DIK_1:
+		gimmick->x = 100;
+		gimmick->y = 650;
+		break;
 	case DIK_4:
 		gimmick->x = 1868;
 		gimmick->y = 440;
+		break;
+	case DIK_5:
+		gimmick->x = 1206;
+		gimmick->y = 650;
 		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
@@ -581,13 +664,13 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 
 	// disable control key when Mario die 
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_K) && gimmick->stunning == false) {
-		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->jumping)
+	if (game->IsKeyDown(DIK_SPACE) && gimmick->stunning == false && !gimmick->inSewer) {
+		if (!gimmick->falling || gimmick->onInclinedBrick || gimmick->onEnemy || gimmick->onStar || gimmick->jumping) // onEnemy de fix loi ko nhay dc tren quai
 			gimmick->SetState(GIMMICK_STATE_JUMP);
 	}
-	if (game->IsKeyDown(DIK_D) && gimmick->stunning == false)
+	if (game->IsKeyDown(DIK_RIGHT) && gimmick->stunning == false && !gimmick->inSewer)
 		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_A) && gimmick->stunning == false)
+	else if (game->IsKeyDown(DIK_LEFT) && gimmick->stunning == false && !gimmick->inSewer)
 		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
 	else
 		gimmick->SetState(GIMMICK_STATE_IDLE);
@@ -596,18 +679,18 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
+	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
 		return;
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	switch (KeyCode)
 	{
-	case DIK_J:
+	case DIK_S:
 		if (star != nullptr) {
 			star->Shot();
 		}
 		break;
-	case DIK_K:
+	case DIK_SPACE:
 		gimmick->falling = true;
 		gimmick->jumping = false;
 		break;

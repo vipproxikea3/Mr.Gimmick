@@ -1,4 +1,4 @@
-#include "Star.h"
+﻿#include "Star.h"
 #include "Utils.h"
 #include "InclinedBrick.h"
 #include "Game.h"
@@ -6,6 +6,8 @@
 #include "Gimmick.h"
 #include "Game.h"
 #include "PlayScene.h"
+#include "WaterDie.h"
+#include "Boat.h"
 
 CStar::CStar() : CGameObject()
 {
@@ -86,12 +88,31 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (state != STAR_STATE_EXPLOSIVE)
 			vy -= STAR_GRAVITY * dt;
 
+		// hướng của gạch nghiêng
+		int direction = 0;
 		onInclinedBrick = false;
 		for (UINT i = 0; i < coObjects->size(); i++)
 		{
 			if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 				CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
-				brick->Collision(this, dy);
+				int tmp = brick->Collision(this, dy);
+				if (tmp != 0)
+					direction = tmp;
+			}
+		}
+
+		if (onInclinedBrick == true && direction != 0) {
+			if (direction == -1) {
+				this->x -= 0.5;
+			}
+			if (direction == 1) {
+				this->x += 0.5;
+			}
+			if (direction == -2) {
+				this->x -= 1;
+			}
+			if (direction == 2) {
+				this->x += 1;
 			}
 		}
 
@@ -106,6 +127,11 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 					CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
 					if (this->CheckAABB(conveyor))
+						this->SetState(STAR_STATE_EXPLOSIVE);
+				}
+				if (dynamic_cast<CBoat*>(coObjects->at(i))) {
+					CBoat* boat = dynamic_cast<CBoat*>(coObjects->at(i));
+					if (this->CheckAABB(boat))
 						this->SetState(STAR_STATE_EXPLOSIVE);
 				}
 			}
@@ -161,6 +187,19 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 
 				if (dynamic_cast<CConveyor*>(e->obj))
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+					x = x0 + min_tx * dx + nx * 0.1f;
+
+					if (e->ny != 0) {
+						vy = -0.75 * vy;
+						if (abs(vy) < 0.1f) vy = 0;
+					}
+					if (e->nx != 0)
+						vx = -vx;
+				}
+
+				if (dynamic_cast<CBoat*>(e->obj))
 				{
 					y = y0 + min_ty * dy + ny * 0.1f;
 					x = x0 + min_tx * dx + nx * 0.1f;

@@ -18,6 +18,7 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
+	int Getid() { return this->id; }
 };
 typedef CScene* LPSCENE;
 
