@@ -10,6 +10,7 @@
 51	textures\Enemies.png	57	189	255
 52	textures\Enemies_flip.png	57	189	255
 53	textures\swing.png	203	102	185
+54	textures\Enemies-die.png	57	189	255
 55	textures\Enemies_upsidedown.png	57	189	255
 56	textures\Enemies_upsidedown_flip.png	57	189	255
 60	Map\Gimmick!(J)-Level1_bank.png	60	188	252
@@ -399,6 +400,40 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 210006	23	142	39	158	20
 210007	8	142	24	158	20
 
+# ELECTRIC BLACK ENEMY
+# walk right
+230001	2	39	18	61	51
+230002	20	39	36	61	51
+230003	38	39	54	61	51
+# shock right
+230004	20	39	36	61	51
+# stop right/ gimmick above
+230005	56	46	72	61	51
+# walk left
+230006	678	39	694	61	52
+230007	660	39	676	61	52
+230008	642	39	658	61	52
+# shock right
+230009	660	39	676	61	52
+# stop left/ gimmick above
+230010	624	46	640	61	52
+# THUNDER
+# right
+230011	179	39	192	52	51
+230012	196	39	209	52	51
+# left
+230013	504	39	517	52	52
+230014	487	39	500	52	52
+# type 2
+# right
+230015	195	54	227	86	51
+# left
+230016	469	54	501	86	52
+# die right
+230017	7	5	23	27	54
+# die left
+230018	27	5	43	27	54
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== GIMMICK=========
@@ -556,6 +591,37 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 # stop
 190003	190004	50
 
+# ==== ELECTRIC BLACK ENEMY ====
+# walk right
+230001	230001	50	230002	50	230003	50
+# shock right
+230002	230004	50
+# stop right/ gimmick above
+230003	230005	50
+# walk left
+230004	230006	50	230007	50	230008	50
+# shock right
+230005	230009	50
+# stop right/ gimmick above
+230006	230010	50
+# ==== THUNDER ====
+# type 1
+# right
+230007	230011	50	230012	50
+# left
+230008	230013	50	230014	50
+# type 2
+# right
+230009	230015	50
+# left
+230010	230016	50
+# die right
+230011	230017	50
+# die left
+230012	230018	50
+
+# die left
+
 # ==== GUN ========
 200001	200001	750	200002	750
 
@@ -631,6 +697,9 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 200001	200001
 # GUN BULLET
 210001	210001	110003
+
+# ELECTRIC BLACK ENEMY
+230001	230001	230002	230003	230004	230005	230006	230007	230008	230009	230010	230011	230012
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -1178,6 +1247,11 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 
 # STAR
 18	59	475	180001
+
+# ELECTRIC BLACK ENEMY
+23	1904	688	230001
+23	1808	688	230001
+
 # DOOR
 19	1888	688	190001
 19	1792	688	190001

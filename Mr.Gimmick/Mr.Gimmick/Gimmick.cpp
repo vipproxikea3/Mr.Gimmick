@@ -124,6 +124,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
@@ -176,6 +177,20 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
 		}
+		if (dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i))) {
+			CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i));
+			if (onTopOf(enemy, 2) && this->vy < 0) {
+				if (enemy->state == ELECTRIC_BLACKENEMY_STATE_STOP) {
+					this->onGround = true;
+					if (!onEnemy) standOn(enemy);
+				}
+				if (enemy->state == ELECTRIC_BLACKENEMY_STATE_WALK) {
+					this->onGround = true;
+					if (!onEnemy) standOn(enemy);
+				}
+
+			}
+		}
 	}
 
 	if (onInclinedBrick == true && direction != 0) {
@@ -216,6 +231,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		stunning = false;
 		this->SetState(GIMMICK_STATE_IDLE);
 	}
+
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -466,7 +482,43 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
 			}
+			if (dynamic_cast<CElectricBlackEnemy*>(e->obj)) {
 
+				CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(e->obj);
+
+				if (e->ny > 0) {
+					if (enemy->state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
+						if (untouchable == 0) {
+							this->SetState(GIMMICK_STATE_STUN);
+							StartUntouchable();
+						}
+					}
+					if (enemy->state == ELECTRIC_BLACKENEMY_STATE_WALK || enemy->state == ELECTRIC_BLACKENEMY_STATE_FALL) {
+						vy = 0;
+						this->y = y0 + min_ty * dy + 1.0f;
+						enemy->SetState(ELECTRIC_BLACKENEMY_STATE_STOP);
+					}
+					if (enemy->state == ELECTRIC_BLACKENEMY_STATE_STOP) {
+						vy = 0;
+						this->y = y0 + min_ty * dy + 1.0f;
+					}
+				}
+				else
+				{
+					if (enemy->x < this->x)
+					{
+						this->nx = 1.0;
+					}
+					else
+					{
+						this->nx = -1.0;
+					}
+					if (untouchable == 0) {
+						this->SetState(GIMMICK_STATE_STUN);
+						StartUntouchable();
+					}
+				}
+			}
 			if (dynamic_cast<CSewer*>(e->obj)) {
 				CSewer* Sewer = dynamic_cast<CSewer*>(e->obj);
 				if (e->nx != 0 || e->ny != 0)
@@ -764,6 +816,11 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 		l = l + 2; //x pixel
 		r = r - 2;
 	}
+	if (dynamic_cast<CElectricBlackEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
+	{
+		l = l + 2; //x pixel
+		r = r - 2;
+	}
 	if (r >= ol && l <= or && abs(b - ot) < equal)
 		return true;
 	return false;
@@ -864,6 +921,15 @@ void CGimmick::standOn(CGameObject* object)
 			this->vy = 0;
 		}
 	}
-	
+	if (dynamic_cast<CElectricBlackEnemy*>(object)) {
+		CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(object);
+
+		onEnemy = true;
+		enemy->carry_player = true;
+		this->vy = 0;
+		if (state == ELECTRIC_BLACKENEMY_STATE_STOP) {
+			this->y = object->y + GIMMICK_BBOX_HEIGHT - 3;
+		}
+	}
 }
 
