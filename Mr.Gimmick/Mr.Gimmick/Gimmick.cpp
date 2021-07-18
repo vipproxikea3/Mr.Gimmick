@@ -1,4 +1,4 @@
-#include "Gimmick.h"
+﻿#include "Gimmick.h"
 #include <algorithm>
 #include <assert.h>
 #include "Utils.h"
@@ -33,6 +33,13 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 		vx += ax * dt;
 	}
 
+	/*if (abs(vx) > GIMMICK_WALKING_SPEED) {
+		vx = nx * GIMMICK_WALKING_SPEED;
+	}*/
+
+	if ((vx * nx < 0) && this->state == GIMMICK_STATE_IDLE && inSewer == false)
+		vx = 0;
+
 	//JUMP:
 	if (vy > GIMMICK_JUMP_SPEED_Y_MAX)
 	{
@@ -46,20 +53,66 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
+	// Set in sewer
+	/*if (onGround)
+	{
+		if (nx * vx < 0 && inSewer == true)
+			inSewer = true; 
+		else 
+			inSewer = false;
+	}// set if onground not inSewer
+	if (equalinSewer == true)
+	{
+		inSewer = true;
+	}//if in sewer3 insewer*/
+	//equalinSewer = false; // check in sewer 3
+	if (inSewer == true)
+	{
+		if (YSewer != 0)
+		{
+			if (nSewer == 1 && (y>YSewer+ 0.25))
+			{
+				inSewer = false;
+			}
+			if (nSewer == -1 && (y < YSewer- 0.25))
+			{
+				inSewer = false;
+			}
+		}
+		if (XSewer != 0)
+		{
+			if (nSewer == 1 && (x > XSewer+ 0.25))
+			{
+				inSewer = false;
+			}
+			if (nSewer == -1 && (x < XSewer-0.25))
+			{
+				inSewer = false;
+			}
+		}
+	}
 	CalculateSpeed(dt);
 
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += ay * dt;
+	
+	if(inSewer==false) //|| equalinSewer == true
+		vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
+
+	DetectStar();
 
 	onInclinedBrick = false;
 	onGround = false;
 	onEnemy = false;
+	onStar = false;
 	facingBrick = false;
 	underBrick = false;
+	// hướng của gạch nghiêng
+	onBoat = false;
+	int direction = 0;
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -72,10 +125,21 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBoat*>(coObjects->at(i))) {
+			CBoat* Boat = dynamic_cast<CBoat*>(coObjects->at(i));
+			if (onTopOf(Boat)) { this->onBoat = true; }
+			newCoObjects.push_back(coObjects->at(i));
+		}
 
+		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
-			brick->Collision(this, dy);
+				int tmp = brick->Collision(this, dy);
+				if (tmp != 0)
+					direction = tmp;
 		}
 		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
@@ -91,12 +155,27 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
 			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK && this->vy < 0 ) { 
 				this->onGround = true;
-				if(!onEnemy) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
+				if(!onEnemy && !stunning) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
-			/*if (isUnder(enemy)) { 
+			if (isUnder(enemy)) { 
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
-			}*/
+			}
+		}
+		if (dynamic_cast<CBrickPink*>(coObjects->at(i))) {
+			CBrickPink* brick = dynamic_cast<CBrickPink*>(coObjects->at(i));
+			if (onTopOf(brick, 3.5f)) { this->onGround = true; }
+		}
+		if (dynamic_cast<CSwing*>(coObjects->at(i))) {
+			CSwing* swing = dynamic_cast<CSwing*>(coObjects->at(i));
+			if (onTopOf(swing)) this->onGround = true; 
+		}
+		if (dynamic_cast<CGreenBoss*>(coObjects->at(i))) {
+			CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(coObjects->at(i));
+			if (onTopOf(enemy, 7) && enemy->state == GREENBOSS_STATE_WALK && this->vy < 0) {
+				this->onGround = true;
+				standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
+			}
 		}
 		if (dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i))) {
 			CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i));
@@ -109,9 +188,23 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->onGround = true;
 					if (!onEnemy) standOn(enemy);
 				}
-				
-			}
 
+			}
+		}
+	}
+
+	if (onInclinedBrick == true && direction != 0) {
+		if (direction == -1) {
+			this->x -= 0.5;
+		}
+		if (direction == 1) {
+			this->x += 0.5;
+		}
+		if (direction == -2) {
+			this->x -= 1;
+		}
+		if (direction == 2) {
+			this->x += 1;
 		}
 	}
 
@@ -155,6 +248,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float x0 = x;
 		float y0 = y;
 
+		float tempy = vy;
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
@@ -172,12 +266,33 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (e->ny > 0) this->falling = false;
 			if (e->ny < 0) { this->falling = true; jumping = false; } //roi khi dung gach tren dau
 
+			if (dynamic_cast<CBoat*>(e->obj)) {
+				CBoat* Boat = dynamic_cast<CBoat*>(e->obj);
+				//x = x0 + min_tx * dx + nx * 0.1f;
+				//y = y0 + min_ty * dy + ny * 0.01f;
+
+				if (e->nx != 0 ) {
+					vx = 0;
+				}
+				if (e->ny > 0) {
+					vy = 0;
+					if(Boat->x <= Boat->GetFinish())
+						Boat->run = true;
+					//DebugOut(L"\nVao day %d", Boat->run);
+					if (Boat->run == true)
+					{
+						x = x0 + min_tx * (dx + Boat->dx) + Boat->nx *0.7f ;
+					}
+				}
+
+			}
+
 			if (dynamic_cast<CBrick*>(e->obj)) {
 				x = x0 + min_tx * dx + nx * 0.1f;
 				if (onInclinedBrick) x = x0 + dx;
 				y = y0 + min_ty * dy + ny * 0.1f;
 
-				if (e->nx != 0) { 
+				if (e->nx != 0 && inSewer == false) {
 					vx = 0; 
 					if (!onInclinedBrick) facingBrick = true;
 				}
@@ -185,6 +300,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					if (e->ny > 0) this->onGround = true;
 				}
+
 			}
 
 			if (dynamic_cast<CBrickPink*>(e->obj)) {
@@ -301,6 +417,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 
 					y = y0 + min_ty * dy + ny * 0.1f;
+					onGround = true;
 				}
 			}
 
@@ -320,17 +437,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 
 				CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(e->obj);
-				float l, t, r, b;
-				GetBoundingBox(l, t, r, b);
-				float ol, ot, or , ob;
-				e->obj->GetBoundingBox(ol, ot, or , ob);
 
 				if (e->ny > 0 && enemy->state == BLACKENEMY_STATE_WALK) {
 					vy = 0;
 					this->y = y0 + min_ty * dy + ny * 0.3f;
 					standOn(enemy); 
 				}
-				else 
+				else if(!untouchable && state != BLACKENEMY_STATE_DIE)
 				{
 					if (enemy->x < this->x)
 					{
@@ -347,6 +460,27 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						StartUntouchable();
 					}
 				}
+			}
+			if (dynamic_cast<CBlackBoss*>(e->obj)) {
+
+				CBlackBoss* boss = dynamic_cast<CBlackBoss*>(e->obj);
+				float l, t, r, b;
+				GetBoundingBox(l, t, r, b);
+				float ol, ot, or , ob;
+				e->obj->GetBoundingBox(ol, ot, or , ob);
+
+				if (boss->x < this->x)
+				{
+					//this->vx = GIMMICK_DEFLECT_SPEED_X;
+					this->nx = 1.0;
+				}
+				else
+				{
+					//this->vx = -GIMMICK_DEFLECT_SPEED_X;
+					this->nx = -1.0;
+				}
+				this->SetState(GIMMICK_STATE_STUN);
+				StartUntouchable();
 			}
 			if (dynamic_cast<CElectricBlackEnemy*>(e->obj)) {
 
@@ -385,9 +519,150 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-		}
-	}
+			if (dynamic_cast<CSewer*>(e->obj)) {
+				CSewer* Sewer = dynamic_cast<CSewer*>(e->obj);
+				if (e->nx != 0 || e->ny != 0)
+				{
+					equalinSewer = false;
+					inSewer = true;
+				}
+				if (e->nx < 0 && Sewer->type == 1)
+				{
+					XSewer = Sewer->GetX()+16;
+					YSewer = 0;
+					nSewer = 1; 
+					y = Sewer->GetY() + 0.01;
+					vx = 0.2f;
+					vy = 0.0f;
+				}
+				else if (e->nx > 0 && Sewer->type == 1)
+				{
+					XSewer = Sewer->GetX() - 16;
+					YSewer = 0;
+					nSewer = -1;
+					y = Sewer->GetY() + 0.01;
+					vx = -0.13f;
+					vy = 0.0f;
+				}
+				if (e->ny < 0 && Sewer->type == 2) {
+					XSewer = 0;
+					YSewer = Sewer->GetY()+ 16;
+					nSewer = 1;
+					x = Sewer->GetX()-0.01;
+					vy = 0.2f;
+					vx = 0.0f;
+				}
+				else if (e->ny > 0 && Sewer->type == 2)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() - 16;
+					nSewer = -1;
+					x = Sewer->GetX();
+					vy = -0.2f;
+					vx = 0.0f;
+				}
+				if (e->nx < 0 && Sewer->type == 3)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() - 16;
+					nSewer = -1;
+					equalinSewer = true;
+					vx = 0.1f;
+					vy = -0.2f;
+				}
+				else if (e->ny < 0 && Sewer->type == 3)
+				{
+					XSewer = Sewer->GetX() - 16;
+					YSewer = 0;
+					nSewer = -1;
+					equalinSewer = true;
+					x = Sewer->GetX()+1;
+					vx = -0.15f;
+					vy = 0.1f;
+				}
+				if (e->nx < 0 && Sewer->type == 6)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() + 16;
+					nSewer = 1;
+					equalinSewer = true;
+					vx = 0.1f;
+					vy = 0.3f;
+				}
+				else if (e->ny > 0 && Sewer->type == 6)
+				{
+					XSewer = Sewer->GetX() - 16;
+					YSewer = 0;
+					nSewer = -1;
+					equalinSewer = true;
+					x = Sewer->GetX() - 0.01;
+					vx = -0.2f;
+					vy = -0.2f;
+				}
+				if (e->nx > 0 && Sewer->type == 4)
+				{
+					XSewer = 0;
+					YSewer = Sewer->GetY() - 16;
+					nSewer = -1;
+					equalinSewer = true;
+					vx = -0.1f;
+					vy = -0.2f;
+				}
+				else if (e->ny < 0 && Sewer->type == 4)
+				{
+					XSewer = Sewer->GetX() + 16;
+					YSewer = 0;
+					nSewer = 1;
+					equalinSewer = true;
+					x = Sewer->GetX() - 0.01;
+					vx = 0.3f;
+					vy = 0.2f;
+				}
+				x = x + min_tx * dx;
+				y = y + min_ty * dy;
+			}
 
+			if (dynamic_cast<CGun*>(e->obj)) 
+			{
+
+				if (coEventsResult.size() == 1)
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+				}
+				if (e->nx != 0) 
+				{
+
+					if (!((CGun*)(e->obj))->onInclinedBrick)
+					{
+						x += dx;
+						((CGun*)(e->obj))->updateX(dx);
+					}
+					else 
+					{
+						x = x0 + min_tx * dx + nx * 0.1f;
+					}
+				}
+
+				if (e->ny != 0) 
+				{
+					vy = 0;
+					this->onGround = true;
+				}
+			}
+			if (dynamic_cast<CBullet*>(e->obj)) 
+			{
+				if (e->ny > 0) 
+				{
+					this->onGround = true;
+					float vx1 = 0, vy1 = 0;
+					(e->obj)->GetSpeed(vx1, vy1);
+					this->vx = vx1;
+				}
+			}
+		}
+		if (equalinSewer && tempy != 0)
+			vy = tempy;
+	}
 	// clean up newCoObjects
 	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
 	// clean up collision events
@@ -399,7 +674,16 @@ void CGimmick::Render()
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	int ani = -1;
-	if (this->stunning == true) {
+	if (this->inSewer)
+	{
+		if (nx > 0)
+			ani = GIMMICK_ANI_IN_SEWER_RIGHT;
+		else
+			ani = GIMMICK_ANI_IN_SEWER_LEFT;
+		animation_set->at(ani)->Render(x , y - 1.0f , 255);
+	}
+	else if (this->stunning == true) 
+	{
 		if (nx > 0)
 			ani = GIMMICK_ANI_STUN_RIGHT;
 		else
@@ -418,22 +702,22 @@ void CGimmick::Render()
 			if (vx == 0) 
 			{ // IDLE AND FALL
 				if (nx > 0) {
-					if (this->onGround) ani = GIMMICK_ANI_IDLE_RIGHT;
+					if (this->onGround||this->onBoat) ani = GIMMICK_ANI_IDLE_RIGHT;
 					else ani = GIMMICK_ANI_JUMP_RIGHT;
 				} 
 				else {
-					if (this->onGround) ani = GIMMICK_ANI_IDLE_LEFT;
+					if (this->onGround || this->onBoat) ani = GIMMICK_ANI_IDLE_LEFT;
 					else ani = GIMMICK_ANI_JUMP_LEFT;
 				}
 			}
 			else if (vx > 0)
 			{ //WALK RIGHT
-				if (this->onGround) ani = GIMMICK_ANI_WALKING_RIGHT;
+				if (this->onGround || this->onBoat) ani = GIMMICK_ANI_WALKING_RIGHT;
 				else ani = GIMMICK_ANI_JUMP_RIGHT;
 			}
 			else
 			{ //WALK LEFT
-				if (this->onGround) ani = GIMMICK_ANI_WALKING_LEFT;
+				if (this->onGround || this->onBoat) ani = GIMMICK_ANI_WALKING_LEFT;
 				else ani = GIMMICK_ANI_JUMP_LEFT;
 			}
 		}
@@ -463,6 +747,8 @@ void CGimmick::SetState(int state)
 
 	switch (state)
 	{
+	case GIMMICK_STATE_IN_SEWER:
+		break;
 	case GIMMICK_STATE_WALKING_RIGHT:
 		ax = GIMMICK_ACCELERATION;
 		if (vx > GIMMICK_WALKING_SPEED)
@@ -490,13 +776,16 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
-		stunning = true;
-		stunning_start = GetTickCount64();
-		this->SetState(GIMMICK_STATE_IDLE);
+		if (stunning == false && untouchable == 0) {
+			stunning = true;
+			stunning_start = GetTickCount64();
+			this->SetState(GIMMICK_STATE_IDLE);
 
-		CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
-		star->Shot();
+			StartUntouchable();
 
+			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
+			star->Shot();
+		}
 		break;
 	}
 	case GIMMICK_STATE_DIE:
@@ -551,6 +840,18 @@ bool CGimmick::isUnder(CGameObject* object, float equal)
 	return false;
 }
 
+void CGimmick::DetectStar()
+{
+	if (state == GIMMICK_STATE_DIE)
+		return;
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CStar* star = ((CPlayScene*)scene)->GetStar();
+	if (star->state == STAR_STATE_WALKING_LEFT || star->state == STAR_STATE_WALKING_RIGHT) {
+		if (onTopOf(star, 4.0f) && vy < 0)
+			standOn(star);
+	}
+}
+
 bool CGimmick::onSideOf(CGameObject* object, float equal)
 {
 	float ol, ot, or , ob;
@@ -586,8 +887,38 @@ void CGimmick::standOn(CGameObject* object)
 		}
 
 		if (!jumping) { 
-			this->y = object->y + GIMMICK_BBOX_HEIGHT - 2;
+			this->y = object->y + GIMMICK_BBOX_HEIGHT ; //-2 pixel thi bi va cham voi quai khac
 			this->vy = 0; 
+		}
+	}
+
+	if (dynamic_cast<CGreenBoss*>(object))
+	{
+		CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(object);
+
+		onEnemy = true;
+		if (!facingBrick) {
+				this->x += object->dx;
+		}
+
+		if (!jumping) {
+			this->y = object->y + GIMMICK_BBOX_HEIGHT; 
+			this->vy = 0;
+		}
+	}
+
+	if (dynamic_cast<CStar*>(object))
+	{
+		CStar* star = dynamic_cast<CStar*>(object);
+
+		onStar = true;
+		if (!facingBrick) {
+			this->x += object->dx;
+		}
+
+		if (!jumping) {
+			this->y = object->y + GIMMICK_BBOX_HEIGHT;
+			this->vy = 0;
 		}
 	}
 	if (dynamic_cast<CElectricBlackEnemy*>(object)) {

@@ -45,6 +45,8 @@ class CGameObject
 {
 public:
 
+	bool visible = true;
+
 	float x;
 	float y;
 

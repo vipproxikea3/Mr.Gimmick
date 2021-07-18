@@ -26,6 +26,18 @@
 #include "Hud.h"
 #include "Star.h"
 #include "Door.h"
+#include "BlackBoss.h"
+#include "Sewer.h"
+#include "GreenBoss.h"
+#include "Portal.h"
+#include "Gun.h"
+#include "Bullet.h"
+#include "EnemyBoom.h"
+#include "MiniBoom.h"
+#include "Boat.h"
+#include "WaterDie.h"
+#include "Boomboat.h"
+#include "BigBoatWindow.h"
 #include "ElectricBlackEnemy.h"
 
 class CPlayScene : public CScene

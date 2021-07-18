@@ -1,6 +1,13 @@
 #include "GimmickDieEffect.h"
+#include "Game.h"
+#include "PlayScene.h"
 
 void CGimmickDieEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (!CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
+		this->visible = false;
+	}
+	if (!visible)
+		return;
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -10,6 +17,8 @@ void CGimmickDieEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CGimmickDieEffect::Render()
 {
+	if (!visible)
+		return;
 	int ani = GIMMICKDIEEFFECT_ANI_ACTIVE;
 
 	int alpha = 255;
