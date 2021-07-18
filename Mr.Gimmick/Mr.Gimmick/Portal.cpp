@@ -8,6 +8,22 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (this->CheckAABB(gimmick)) {
 		if (gimmick->GetState() != GIMMICK_STATE_DIE) {
 			gimmick->SetPosition(target_x, target_y);
+			if (gimmick->y > 300 && gimmick->x > 1280)
+			{
+				gimmick->vx = 0.1f;
+				gimmick->inSewer = true;
+				gimmick->YSewer = 0;
+				gimmick->XSewer = gimmick->x + 16;
+				gimmick->nSewer = 1;
+			}
+			else if(gimmick->y > 300 && gimmick->x < 1280)
+			{
+				gimmick->vx = -0.1f;
+				gimmick->inSewer = true;
+				gimmick->YSewer = 0;
+				gimmick->XSewer = gimmick->x - 16;
+				gimmick->nSewer = -1;
+			}
 		}
 	}
 }
