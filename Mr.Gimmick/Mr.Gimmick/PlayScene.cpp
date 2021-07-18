@@ -55,6 +55,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SEWER			99
 #define OBJECT_TYPE_ENEMYBOOM		40
 #define OBJECT_TYPE_PORTAL			42
+#define OBJECT_TYPE_ELECTRIC_BLACKENEMY		23
+#define OBJECT_TYPE_THUNDER			24
 
 #define OBJECT_TYPE_GREEN_BOSS		50
 #define OBJECT_TYPE_GUN				20
@@ -310,6 +312,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GUN:
 		obj = new CGun();
 		break;
+	case OBJECT_TYPE_ELECTRIC_BLACKENEMY:
+		obj = new CElectricBlackEnemy();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -442,6 +447,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBlackBoss*>(objects[i])
 			|| dynamic_cast<CBrick*>(objects[i])
 			|| dynamic_cast<CBrickPink*>(objects[i])
+			|| dynamic_cast<CDoor*>(objects[i])
+			|| dynamic_cast<CElectricBlackEnemy*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
 			|| dynamic_cast<CGreenBoss*>(objects[i])
 			|| dynamic_cast<CPortal*>(objects[i])
@@ -640,6 +647,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_5:
 		gimmick->x = 1206;
 		gimmick->y = 650;
+		break;
+	case DIK_L:
+		gimmick->SetPosition(64, 448);
 		break;
 	}
 }

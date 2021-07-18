@@ -17,6 +17,9 @@
 
 #define	DOOR_LIMIT_TIME		100
 
+#define	DISTANCE_X		56
+#define	DISTANCE_Y		70
+
 class CDoor : public CGameObject
 {
 	DWORD open_start = 0;
