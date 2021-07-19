@@ -648,6 +648,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->x = 1206;
 		gimmick->y = 650;
 		break;
+	case DIK_6:
+		gimmick->x = 1984;
+		gimmick->y = 320;
+		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
 		break;
