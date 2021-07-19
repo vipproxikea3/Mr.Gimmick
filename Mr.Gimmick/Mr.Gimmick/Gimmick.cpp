@@ -6,6 +6,7 @@
 #include "GimmickDieEffect.h"
 #include "PlayScene.h"
 #include "Brick.h"
+#include "BlackBird.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -132,6 +133,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CBoat* Boat = dynamic_cast<CBoat*>(coObjects->at(i));
 			if (onTopOf(Boat)) { this->onBoat = true; }
 			newCoObjects.push_back(coObjects->at(i));
+		}
+		else if (dynamic_cast<CBlackBird*>(coObjects->at(i)))
+		{
+			if (!((CBlackBird*)(coObjects->at(i)))->DropPlayer())
+				newCoObjects.push_back(coObjects->at(i));
 		}
 
 		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
@@ -658,6 +664,16 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					(e->obj)->GetSpeed(vx1, vy1);
 					this->vx = vx1;
 				}
+			}
+			if (dynamic_cast<CBlackBird*>(e->obj)) 
+			{
+				x = x0 + min_tx * dx + nx * 0.1f;
+				y = y0 + min_ty * dy + ny * 0.1f;
+				vy = 0;
+				this->onGround = true;
+
+				((CBlackBird*)(e->obj))->setOnBird(true);
+
 			}
 		}
 		if (equalinSewer && tempy != 0)
