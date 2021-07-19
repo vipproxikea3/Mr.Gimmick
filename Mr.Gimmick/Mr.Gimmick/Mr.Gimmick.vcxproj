@@ -186,6 +186,8 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Swing.h" />
+    <ClInclude Include="Sword.h" />
+    <ClInclude Include="SwordBoss.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tube.h" />
     <ClInclude Include="Utils.h" />
@@ -238,6 +240,8 @@
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Swing.cpp" />
+    <ClCompile Include="Sword.cpp" />
+    <ClCompile Include="SwordBoss.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tube.cpp" />
     <ClCompile Include="Utils.cpp" />

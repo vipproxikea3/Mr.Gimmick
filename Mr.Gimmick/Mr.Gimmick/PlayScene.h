@@ -34,6 +34,8 @@
 #include "Bullet.h"
 #include "EnemyBoom.h"
 #include "MiniBoom.h"
+#include "SwordBoss.h"
+#include "Sword.h"
 #include "Boat.h"
 #include "WaterDie.h"
 #include "Boomboat.h"

@@ -59,6 +59,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_THUNDER			24
 
 #define OBJECT_TYPE_GREEN_BOSS		50
+#define OBJECT_TYPE_SWORD_BOSS		51
+#define OBJECT_TYPE_SWORD			52
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BOAT			700
 #define OBJECT_TYPE_WATER_DIE		750
@@ -319,6 +321,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLACKBIRD:
 		obj = new CBlackBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
+	case OBJECT_TYPE_SWORD_BOSS:
+		obj = new CSwordBoss();
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -463,7 +468,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CEnemyBoom*>(objects[i])
 			|| dynamic_cast<CMiniBoom*>(objects[i])
 			|| dynamic_cast<CBomboat*>(objects[i])
-			|| dynamic_cast<CBlackBird*>(objects[i]))
+			|| dynamic_cast<CBlackBird*>(objects[i])
+			|| dynamic_cast<CSwordBoss*>(objects[i])
+			|| dynamic_cast<CSword*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -659,6 +666,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
+		break;
+	case DIK_B:
+		gimmick->x = 1670;
+		gimmick->y = 496;
 		break;
 	}
 }
