@@ -24,6 +24,24 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				gimmick->XSewer = gimmick->x - 16;
 				gimmick->nSewer = -1;
 			}
+			else if (gimmick->y < 300 && gimmick->x < 1280)
+			{
+				gimmick->vy = -0.1f;
+				gimmick->equalinSewer = false;
+				gimmick->inSewer = true;
+				gimmick->YSewer = gimmick->y -16;
+				gimmick->XSewer = 0;
+				gimmick->nSewer = -1;
+			}
+			else if (gimmick->y < 300 && gimmick->x > 1280)
+			{
+				gimmick->vy = -0.1f;
+				gimmick->equalinSewer = false;
+				gimmick->inSewer = true;
+				gimmick->YSewer = gimmick->y - 16;
+				gimmick->XSewer = 0;
+				gimmick->nSewer = -1;
+			}
 		}
 	}
 }
