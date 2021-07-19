@@ -64,6 +64,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WATER_DIE		750
 #define OBJECT_TYPE_BOOM_BOAT		777
 #define OBJECT_TYPE_BIG_BOAT_WINDOW	778
+#define OBJECT_TYPE_BLACKBIRD		35
 
 #define MAX_SCENE_LINE 1024
 
@@ -315,6 +316,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_ELECTRIC_BLACKENEMY:
 		obj = new CElectricBlackEnemy();
 		break;
+	case OBJECT_TYPE_BLACKBIRD:
+		obj = new CBlackBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -458,7 +462,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CWaterDie*>(objects[i])
 			|| dynamic_cast<CEnemyBoom*>(objects[i])
 			|| dynamic_cast<CMiniBoom*>(objects[i])
-			|| dynamic_cast<CBomboat*>(objects[i]))
+			|| dynamic_cast<CBomboat*>(objects[i])
+			|| dynamic_cast<CBlackBird*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
