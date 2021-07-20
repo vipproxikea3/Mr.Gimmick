@@ -49,6 +49,11 @@
     <ClCompile Include="MiniBoom.cpp" />
     <ClCompile Include="SwordBoss.cpp" />
     <ClCompile Include="Sword.cpp" />
+    <ClCompile Include="BigBoatWindow.cpp" />
+    <ClCompile Include="BlackBird.cpp" />
+    <ClCompile Include="Boomboat.cpp" />
+    <ClCompile Include="ElectricBlackEnemy.cpp" />
+    <ClCompile Include="Bridge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -99,5 +104,10 @@
     <ClInclude Include="MiniBoom.h" />
     <ClInclude Include="SwordBoss.h" />
     <ClInclude Include="Sword.h" />
+    <ClInclude Include="BigBoatWindow.h" />
+    <ClInclude Include="BlackBird.h" />
+    <ClInclude Include="Boomboat.h" />
+    <ClInclude Include="ElectricBlackEnemy.h" />
+    <ClInclude Include="Bridge.h" />
   </ItemGroup>
 </Project>

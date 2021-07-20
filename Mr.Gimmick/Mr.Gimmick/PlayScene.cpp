@@ -55,6 +55,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SEWER			99
 #define OBJECT_TYPE_ENEMYBOOM		40
 #define OBJECT_TYPE_PORTAL			42
+#define OBJECT_TYPE_BRIDGE			43
 #define OBJECT_TYPE_ELECTRIC_BLACKENEMY		23
 #define OBJECT_TYPE_THUNDER			24
 
@@ -263,7 +264,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInclinedBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
 		break;
 	case OBJECT_TYPE_CONVEYOR:
-		obj = new CConveyor(atoi(tokens[4].c_str()));
+		obj = new CConveyor(atoi(tokens[4].c_str()), atoi(tokens[5].c_str()));
 		break;
 	case OBJECT_TYPE_TUBE:
 		obj = new CTube(atoi(tokens[4].c_str()));
@@ -323,6 +324,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_SWORD_BOSS:
 		obj = new CSwordBoss();
+		break;
+	case OBJECT_TYPE_BRIDGE:
+		obj = new CBridge(atoi(tokens[4].c_str()));
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -425,6 +429,10 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CBomboat*>(objects[i]))
 			continue;
+		if (dynamic_cast<CBridge*>(objects[i]))
+			continue;
+		if (dynamic_cast<CPortal*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -438,6 +446,7 @@ void CPlayScene::Update(DWORD dt)
 		star->SetPosition(player->x, player->y + 16);
 	}
 
+	// Update star
 	vector<LPGAMEOBJECT> tmp_coObjects;
 	quadtree->Retrieve(&tmp_coObjects, star);
 	star->Update(dt, &tmp_coObjects);
@@ -592,7 +601,7 @@ void CPlayScene::Render()
 	// Render top layer
 	for (int i = 0; i < objects.size(); i++)
 	{
-		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
+		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i]) || dynamic_cast<CBridge*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
 		if (dynamic_cast<CBomboat*>(objects[i])) // render Boomboat falling
 		{
