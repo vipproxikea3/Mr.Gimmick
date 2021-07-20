@@ -47,12 +47,14 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="EnemyBoom.cpp" />
     <ClCompile Include="MiniBoom.cpp" />
-    <ClCompile Include="Boomboat.cpp" />
+    <ClCompile Include="SwordBoss.cpp" />
+    <ClCompile Include="Sword.cpp" />
     <ClCompile Include="BigBoatWindow.cpp" />
-    <ClCompile Include="Door.cpp" />
-    <ClCompile Include="ElectricBlackEnemy.cpp" />
     <ClCompile Include="BlackBird.cpp" />
     <ClCompile Include="StandBlackEnemy.cpp" />
+    <ClCompile Include="Boomboat.cpp" />
+    <ClCompile Include="ElectricBlackEnemy.cpp" />
+    <ClCompile Include="Bridge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -101,11 +103,12 @@
     <ClInclude Include="WaterDie.h" />
     <ClInclude Include="EnemyBoom.h" />
     <ClInclude Include="MiniBoom.h" />
-    <ClInclude Include="Boomboat.h" />
+    <ClInclude Include="SwordBoss.h" />
+    <ClInclude Include="Sword.h" />
     <ClInclude Include="BigBoatWindow.h" />
-    <ClInclude Include="Door.h" />
+    <ClInclude Include="BlackBird.h" />
+    <ClInclude Include="Boomboat.h" />
     <ClInclude Include="ElectricBlackEnemy.h" />
     <ClInclude Include="BlackBird.h" />
-    <ClInclude Include="StandBlackEnemy.h" />
   </ItemGroup>
 </Project>

@@ -103,8 +103,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
 
-	DetectStar();
-
 	onInclinedBrick = false;
 	onGround = false;
 	onEnemy = false;
@@ -114,6 +112,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// hướng của gạch nghiêng
 	onBoat = false;
 	int direction = 0;
+
+	DetectStar();
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -179,7 +179,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CGreenBoss*>(coObjects->at(i))) {
 			CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(coObjects->at(i));
-			if (onTopOf(enemy, 7) && enemy->state == GREENBOSS_STATE_WALK && this->vy < 0) {
+			if (onTopOf(enemy, 6) && enemy->state == GREENBOSS_STATE_WALK && this->vy < 0) {
 				this->onGround = true;
 				standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
@@ -906,8 +906,9 @@ void CGimmick::DetectStar()
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 	if (star->state == STAR_STATE_WALKING_LEFT || star->state == STAR_STATE_WALKING_RIGHT) {
-		if (onTopOf(star, 4.0f) && vy < 0)
+		if (onTopOf(star, 4.0f) && vy < 0) {
 			standOn(star);
+		}
 	}
 }
 
@@ -971,6 +972,7 @@ void CGimmick::standOn(CGameObject* object)
 		CStar* star = dynamic_cast<CStar*>(object);
 
 		onStar = true;
+		onGround = true;
 		if (!facingBrick) {
 			this->x += object->dx;
 		}
