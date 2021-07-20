@@ -30,12 +30,12 @@ void CGreenBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
-			if (onTopOf(brick, 2.0f)) this->onGround = true;
+			if (onTopOf(brick, 1.0f)) this->onGround = true;
 			if (onSideOf(brick) && onGround) {
-				/*float ol, ot, or , ob;
+				float ol, ot, or , ob;
 				brick->GetBoundingBox(ol, ot, or , ob);
-				if (ob < y && ot > y)
-					vx = -0.8f;*/
+				if (ob <= x && ot > x && x + GREENBOSS_BBOX_HEIGHT < ob)
+					vx = -0.8f;
 				Jump();
 			}
 		}
@@ -77,23 +77,21 @@ void CGreenBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				x = x0 + min_tx * dx + nx * 0.1f;
+				x = x0 + min_tx * dx + nx * 0.3f;
 				y = y0 + min_ty * dy + ny * 0.1f;
 				if (e->nx != 0)
 				{
 					vx = 0;
-
-					if (ob <= t && ot > t && onGround) {
-						Jump();
+					if (onGround) Jump();
+					if (ob <= t && ot > t && b < ob ) {
 						ax = -ax;
-						//vx = -0.8f ;
+						vx = -0.8f ;
 						canTurnAround = true;
 					}
-					else if (onGround) Jump();
 				}
-				else
 				if (e->ny > 0)
 				{
+					onGround = true;
 					vy = 0;
 					if (((l < ol - 3 && vx < 0) || (r > or +3 && vx > 0))) { Jump(); }
 				}

@@ -88,4 +88,6 @@ public:
 	bool isUnder(CGameObject* object, float equal = 1);
 	int getUntouchable() { return untouchable; }
 	void DetectStar();
+
+	void UpdateWithBird(float x, float y) { this->x += x; this->y += y; };
 };

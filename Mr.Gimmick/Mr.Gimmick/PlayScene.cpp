@@ -55,16 +55,20 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SEWER			99
 #define OBJECT_TYPE_ENEMYBOOM		40
 #define OBJECT_TYPE_PORTAL			42
+#define OBJECT_TYPE_BRIDGE			43
 #define OBJECT_TYPE_ELECTRIC_BLACKENEMY		23
 #define OBJECT_TYPE_THUNDER			24
 
 #define OBJECT_TYPE_GREEN_BOSS		50
+#define OBJECT_TYPE_SWORD_BOSS		51
+#define OBJECT_TYPE_SWORD			52
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BIRD			177
 #define OBJECT_TYPE_BOAT			700
 #define OBJECT_TYPE_WATER_DIE		750
 #define OBJECT_TYPE_BOOM_BOAT		777
 #define OBJECT_TYPE_BIG_BOAT_WINDOW	778
+#define OBJECT_TYPE_BLACKBIRD		35
 
 #define MAX_SCENE_LINE 1024
 
@@ -264,7 +268,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInclinedBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
 		break;
 	case OBJECT_TYPE_CONVEYOR:
-		obj = new CConveyor(atoi(tokens[4].c_str()));
+		obj = new CConveyor(atoi(tokens[4].c_str()), atoi(tokens[5].c_str()));
 		break;
 	case OBJECT_TYPE_TUBE:
 		obj = new CTube(atoi(tokens[4].c_str()));
@@ -318,6 +322,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_ELECTRIC_BLACKENEMY:
 		obj = new CElectricBlackEnemy();
+		break;
+	case OBJECT_TYPE_BLACKBIRD:
+		obj = new CBlackBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
+	case OBJECT_TYPE_SWORD_BOSS:
+		obj = new CSwordBoss();
+		break;
+	case OBJECT_TYPE_BRIDGE:
+		obj = new CBridge(atoi(tokens[4].c_str()));
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -420,6 +433,10 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CBomboat*>(objects[i]))
 			continue;
+		if (dynamic_cast<CBridge*>(objects[i]))
+			continue;
+		if (dynamic_cast<CPortal*>(objects[i]))
+			continue;
 		if (dynamic_cast<CBird*>(objects[i]))
 			continue;
 		quadtree->Insert(objects[i]);
@@ -435,6 +452,7 @@ void CPlayScene::Update(DWORD dt)
 		star->SetPosition(player->x, player->y + 16);
 	}
 
+	// Update star
 	vector<LPGAMEOBJECT> tmp_coObjects;
 	quadtree->Retrieve(&tmp_coObjects, star);
 	star->Update(dt, &tmp_coObjects);
@@ -465,6 +483,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CEnemyBoom*>(objects[i])
 			|| dynamic_cast<CMiniBoom*>(objects[i])
 			|| dynamic_cast<CBomboat*>(objects[i])
+			|| dynamic_cast<CBlackBird*>(objects[i])
+			|| dynamic_cast<CSwordBoss*>(objects[i])
+			|| dynamic_cast<CSword*>(objects[i])
 			|| dynamic_cast<CBird*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
@@ -587,7 +608,7 @@ void CPlayScene::Render()
 	// Render top layer
 	for (int i = 0; i < objects.size(); i++)
 	{
-		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i]) || dynamic_cast<CBird*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
+		if (dynamic_cast<CSewer*>(objects[i]) || (dynamic_cast<CTube*>(objects[i]) || dynamic_cast<CWindow*>(objects[i]) || dynamic_cast<CBridge*>(objects[i]) || dynamic_cast<CBird*>(objects[i])) && CGame::GetInstance()->InCamera(objects[i]))
 			objects[i]->Render();
 		if (dynamic_cast<CBomboat*>(objects[i])) // render Boomboat falling
 		{
@@ -661,6 +682,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
+		break;
+	case DIK_B:
+		gimmick->x = 1670;
+		gimmick->y = 496;
 		break;
 	}
 }
