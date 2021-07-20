@@ -59,7 +59,7 @@ void CBomboat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
-	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT))
+	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && this->state == BOOM_BOAT_STATE_FALLING && vy < 0)
 	{
 		if(x>star->x)
 			star->SetState(STAR_STATE_WALKING_LEFT);

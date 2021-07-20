@@ -552,7 +552,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					YSewer = 0;
 					nSewer = 1; 
 					y = Sewer->GetY() + 0.01;
-					vx = 0.2f;
+					vx = 0.25f;
 					vy = 0.0f;
 				}
 				else if (e->nx > 0 && Sewer->type == 1)
@@ -561,7 +561,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					YSewer = 0;
 					nSewer = -1;
 					y = Sewer->GetY() + 0.01;
-					vx = -0.13f;
+					vx = -0.2f;
 					vy = 0.0f;
 				}
 				if (e->ny < 0 && Sewer->type == 2) {
