@@ -43,6 +43,7 @@
 #include "ElectricBlackEnemy.h"
 #include "BlackBird.h"
 #include "Bridge.h"
+#include "EnemyTail.h"
 
 class CPlayScene : public CScene
 {

@@ -164,6 +164,7 @@
     <ClInclude Include="Door.h" />
     <ClInclude Include="EnemyBoom.h" />
     <ClInclude Include="ElectricBlackEnemy.h" />
+    <ClInclude Include="EnemyTail.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="EnemyBoom.cpp" />
     <ClCompile Include="ElectricBlackEnemy.cpp" />
+    <ClCompile Include="EnemyTail.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
