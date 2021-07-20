@@ -42,6 +42,7 @@
 #include "BigBoatWindow.h"
 #include "ElectricBlackEnemy.h"
 #include "BlackBird.h"
+#include "StandBlackEnemy.h"
 #include "Bridge.h"
 
 class CPlayScene : public CScene

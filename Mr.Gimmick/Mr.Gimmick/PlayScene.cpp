@@ -68,6 +68,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BOOM_BOAT		777
 #define OBJECT_TYPE_BIG_BOAT_WINDOW	778
 #define OBJECT_TYPE_BLACKBIRD		35
+#define OBJECT_TYPE_STANDBLACKENEMY		34
 
 #define MAX_SCENE_LINE 1024
 
@@ -322,6 +323,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLACKBIRD:
 		obj = new CBlackBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
+	case OBJECT_TYPE_STANDBLACKENEMY:
+		obj = new CStandBlackEnemy();
+		break;
 	case OBJECT_TYPE_SWORD_BOSS:
 		obj = new CSwordBoss();
 		break;
@@ -478,8 +482,7 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CMiniBoom*>(objects[i])
 			|| dynamic_cast<CBomboat*>(objects[i])
 			|| dynamic_cast<CBlackBird*>(objects[i])
-			|| dynamic_cast<CSwordBoss*>(objects[i])
-			|| dynamic_cast<CSword*>(objects[i]))
+			|| dynamic_cast<CStandBlackEnemy*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
