@@ -186,6 +186,7 @@
     <ClInclude Include="Sewer.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="StandBlackEnemy.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Swing.h" />
     <ClInclude Include="Sword.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="Sewer.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="StandBlackEnemy.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Swing.cpp" />
     <ClCompile Include="Sword.cpp" />
