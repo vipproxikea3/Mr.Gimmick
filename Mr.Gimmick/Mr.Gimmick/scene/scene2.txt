@@ -21,7 +21,6 @@
 96	textures\NES - Gimmick Mr Gimmick - Bosses-flip.png	0	0	255
 97	textures\boss_upsidedown.png	0	0	255
 400	textures\EnemyBoom.png	57	189	255
-
 778	textures\map2.png	0	0	0
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
@@ -706,7 +705,6 @@
 #FLY LEFT
 350210	350111	100	350112	100	350113	100
 
-
 #
 # id	ani1	ani2	ani3
 #
@@ -794,6 +792,7 @@
 
 #BLACK BIRD
 350000	350100	350110	350200	350210
+
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor,9 = Tube, 10 = , 11 = Boom, 12 = Worm, 14 = Gimmick Die Effect, 15 = Swing, 16= Brick pink, 17 = Medicine, 18 = Star, 19 = Door, 40 = EnemyBoom, 42 = Portal, 700 = Boat, 750 = WaterDie, 777 = BOMBOAT, 778 = BOMBOATWINDOW

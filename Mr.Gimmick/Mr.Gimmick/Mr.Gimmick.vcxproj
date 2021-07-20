@@ -154,6 +154,7 @@
     <ClInclude Include="Boom.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickPink.h" />
+    <ClInclude Include="Bridge.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Cogwheel.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="Boom.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="BrickPink.cpp" />
+    <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
