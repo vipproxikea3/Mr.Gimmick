@@ -481,7 +481,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CEnemyBoom*>(objects[i])
 			|| dynamic_cast<CMiniBoom*>(objects[i])
 			|| dynamic_cast<CBomboat*>(objects[i])
-			|| dynamic_cast<CBlackBird*>(objects[i]))
+			|| dynamic_cast<CBlackBird*>(objects[i])
+			|| dynamic_cast<CStandBlackEnemy*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);

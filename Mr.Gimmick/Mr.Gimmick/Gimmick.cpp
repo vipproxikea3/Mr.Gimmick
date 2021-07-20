@@ -201,7 +201,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CStandBlackEnemy*>(coObjects->at(i)))
 		{
 			CStandBlackEnemy* bEnemy = dynamic_cast<CStandBlackEnemy*>(coObjects->at(i));
-			if (onTopOf(bEnemy, 3.5f) && this->vy < 0)
+			if (onTopOf(bEnemy, 5.0f) && this->vy < 0)
 			{
 				if (bEnemy->state == ENEMY_STATE_STAND)
 				{
@@ -699,7 +699,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (enemyB->state == ENEMY_STATE_STAND)
 					{
 						vy = 0;
-						this->y = y0 + min_ty * dy + 1.1f;
+						this->y = y0 + min_ty * dy + 1.0f;
 					}
 				}
 
@@ -880,6 +880,11 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 		l = l + 2; //x pixel
 		r = r - 2;
 	}
+	if (dynamic_cast<CStandBlackEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
+	{
+		l = l + 1; //x pixel
+		r = r - 1;
+	}
 	if (r >= ol && l <= or && abs(b - ot) < equal)
 		return true;
 	return false;
@@ -999,7 +1004,7 @@ void CGimmick::standOn(CGameObject* object)
 		onEnemy = true;
 		this->vy = 0;
 		if (state == ENEMY_STATE_STAND) {
-			this->y = object->y + GIMMICK_BBOX_HEIGHT - 1;
+			this->y = object->y + GIMMICK_BBOX_HEIGHT -1;
 		}
 	}
 }
