@@ -51,6 +51,7 @@
     <ClCompile Include="BigBoatWindow.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="ElectricBlackEnemy.cpp" />
+    <ClCompile Include="Bird.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -103,5 +104,6 @@
     <ClInclude Include="BigBoatWindow.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="ElectricBlackEnemy.h" />
+    <ClInclude Include="Bird.h" />
   </ItemGroup>
 </Project>

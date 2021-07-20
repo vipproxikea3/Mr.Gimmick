@@ -39,6 +39,7 @@
 #include "Boomboat.h"
 #include "BigBoatWindow.h"
 #include "ElectricBlackEnemy.h"
+#include "Bird.h"
 
 class CPlayScene : public CScene
 {
