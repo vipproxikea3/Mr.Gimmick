@@ -160,6 +160,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Chain.h" />
+    <ClInclude Include="CloudEnemy.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
     <ClInclude Include="Conveyor.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Chain.cpp" />
+    <ClCompile Include="CloudEnemy.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
     <ClCompile Include="Conveyor.cpp" />

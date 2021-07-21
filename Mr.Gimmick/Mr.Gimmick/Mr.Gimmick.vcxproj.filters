@@ -83,6 +83,7 @@
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="SpecialBrick.cpp" />
+    <ClCompile Include="CloudEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -167,5 +168,6 @@
     <ClInclude Include="Bird.h" />
     <ClInclude Include="BlackBird.h" />
     <ClInclude Include="SpecialBrick.h" />
+    <ClInclude Include="CloudEnemy.h" />
   </ItemGroup>
 </Project>
