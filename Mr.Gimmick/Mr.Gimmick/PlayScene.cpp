@@ -64,6 +64,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WATER_DIE		750
 #define OBJECT_TYPE_BOOM_BOAT		777
 #define OBJECT_TYPE_BIG_BOAT_WINDOW	778
+#define OBJECT_TYPE_CANNON			80
+#define OBJECT_TYPE_TURLTE			91
 
 #define MAX_SCENE_LINE 1024
 
@@ -315,6 +317,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_ELECTRIC_BLACKENEMY:
 		obj = new CElectricBlackEnemy();
 		break;
+	case OBJECT_TYPE_CANNON:
+		obj = new CCannon();
+		break;
+	case OBJECT_TYPE_TURLTE:
+		obj = new CTurle(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -449,7 +457,6 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBrickPink*>(objects[i])
 			|| dynamic_cast<CDoor*>(objects[i])
 			|| dynamic_cast<CElectricBlackEnemy*>(objects[i])
-			|| dynamic_cast<CDoor*>(objects[i])
 			|| dynamic_cast<CGreenBoss*>(objects[i])
 			|| dynamic_cast<CPortal*>(objects[i])
 			|| dynamic_cast<CGun*>(objects[i])
@@ -458,7 +465,10 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CWaterDie*>(objects[i])
 			|| dynamic_cast<CEnemyBoom*>(objects[i])
 			|| dynamic_cast<CMiniBoom*>(objects[i])
-			|| dynamic_cast<CBomboat*>(objects[i]))
+			|| dynamic_cast<CBomboat*>(objects[i])
+			|| dynamic_cast<CCannon*>(objects[i])
+			|| dynamic_cast<CBoomCannon*>(objects[i])
+			|| dynamic_cast<CTurle*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -483,8 +493,8 @@ void CPlayScene::Update(DWORD dt)
 	}*/
 
 
-	for (int i = objects.size() - 1; i >= 0; i--)
-		if (dynamic_cast<CBullet*>(objects[i])) 
+	for (int i = objects.size() - 1; i >= 0; i--) {
+		if (dynamic_cast<CBullet*>(objects[i]))
 		{
 			CBullet* bullet = (CBullet*)(objects[i]);
 			if (bullet->isDelete == true)
@@ -493,6 +503,17 @@ void CPlayScene::Update(DWORD dt)
 				delete bullet;
 			}
 		}
+		if (dynamic_cast<CBoomCannon*>(objects[i]))
+		{
+			CBoomCannon* boom_cannon = (CBoomCannon*)(objects[i]);
+			if (boom_cannon->isDelete == true)
+			{
+				objects.erase(objects.begin() + i);
+				delete boom_cannon;
+			}
+		}
+	}
+		
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
