@@ -13,9 +13,11 @@
 class CConveyor : public CGameObject
 {
 	int direction;
+	int isRender = 1;
 public:
-	CConveyor(int direction) : CGameObject() {
+	CConveyor(int direction, int isRender = 1) : CGameObject() {
 		this->direction = direction;
+		this->isRender = isRender;
 	}
 	int GetDirection() { return this->direction; }
 	~CConveyor() {}

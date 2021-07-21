@@ -330,7 +330,7 @@ bool CGame::InLargeCamera(CGameObject* object)
 {
 	float l, t, r, b;
 	object->GetBoundingBox(l, t, r, b);
-	return !(r < cam_x - 16.0f || l > cam_x + screen_width + 16.0f || t < cam_y - screen_height - 16.0f || b > cam_y + 16.0f);
+	return !(r < cam_x - 16.0f || l > cam_x + screen_width + 16.0f || t < cam_y - screen_height - 16.0f || b > cam_y + 52.0f);
 }
 
 CGame* CGame::GetInstance()

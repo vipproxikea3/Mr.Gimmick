@@ -6,6 +6,9 @@ void CConveyor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CConveyor::Render()
 {
+	if (this->isRender == 0)
+		return;
+
 	int ani;
 
 	switch (this->direction)
