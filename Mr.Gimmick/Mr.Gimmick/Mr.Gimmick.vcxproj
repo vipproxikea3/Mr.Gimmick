@@ -153,10 +153,12 @@
     <ClInclude Include="Boat.h" />
     <ClInclude Include="Boomboat.h" />
     <ClInclude Include="Boom.h" />
+    <ClInclude Include="BoomCannon.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickPink.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Cannon.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
@@ -193,6 +195,7 @@
     <ClInclude Include="SwordBoss.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tube.h" />
+    <ClInclude Include="Turle.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WaterDie.h" />
     <ClInclude Include="Window.h" />
@@ -210,10 +213,12 @@
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="Boomboat.cpp" />
     <ClCompile Include="Boom.cpp" />
+    <ClCompile Include="BoomCannon.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="BrickPink.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
@@ -250,6 +255,7 @@
     <ClCompile Include="SwordBoss.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tube.cpp" />
+    <ClCompile Include="Turle.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WaterDie.cpp" />
     <ClCompile Include="Window.cpp" />

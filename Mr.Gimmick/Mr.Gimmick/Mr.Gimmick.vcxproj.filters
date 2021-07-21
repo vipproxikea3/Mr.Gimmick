@@ -54,8 +54,14 @@
     <ClCompile Include="StandBlackEnemy.cpp" />
     <ClCompile Include="Boomboat.cpp" />
     <ClCompile Include="ElectricBlackEnemy.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Cannon.cpp" />
+    <ClCompile Include="BoomCannon.cpp" />
+    <ClCompile Include="Turle.cpp" />
+=======
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Bird.cpp" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -110,8 +116,14 @@
     <ClInclude Include="BlackBird.h" />
     <ClInclude Include="Boomboat.h" />
     <ClInclude Include="ElectricBlackEnemy.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Cannon.h" />
+    <ClInclude Include="BoomCannon.h" />
+    <ClInclude Include="Turle.h" />
+=======
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Bird.h" />
     <ClInclude Include="BlackBird.h" />
+>>>>>>> master
   </ItemGroup>
 </Project>
