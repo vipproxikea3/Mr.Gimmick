@@ -620,6 +620,8 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 # die left
 230012	230018	50
 
+# die left
+
 # ==== GUN ========
 200001	200001	750	200002	750
 
@@ -1248,7 +1250,7 @@ Audio/Sound Effect (1).wav	SOUND_Effect_1
 
 # ELECTRIC BLACK ENEMY
 23	1904	688	230001
-#23	1808	688	230001
+23	1808	688	230001
 
 # DOOR
 19	1888	688	190001

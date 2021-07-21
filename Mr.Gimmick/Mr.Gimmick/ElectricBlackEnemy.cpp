@@ -65,8 +65,6 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	//DebugOut(L"state = %d\n", state);
-
 	if (coEvents.size() == 0)
 	{
 		//x += dx;
@@ -98,17 +96,13 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				if (e->ny > 0) {
-					if (state != ELECTRIC_BLACKENEMY_STATE_DIE) {
-						if (!carry_player && state != ELECTRIC_BLACKENEMY_STATE_SHOCK) {
-							SetState(ELECTRIC_BLACKENEMY_STATE_WALK);
-							x = x0 + min_tx * dx + nx * 0.1f;
-							y = y0 + min_ty * dy + ny * 0.1f;
-						}
-					}
+				//StartShock();
+				if (!carry_player && state != ELECTRIC_BLACKENEMY_STATE_SHOCK) {
+					SetState(ELECTRIC_BLACKENEMY_STATE_WALK);
+					x = x0 + min_tx * dx + nx * 0.1f;
+					y = y0 + min_ty * dy + ny * 0.1f;
 				}
 
-				if (e->nx != 0) vx = 0;
 			}
 		}
 	}
@@ -131,19 +125,19 @@ void CElectricBlackEnemy::Render()
 			}
 
 		}
-		if (state == ELECTRIC_BLACKENEMY_STATE_WALK) {
+		else if (state == ELECTRIC_BLACKENEMY_STATE_WALK) {
 			if (ax > 0)
 				ani = ELECTRIC_BLACKENEMY_ANI_WALKING_RIGHT;
 			else
 				ani = ELECTRIC_BLACKENEMY_ANI_WALKING_LEFT;
 		}
-		if (state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
+		else if (state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
 			if (ax > 0)
 				ani = ELECTRIC_BLACKENEMY_ANI_SHOCKING_RIGHT;
 			else
 				ani = ELECTRIC_BLACKENEMY_ANI_SHOCKING_LEFT;
 		}
-		if (state == ELECTRIC_BLACKENEMY_STATE_DIE) {
+		else if (state == ELECTRIC_BLACKENEMY_STATE_DIE) {
 			if (nx > 0)
 				ani = ELECTRIC_BLACKENEMY_ANI_DIE_RIGHT;
 			else
@@ -158,7 +152,7 @@ void CElectricBlackEnemy::Render()
 	
 	if (shocking) {
 		if (shocking_large) {
-			if (nx > 1) {
+			if (ax > 0) {
 				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_RIGHT)->Render(x + 3, y + 10);
 				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_2_RIGHT)->Render(x, y);
 			}
@@ -258,7 +252,7 @@ void CElectricBlackEnemy::DetectPlayer()
 	CGimmick* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	//Reset dem neu ngang hang hoac o duoi gimmick
-	if (state == ELECTRIC_BLACKENEMY_STATE_STOP && state != ELECTRIC_BLACKENEMY_STATE_DIE)
+	if (state == ELECTRIC_BLACKENEMY_STATE_STOP)
 	{
 		if ((player->y >= this->y + ELECTRIC_BLACKENEMY_BBOX_HEIGHT)
 			|| (player->x <= this->x - ELECTRIC_BLACKENEMY_STOP_BBOX_WIDTH - 0.5f && this->y < player->x)
@@ -284,7 +278,7 @@ void CElectricBlackEnemy::DetectPlayer()
 	}
 
 	//reset quay dau
-	if (state != ELECTRIC_BLACKENEMY_STATE_STOP && !player->onEnemy && state != ELECTRIC_BLACKENEMY_STATE_DIE) {
+	if (state != ELECTRIC_BLACKENEMY_STATE_STOP && !player->onEnemy) {
 		carry_player = false;
 		if (!this->canTurnAround && (this->x >= player->x - (PLAYER_MAX_RANGE_FLY - 1)) && (this->x <= player->x + (PLAYER_MAX_RANGE_FLY - 1))) //reset turn around, can dam bao so +- < PLAYER_MAX_RANGE_FLY
 			this->canTurnAround = true;
@@ -300,12 +294,8 @@ void CElectricBlackEnemy::DetectStar() {
 		&& star->state != STAR_STATE_HIDE && star->state != STAR_STATE_EXPLOSIVE
 		&& star->state != STAR_STATE_PENDING && star->state != STAR_STATE_READY)
 	{
-		if (state == ELECTRIC_BLACKENEMY_STATE_STOP) {
-			this->carry_player = false;
+		if (state == ELECTRIC_BLACKENEMY_STATE_STOP)
 			SetState(ELECTRIC_BLACKENEMY_STATE_DIE);
-			DebugOut(L"va cham ngoi sao \n");
-		}
-			
 		if (state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
 			this->shocking_large = true;
 			star->SetState(STAR_STATE_EXPLOSIVE);
@@ -322,7 +312,7 @@ void CElectricBlackEnemy::DetectStar() {
 int CElectricBlackEnemy::CheckSideOfStar() // -1 left, 1 right
 {
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
-	if (star->x < this->x)
+	if (star->x < x)
 		return -1;
 	else
 		return 1;
@@ -338,7 +328,7 @@ void CElectricBlackEnemy::SpecialCollisionWithPlayer()
 	{
 		if (IsCollidingWithPlayer())
 		{
-			if (this->x < player->x)
+			if (x < player->x)
 			{
 				player->nx = 1.0;
 			}

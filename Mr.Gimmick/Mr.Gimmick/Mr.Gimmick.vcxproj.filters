@@ -51,9 +51,6 @@
     <ClCompile Include="BigBoatWindow.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="ElectricBlackEnemy.cpp" />
-    <ClCompile Include="Cannon.cpp" />
-    <ClCompile Include="BoomCannon.cpp" />
-    <ClCompile Include="Turle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -106,8 +103,5 @@
     <ClInclude Include="BigBoatWindow.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="ElectricBlackEnemy.h" />
-    <ClInclude Include="Cannon.h" />
-    <ClInclude Include="BoomCannon.h" />
-    <ClInclude Include="Turle.h" />
   </ItemGroup>
 </Project>

@@ -39,9 +39,6 @@
 #include "Boomboat.h"
 #include "BigBoatWindow.h"
 #include "ElectricBlackEnemy.h"
-#include "Cannon.h"
-#include "BoomCannon.h"
-#include "Turle.h"
 
 class CPlayScene : public CScene
 {
