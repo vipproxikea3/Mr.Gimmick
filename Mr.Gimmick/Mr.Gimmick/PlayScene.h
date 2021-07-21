@@ -42,8 +42,11 @@
 #include "BigBoatWindow.h"
 #include "ElectricBlackEnemy.h"
 #include "BlackBird.h"
+#include "StandBlackEnemy.h"
 #include "Bridge.h"
+#include "Bird.h"
 #include "EnemyTail.h"
+#include "SpecialBrick.h"
 
 class CPlayScene : public CScene
 {

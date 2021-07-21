@@ -146,6 +146,7 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BigBoatWindow.h" />
     <ClInclude Include="BlackBird.h" />
+    <ClInclude Include="Bird.h" />
     <ClInclude Include="BlackBoss.h" />
     <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="BlueFire.h" />
@@ -185,7 +186,9 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sewer.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="SpecialBrick.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="StandBlackEnemy.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Swing.h" />
     <ClInclude Include="Sword.h" />
@@ -202,6 +205,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BigBoatWindow.cpp" />
     <ClCompile Include="BlackBird.cpp" />
+    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="BlackBoss.cpp" />
     <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="BlueFire.cpp" />
@@ -241,7 +245,9 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sewer.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SpecialBrick.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="StandBlackEnemy.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Swing.cpp" />
     <ClCompile Include="Sword.cpp" />
