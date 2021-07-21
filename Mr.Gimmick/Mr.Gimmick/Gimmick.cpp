@@ -6,6 +6,7 @@
 #include "GimmickDieEffect.h"
 #include "PlayScene.h"
 #include "Brick.h"
+#include "BlackBird.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -102,8 +103,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += ay * dt;
 	ay = -GIMMICK_GRAVITY;
 
-	DetectStar();
-
 	onInclinedBrick = false;
 	onGround = false;
 	onEnemy = false;
@@ -113,6 +112,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// hướng của gạch nghiêng
 	onBoat = false;
 	int direction = 0;
+
+	DetectStar();
 
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -128,6 +129,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CStandBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBoat*>(coObjects->at(i))) {
 			CBoat* Boat = dynamic_cast<CBoat*>(coObjects->at(i));
 			if (onTopOf(Boat)) { this->onBoat = true; }
@@ -139,13 +141,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			newCoObjects.push_back(coObjects->at(i));
 		}
 		else if (dynamic_cast<CBoomCannon*>(coObjects->at(i))) {
-			//CBoomCannon* boom_cannon = dynamic_cast<CBoomCannon*>(coObjects->at(i));
-			//if (onTopOf(boom_cannon)) { 
-			//	this->onGround = true;
-			//	//standOn(boom_cannon);
-			//}
 			newCoObjects.push_back(coObjects->at(i));
 		}
+		else if (dynamic_cast<CBlackBird*>(coObjects->at(i)))
+		{
+			if (!((CBlackBird*)(coObjects->at(i)))->DropPlayer())
+				newCoObjects.push_back(coObjects->at(i));
+		}
+
 		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
@@ -184,7 +187,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CGreenBoss*>(coObjects->at(i))) {
 			CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(coObjects->at(i));
-			if (onTopOf(enemy, 7) && enemy->state == GREENBOSS_STATE_WALK && this->vy < 0) {
+			if (onTopOf(enemy, 6) && enemy->state == GREENBOSS_STATE_WALK && this->vy < 0) {
 				this->onGround = true;
 				standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
@@ -211,9 +214,21 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CBoomCannon*>(coObjects->at(i))) {
 			CBoomCannon* boom_cannon = dynamic_cast<CBoomCannon*>(coObjects->at(i));
-			if (onTopOf(boom_cannon, 2.5f) && this->vy < 0) { 
+			if (onTopOf(boom_cannon, 2.5f) && this->vy < 0) {
 				this->onGround = true;
 				standOn(boom_cannon);
+			}
+		}
+		if (dynamic_cast<CStandBlackEnemy*>(coObjects->at(i)))
+		{
+			CStandBlackEnemy* bEnemy = dynamic_cast<CStandBlackEnemy*>(coObjects->at(i));
+			if (onTopOf(bEnemy, 5.0f) && this->vy < 0)
+			{
+				if (bEnemy->state == ENEMY_STATE_STAND)
+				{
+					this->onGround = true;
+					if (!onEnemy) standOn(bEnemy);
+				}
 			}
 		}
 	}
@@ -561,7 +576,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					YSewer = 0;
 					nSewer = 1; 
 					y = Sewer->GetY() + 0.01;
-					vx = 0.2f;
+					vx = 0.25f;
 					vy = 0.0f;
 				}
 				else if (e->nx > 0 && Sewer->type == 1)
@@ -570,7 +585,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					YSewer = 0;
 					nSewer = -1;
 					y = Sewer->GetY() + 0.01;
-					vx = -0.13f;
+					vx = -0.2f;
 					vy = 0.0f;
 				}
 				if (e->ny < 0 && Sewer->type == 2) {
@@ -707,6 +722,17 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+			if (dynamic_cast<CBlackBird*>(e->obj))
+			{
+				x = x0 + min_tx * dx + nx * 0.1f;
+				y = y0 + min_ty * dy + ny * 0.1f;
+				vy = 0;
+				this->onGround = true;
+
+				((CBlackBird*)(e->obj))->setOnBird(true);
+
+			}
+
 			if (dynamic_cast<CBoomCannon*>(e->obj))
 			{
 				CBoomCannon* boom_cannon = dynamic_cast<CBoomCannon*>(e->obj);
@@ -729,6 +755,36 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->SetState(GIMMICK_STATE_STUN);
 						StartUntouchable();
 					}
+				}
+			}
+			
+
+			if (dynamic_cast<CStandBlackEnemy*>(e->obj)) {
+
+				CStandBlackEnemy* enemyB = dynamic_cast<CStandBlackEnemy*>(e->obj);
+
+				if (e->ny > 0) 
+				{	
+					if (enemyB->state == ENEMY_STATE_STAND)
+					{
+						vy = 0;
+						this->y = y0 + min_ty * dy + 1.0f;
+					}
+				}
+
+				if (e->nx != 0)
+				{
+					if (enemyB->x < this->x)
+					{
+						this->vx = GIMMICK_DEFLECT_SPEED_X;
+						this->nx = 1.0;
+					}
+					else 
+					{
+						this->vx = -GIMMICK_DEFLECT_SPEED_X;
+						this->nx = -1.0;
+					}
+					this->SetState(GIMMICK_STATE_STUN);
 				}
 			}
 		}
@@ -893,6 +949,11 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 		l = l + 2; //x pixel
 		r = r - 2;
 	}
+	if (dynamic_cast<CStandBlackEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
+	{
+		l = l + 1; //x pixel
+		r = r - 1;
+	}
 	if (r >= ol && l <= or && abs(b - ot) < equal)
 		return true;
 	return false;
@@ -919,8 +980,9 @@ void CGimmick::DetectStar()
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 	if (star->state == STAR_STATE_WALKING_LEFT || star->state == STAR_STATE_WALKING_RIGHT) {
-		if (onTopOf(star, 4.0f) && vy < 0)
+		if (onTopOf(star, 4.0f) && vy < 0) {
 			standOn(star);
+		}
 	}
 }
 
@@ -984,6 +1046,7 @@ void CGimmick::standOn(CGameObject* object)
 		CStar* star = dynamic_cast<CStar*>(object);
 
 		onStar = true;
+		onGround = true;
 		if (!facingBrick) {
 			this->x += object->dx;
 		}
@@ -1013,6 +1076,16 @@ void CGimmick::standOn(CGameObject* object)
 			this->y = object->y + GIMMICK_BBOX_HEIGHT;
 			this->vy = 0;
 			
+		}
+	}
+
+	if (dynamic_cast<CStandBlackEnemy*>(object)) {
+		CStandBlackEnemy* bEnemy = dynamic_cast<CStandBlackEnemy*>(object);
+
+		onEnemy = true;
+		this->vy = 0;
+		if (state == ENEMY_STATE_STAND) {
+			this->y = object->y + GIMMICK_BBOX_HEIGHT -1;
 		}
 	}
 }

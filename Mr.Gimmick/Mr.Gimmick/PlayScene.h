@@ -34,6 +34,8 @@
 #include "Bullet.h"
 #include "EnemyBoom.h"
 #include "MiniBoom.h"
+#include "SwordBoss.h"
+#include "Sword.h"
 #include "Boat.h"
 #include "WaterDie.h"
 #include "Boomboat.h"
@@ -42,6 +44,10 @@
 #include "Cannon.h"
 #include "BoomCannon.h"
 #include "Turle.h"
+#include "BlackBird.h"
+#include "StandBlackEnemy.h"
+#include "Bridge.h"
+#include "Bird.h"
 
 class CPlayScene : public CScene
 {
