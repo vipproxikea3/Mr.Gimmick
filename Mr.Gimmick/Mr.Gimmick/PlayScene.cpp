@@ -56,6 +56,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_ENEMYBOOM		40
 #define OBJECT_TYPE_PORTAL			42
 #define OBJECT_TYPE_BRIDGE			43
+#define OBJECT_TYPE_ENEMYTAIL		44
+#define OBJECT_TYPE_SPECIALBRICK	45
 #define OBJECT_TYPE_ELECTRIC_BLACKENEMY		23
 #define OBJECT_TYPE_THUNDER			24
 
@@ -343,6 +345,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRIDGE:
 		obj = new CBridge(atoi(tokens[4].c_str()));
 		break;
+	case OBJECT_TYPE_ENEMYTAIL:
+		obj = new CEnemyTail(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
+	case OBJECT_TYPE_SPECIALBRICK: obj = new CSpecialBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str())); break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -498,9 +504,10 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CTurle*>(objects[i])
 			|| dynamic_cast<CBlackBird*>(objects[i])
 			|| dynamic_cast<CSwordBoss*>(objects[i])
-			|| dynamic_cast<CSword*>(objects[i])
 			|| dynamic_cast<CBird*>(objects[i])
-			|| dynamic_cast<CStandBlackEnemy*>(objects[i]))
+			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
+			|| dynamic_cast<CSword*>(objects[i])
+			|| dynamic_cast<CEnemyTail*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -535,7 +542,7 @@ void CPlayScene::Update(DWORD dt)
 				delete bullet;
 			}
 		}
-		if (dynamic_cast<CBoomCannon*>(objects[i]))
+		else if (dynamic_cast<CBoomCannon*>(objects[i]))
 		{
 			CBoomCannon* boom_cannon = (CBoomCannon*)(objects[i]);
 			if (boom_cannon->isDelete == true)
