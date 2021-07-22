@@ -45,6 +45,7 @@
 #include "StandBlackEnemy.h"
 #include "Bridge.h"
 #include "Bird.h"
+#include "Cat.h"
 
 class CPlayScene : public CScene
 {

@@ -157,6 +157,7 @@
     <ClInclude Include="BrickPink.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Cat.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="BrickPink.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Cat.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
