@@ -123,8 +123,10 @@ void CPlayScene::_ParseSection_ZONES(string line)
 	float t = (float)atof(tokens[1].c_str());
 	float r = (float)atof(tokens[2].c_str());
 	float b = (float)atof(tokens[3].c_str());
+	float revival_x = (float)atof(tokens[4].c_str());
+	float revival_y = (float)atof(tokens[5].c_str());
 
-	CZone* zone = new CZone(l, t, r, b);
+	CZone* zone = new CZone(l, t, r, b, revival_x, revival_y);
 	zones.push_back(zone);
 }
 
@@ -577,6 +579,8 @@ void CPlayScene::UpdateZone() {
 			lt = zones[i]->t;
 			lr = zones[i]->r;
 			lb = zones[i]->b;
+			revival_x = zones[i]->revival_x;
+			revival_y = zones[i]->revival_y;
 		}
 	}
 }
@@ -683,8 +687,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
-		return;
+	/*if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
+		return;*/
 
 	switch (KeyCode)
 	{
@@ -692,8 +696,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
 	//	break;
 	case DIK_S:
-		if (star != nullptr) {
-			star->Ready();
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			if (star != nullptr) {
+				star->Ready();
+			}
 		}
 		break;
 	case DIK_1:
@@ -709,8 +715,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->y = 650;
 		break;
 	case DIK_6:
-		gimmick->x = 1984;
-		gimmick->y = 320;
+		gimmick->Revival();
 		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
@@ -718,6 +723,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_B:
 		gimmick->x = 1670;
 		gimmick->y = 496;
+		break;
+	case DIK_M:
+		gimmick->SetState(GIMMICK_STATE_DIE);
 		break;
 	}
 }
@@ -747,20 +755,24 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
-		return;
+	/*if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
+		return;*/
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (star != nullptr) {
-			star->Shot();
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			if (star != nullptr) {
+				star->Shot();
+			}
 		}
 		break;
 	case DIK_SPACE:
-		gimmick->falling = true;
-		gimmick->jumping = false;
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			gimmick->falling = true;
+			gimmick->jumping = false;
+		}
 		break;
 	}
 }

@@ -72,6 +72,8 @@ protected:
 	float lt = 9999.0f;
 	float lr = 9999.0f;
 	float lb = -9999.0f;
+	float revival_x = 0;
+	float revival_y = 0;
 
 	Quadtree* quadtree;
 
@@ -97,6 +99,11 @@ public:
 
 	void UpdateZone();
 	void SetCamPos();
+
+	void GetRevivalPosition(float& x, float& y) {
+		x = this->revival_x;
+		y = this->revival_y;
+	}
 
 	void PushBackObj(CGameObject* obj);
 
