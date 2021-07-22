@@ -7,6 +7,7 @@
 #include "PlayScene.h"
 #include "Brick.h"
 #include "BlackBird.h"
+#include "Backup.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -52,6 +53,10 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->state == GIMMICK_STATE_DIE && GetTickCount64() - die_start >= GIMMICK_REVIVAL_TIME) {
+		this->Revival();
+	}
+
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	// Set in sewer
@@ -1001,19 +1006,26 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
-		if (stunning == false && untouchable == 0) {
+		if (untouchable == 0) {
+			this->SetState(GIMMICK_STATE_IDLE);
+			
 			stunning = true;
 			stunning_start = GetTickCount64();
-			this->SetState(GIMMICK_STATE_IDLE);
-
 			StartUntouchable();
 
 			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 			star->Shot();
+			CBackup::GetInstance()->UpdateLifeStack(CBackup::GetInstance()->lifeStack - 1);
 		}
-		break;
+		else {
+			this->SetState(GIMMICK_STATE_IDLE);
+		}
 	}
+	break;
 	case GIMMICK_STATE_DIE:
+		CBackup::GetInstance()->UpdateRest(CBackup::GetInstance()->rest - 1);
+		CBackup::GetInstance()->UpdateLifeStack(4);
+		this->die_start = GetTickCount64();
 		CreateDieEffect();
 		vx = 0;
 		vy = 0;
@@ -1081,6 +1093,19 @@ void CGimmick::DetectStar()
 			standOn(star);
 		}
 	}
+}
+
+void CGimmick::Revival() {
+	float revival_x, revival_y;
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	((CPlayScene*)scene)->GetRevivalPosition(revival_x, revival_y);
+	this->SetPosition(revival_x, revival_y);
+	this->SetSpeed(0, 0);
+	this->ax = 0;
+	this->ay = 0;
+	this->SetState(GIMMICK_STATE_IDLE);
+	this->stunning = false;
+	this->untouchable = 0;
 }
 
 bool CGimmick::onSideOf(CGameObject* object, float equal)

@@ -14,6 +14,7 @@
 
 class CHud : public CGameObject
 {
+public:
 	//Score
 	//int timeDP = HUB_TIME_DP;
 	int dpScore = 1000;
@@ -21,16 +22,14 @@ class CHud : public CGameObject
 	int displayScore = 0;
 
 	//Rest
-	int rest = 3;
+	int rest = 5;
 
 	//Light
-	int light1 = 0, light2 = 1, light3 = 2, light4 = 3;
+	int light1 = 3, light2 = 3, light3 = 3, light4 = 3;
 
 	//Item
 	int item1 = 6, item2 = 4, item3 = 1;
 
-
-public:
 	CHud() {
 
 	}

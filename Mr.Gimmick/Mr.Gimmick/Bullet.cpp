@@ -21,8 +21,10 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (this->CheckAABB(star) && this->state != BULLET_STATE_EXPLODE && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT))
 			this->SetState(BULLET_STATE_EXPLODE);
 
-		if (this->CheckAABB(gimmick) && this->state != BULLET_STATE_EXPLODE)
-			gimmick->SetState(GIMMICK_STATE_STUN);
+		if (this->CheckAABB(gimmick) && this->state != BULLET_STATE_EXPLODE) {
+			if (gimmick->untouchable == 0)
+				gimmick->SetState(GIMMICK_STATE_STUN);
+		}
 
 		vy -= GIMMICK_GRAVITY * dt;
 		CGameObject::Update(dt);
