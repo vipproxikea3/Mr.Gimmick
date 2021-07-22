@@ -7,6 +7,7 @@
 #include "PlayScene.h"
 #include "Brick.h"
 #include "BlackBird.h"
+#include "Backup.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -928,19 +929,25 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
-		if (stunning == false && untouchable == 0) {
+		if (untouchable == 0) {
+			this->SetState(GIMMICK_STATE_IDLE);
+			
 			stunning = true;
 			stunning_start = GetTickCount64();
-			this->SetState(GIMMICK_STATE_IDLE);
-
 			StartUntouchable();
 
 			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 			star->Shot();
+			CBackup::GetInstance()->UpdateLifeStack(CBackup::GetInstance()->lifeStack - 1);
 		}
-		break;
+		else {
+			this->SetState(GIMMICK_STATE_IDLE);
+		}
 	}
+	break;
 	case GIMMICK_STATE_DIE:
+		CBackup::GetInstance()->UpdateRest(CBackup::GetInstance()->rest - 1);
+		CBackup::GetInstance()->UpdateLifeStack(4);
 		this->die_start = GetTickCount64();
 		CreateDieEffect();
 		vx = 0;

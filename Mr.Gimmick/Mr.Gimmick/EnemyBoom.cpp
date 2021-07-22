@@ -47,7 +47,8 @@ void CEnemyBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (CheckAABB(player) && (this->state == ENEMYBOOM_STATE_WALKING_RIGHT || this->state == ENEMYBOOM_STATE_WALKING_LEFT))
 	{
-		player->SetState(GIMMICK_STATE_STUN);
+		if (player->untouchable == 0)
+			player->SetState(GIMMICK_STATE_STUN);
 	}
 
 	// Calculate dx, dy 

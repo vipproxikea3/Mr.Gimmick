@@ -34,7 +34,8 @@ void CMiniBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (CheckAABB(player))
 	{
-		player->SetState(GIMMICK_STATE_STUN);
+		if (player->untouchable == 0)
+			player->SetState(GIMMICK_STATE_STUN);
 	}
 
 	if (this->state == MINIBOOM_STATE_EXPLOSIVE) {

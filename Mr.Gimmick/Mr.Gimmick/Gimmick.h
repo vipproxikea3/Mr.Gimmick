@@ -48,7 +48,6 @@
 
 class CGimmick : public CGameObject
 {
-	int untouchable;
 	DWORD untouchable_start;
 
 	DWORD die_start;
@@ -59,6 +58,7 @@ class CGimmick : public CGameObject
 	
 	bool updated = false;
 public:
+	int untouchable;
 	float ay = 0;
 	bool onGround = false;
 	bool falling = false;

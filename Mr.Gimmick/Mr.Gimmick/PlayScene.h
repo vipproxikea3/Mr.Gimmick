@@ -109,6 +109,7 @@ public:
 
 	CGimmick* GetPlayer() { return player; };
 	CStar* GetStar() { return star; };
+	CHud* GetHud() { return hud; };
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler
