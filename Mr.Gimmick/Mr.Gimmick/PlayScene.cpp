@@ -232,7 +232,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_CAT:
-		obj = new CCat(atoi(tokens[4].c_str()));
+		obj = new CCat(atoi(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
 		break;
 	case OBJECT_TYPE_BIRD:
 		obj = new CBird(atoi(tokens[4].c_str()));

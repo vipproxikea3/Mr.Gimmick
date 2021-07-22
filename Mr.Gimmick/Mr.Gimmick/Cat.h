@@ -22,15 +22,16 @@
 #define CAT_BBOX_WIDTH	24
 #define CAT_BBOX_HEIGHT	19
 
-#define CAT_GRAVITY	0.0006f
+#define CAT_GRAVITY	0.001f
 #define CAT_RUN_SPEED	0.13f
 #define CAT_RUN_SLIDE	0.005f
 
-#define CAT_TIME_SLEEP	15000
+#define CAT_TIME_SLEEP	120000
 #define CAT_TIME_RUN	2600
+#define CAT_TIME_HIDE	300
 
 #define CAT_LIMIT_X	160
-#define CAT_LIMIT_Y	70
+#define CAT_LIMIT_Y	30
 #define CAT_LIMIT_RUN_X	5
 
 class CCat : public CGameObject
@@ -43,10 +44,12 @@ public:
 
 	DWORD sleep_start = 0;
 	DWORD run_start = 0;
+	DWORD water_die = 0;
 
-	CCat(int type) : CGameObject() {
+	CCat(int type,int nx,int state) : CGameObject() {
 		this->type = type;
-		SetState(CAT_STATE_IDLE);
+		this->nx = nx;
+		SetState(state);
 	}
 	~CCat() {}
 	int Collision(LPGAMEOBJECT object, float dy);
@@ -56,6 +59,7 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void StartSleep() { sleep_start = GetTickCount64(); }
 	void StartRun() { run_start = GetTickCount64(); }
+	void StartWaterDie() { water_die = GetTickCount64(); }
 	//void CreateReward();
 	/*float GetX() { return this->x; };
 	float GetY() { return this->y; };*/
