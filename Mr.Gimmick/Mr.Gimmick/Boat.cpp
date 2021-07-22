@@ -73,7 +73,7 @@ void CBoat::Render()
 	ani = BOAT_ANI;
 	int alpha = 255;
 	animation_set->at(ani)->Render(x, y, alpha);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CBoat::SetState(int state) {}
