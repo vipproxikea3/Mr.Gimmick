@@ -337,6 +337,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_TURLTE:
 		obj = new CTurle(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
 	case OBJECT_TYPE_BLACKBIRD:
 		obj = new CBlackBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;

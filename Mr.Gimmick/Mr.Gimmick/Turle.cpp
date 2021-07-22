@@ -5,12 +5,14 @@
 #include "PlayScene.h"
 #include "Star.h"
 #include "Gimmick.h"
+#include "WaterDie.h"
 
 CTurle::CTurle(float left, float right) : CGameObject()
 {
 	this->SetState(TURLE_STATE_WALKING_RIGHT);
 	this->left = left;
 	this->right = right;
+	this->canBeAttacked = true;
 }
 
 void CTurle::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -20,7 +22,7 @@ void CTurle::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		left = x;
 		top = y;
 		right = left + TURLE_WALKING_BBOX_WIDTH;
-		bottom = top - TURLE_WALKING_BBOX_HEIGHT;
+		bottom = top - TURLE_WALKING_BBOX_HEIGHT + 0.5f;
 	}
 	if (state == TURLE_STATE_TURNING_RIGHT
 		|| state == TURLE_STATE_TURNING_LEFT) {
@@ -30,17 +32,13 @@ void CTurle::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		bottom = top - TURLE_TURNING_BBOX_HEIGHT;
 	}
 	if (state == TURLE_STATE_DIE_RIGHT
-		|| state == TURLE_STATE_DIE_LEFT) {
-		left = x;
-		top = y;
-		right = left + TURLE_DIE_BBOX_WIDTH;
-		bottom = top - TURLE_DIE_BBOX_HEIGHT;
-	}
-	if (state == TURLE_STATE_DIE_COMPLETE) {
-		left = x;
-		top = y;
-		right = left + TURLE_DIE_BBOX_WIDTH;
-		bottom = top - TURLE_DIE_BBOX_HEIGHT;
+		|| state == TURLE_STATE_DIE_LEFT
+		|| state == TURLE_STATE_DIE_COMPLETE_RIGHT
+		|| state == TURLE_STATE_DIE_COMPLETE_LEFT) {
+		left = x + 2.0f;
+		top = y - 0.2f;
+		right = left + TURLE_DIE_BBOX_WIDTH - 2.0f;
+		bottom = top - TURLE_DIE_BBOX_HEIGHT + 0.5f;
 	}
 }
 
@@ -49,21 +47,39 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
-	if (CheckAABB(star) && this->GetState() != TURLE_STATE_DIE_COMPLETE && star->state != STAR_STATE_HIDE
-		&& star->state != STAR_STATE_EXPLOSIVE && star->state != STAR_STATE_PENDING && star->state != STAR_STATE_READY)
-	{
+	if (CheckAABB(star) && this->canBeAttacked && (this->GetState() == TURLE_STATE_DIE_RIGHT || this->GetState() == TURLE_STATE_DIE_LEFT)
+		&& star->state != STAR_STATE_HIDE
+		&& star->state != STAR_STATE_EXPLOSIVE 
+		&& star->state != STAR_STATE_PENDING 
+		&& star->state != STAR_STATE_READY) {
+
+		if (this->GetState() == TURLE_STATE_DIE_RIGHT) {
+			this->SetState(TURLE_STATE_DIE_COMPLETE_RIGHT);
+			DebugOut(L"va cham ngoi sao\n");
+		}
+			
+		else if (this->GetState() == TURLE_STATE_DIE_LEFT) {
+			this->SetState(TURLE_STATE_DIE_COMPLETE_LEFT);
+			DebugOut(L"va cham ngoi sao\n");
+		}
+	}
+		
+	if (CheckAABB(star) && this->canBeAttacked && (this->GetState() != TURLE_STATE_DIE_COMPLETE_RIGHT || this->GetState() != TURLE_STATE_DIE_COMPLETE_LEFT) 
+		&& star->state != STAR_STATE_HIDE
+		&& star->state != STAR_STATE_EXPLOSIVE 
+		&& star->state != STAR_STATE_PENDING 
+		&& star->state != STAR_STATE_READY) {
+
 		if (this->state == TURLE_STATE_WALKING_RIGHT)
 			this->SetState(TURLE_STATE_DIE_RIGHT);
-		else if(this->state == TURLE_STATE_WALKING_LEFT)
+		else if (this->state == TURLE_STATE_WALKING_LEFT)
 			this->SetState(TURLE_STATE_DIE_LEFT);
+
+		this->canBeAttacked = false;
 	}
+	
 
-	/*if (CheckAABB(star) && (this->GetState() == TURLE_STATE_DIE_RIGHT || this->GetState() == TURLE_STATE_DIE_LEFT) && this->GetState() != TURLE_STATE_DIE_COMPLETE && star->state != STAR_STATE_HIDE
-		&& star->state != STAR_STATE_EXPLOSIVE && star->state != STAR_STATE_PENDING && star->state != STAR_STATE_READY)
-	{
-		this->SetState(TURLE_STATE_DIE_COMPLETE);
-	}*/
-
+	
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
 
 	if (CheckAABB(player) && (this->state == TURLE_STATE_WALKING_RIGHT || this->state == TURLE_STATE_WALKING_LEFT))
@@ -83,7 +99,7 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x = x0 + dx;
 	y = y0 + dy;
 
-	if (this->state == TURLE_STATE_DIE_COMPLETE)
+	if (this->state == TURLE_STATE_DIE_COMPLETE_RIGHT || this->state == TURLE_STATE_DIE_COMPLETE_LEFT)
 		return;
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -93,21 +109,24 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CalcPotentialCollisions(coObjects, coEvents);
 
-	DebugOut(L"state = %d\n", state);
+	if (!canBeAttacked) {
+		if (count_down == 0) {
+			StartCountDown();
+		}
+		if (GetTickCount64() - count_down >= 1000) {
+			this->canBeAttacked = true;
+		}
+	}
 
 	if (coEvents.size() == 0)
 	{
-		/*x = x0 + dx;
-		y = y0 + dy;*/
 	}
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny = 0;
+		//float min_tx, min_ty, nx, ny;
 		float rdx = 0;
 		float rdy = 0;
-
-		/*x = x0 + dx;
-		y = y0 + dy;*/
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
@@ -117,9 +136,6 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				this->y = y0 + min_ty * dy + e->ny * 0.2f;
-				this->x = x0 + min_tx * dx + e->nx * 0.2f;				
-
 				if (e->nx > 0 && this->state == TURLE_STATE_WALKING_LEFT)
 					this->SetState(TURLE_STATE_WALKING_RIGHT);
 				if (e->nx < 0 && this->state == TURLE_STATE_WALKING_RIGHT)
@@ -127,17 +143,37 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				
 				if (e->ny != 0) {
 					this->vy = 0;
-					if (state == TURLE_STATE_DIE_RIGHT || state == TURLE_STATE_DIE_LEFT)
+					if (this->state == TURLE_STATE_WALKING_LEFT
+						|| this->state == TURLE_STATE_WALKING_RIGHT) {
+						this->y = y0 + min_ty * dy + e->ny * 0.2f;
+						this->x = x0 + min_tx * dx + e->nx * 0.2f;
+					}
+
+					else if (this->state == TURLE_STATE_DIE_RIGHT || this->state == TURLE_STATE_DIE_LEFT) {
 						this->vx = 0;
+						this->vy = 0;
+						this->y = y0 + min_ty * dy + e->ny * 0.4f;
+						this->x = x0 + min_tx * dx + e->nx * 0.2f;
+					}
+				}	
+			}
+			if (dynamic_cast<CWaterDie*>(e->obj))
+			{
+				CWaterDie* waterDie = dynamic_cast<CWaterDie*>(e->obj);
+				if (e->ny != 0)
+				{
+					if (this->state == TURLE_STATE_DIE_RIGHT)
+						SetState(TURLE_STATE_DIE_COMPLETE_RIGHT);
+					else if (this->state == TURLE_STATE_DIE_LEFT)
+						SetState(TURLE_STATE_DIE_COMPLETE_LEFT);
 				}
-					
 			}
 		}
 	}
 
 	if (this->x < this->left + 1 && this->state == TURLE_STATE_WALKING_LEFT)
 		this->SetState(TURLE_STATE_WALKING_RIGHT);
-	if (this->x + TURLE_WALKING_BBOX_WIDTH > this->right - 1 && this->state == TURLE_STATE_WALKING_RIGHT)
+	if (this->x + TURLE_WALKING_BBOX_WIDTH > this->right && this->state == TURLE_STATE_WALKING_RIGHT)
 		this->SetState(TURLE_STATE_WALKING_LEFT);
 
 	// clean up collision events
@@ -158,17 +194,17 @@ void CTurle::Render()
 		ani = TURLE_ANI_WALKING_LEFT;
 		break;
 	case TURLE_STATE_DIE_RIGHT:
-		//ani = TURLE_ANI_DIE_RIGHT
-		ani = TURLE_ANI_DIE_LEFT;;
-		break;
-	case TURLE_STATE_DIE_LEFT:
-		//ani = TURLE_ANI_DIE_LEFT;
+	case TURLE_STATE_DIE_COMPLETE_RIGHT:
 		ani = TURLE_ANI_DIE_RIGHT;
 		break;
+	case TURLE_STATE_DIE_LEFT:
+	case TURLE_STATE_DIE_COMPLETE_LEFT:
+		ani = TURLE_ANI_DIE_LEFT;
+		break;
 	}
-
+	
 	animation_set->at(ani)->Render(x, y, alpha);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CTurle::SetState(int state)
@@ -184,11 +220,13 @@ void CTurle::SetState(int state)
 		this->vx = -TURLE_WALKING_SPEED;
 		break;
 	case TURLE_STATE_DIE_RIGHT:
-		this->vx = -0.01f;
+	case TURLE_STATE_DIE_COMPLETE_RIGHT:
+		this->vx = -0.02f;
 		this->vy = TURLE_DIE_SPEED;
 		break;
 	case TURLE_STATE_DIE_LEFT:
-		this->vx = 0.01f;
+	case TURLE_STATE_DIE_COMPLETE_LEFT:
+		this->vx = 0.02f;
 		this->vy = TURLE_DIE_SPEED;
 		break;
 	}
