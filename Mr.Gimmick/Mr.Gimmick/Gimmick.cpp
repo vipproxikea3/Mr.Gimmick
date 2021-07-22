@@ -354,8 +354,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				x = x0 + dx;
 				y = y0 + dy;
 				
-
-				if (e->ny > 0) {
+				CSpecialBrick* brick = dynamic_cast<CSpecialBrick*>(e->obj);
+				if (e->ny > 0 && brick->type == 0) {
 					vy = 0;
 					x = x0 + min_tx * dx + nx * 0.1f;
 					y = y0 + min_ty * dy + ny * 0.1f;
