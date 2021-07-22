@@ -12,6 +12,7 @@ CTurle::CTurle(float left, float right) : CGameObject()
 	this->SetState(TURLE_STATE_WALKING_RIGHT);
 	this->left = left;
 	this->right = right;
+	this->canBeAttacked = true;
 }
 
 void CTurle::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -46,7 +47,7 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
-	/*if (CheckAABB(star) && (this->GetState() == TURLE_STATE_DIE_RIGHT || this->GetState() == TURLE_STATE_DIE_LEFT) 
+	if (CheckAABB(star) && this->canBeAttacked && (this->GetState() == TURLE_STATE_DIE_RIGHT || this->GetState() == TURLE_STATE_DIE_LEFT)
 		&& star->state != STAR_STATE_HIDE
 		&& star->state != STAR_STATE_EXPLOSIVE 
 		&& star->state != STAR_STATE_PENDING 
@@ -61,9 +62,9 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			this->SetState(TURLE_STATE_DIE_COMPLETE_LEFT);
 			DebugOut(L"va cham ngoi sao\n");
 		}
-	}*/
+	}
 		
-	if (CheckAABB(star) && (this->GetState() != TURLE_STATE_DIE_COMPLETE_RIGHT || this->GetState() != TURLE_STATE_DIE_COMPLETE_LEFT) 
+	if (CheckAABB(star) && this->canBeAttacked && (this->GetState() != TURLE_STATE_DIE_COMPLETE_RIGHT || this->GetState() != TURLE_STATE_DIE_COMPLETE_LEFT) 
 		&& star->state != STAR_STATE_HIDE
 		&& star->state != STAR_STATE_EXPLOSIVE 
 		&& star->state != STAR_STATE_PENDING 
@@ -73,6 +74,8 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			this->SetState(TURLE_STATE_DIE_RIGHT);
 		else if (this->state == TURLE_STATE_WALKING_LEFT)
 			this->SetState(TURLE_STATE_DIE_LEFT);
+
+		this->canBeAttacked = false;
 	}
 	
 
@@ -105,6 +108,15 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
+
+	if (!canBeAttacked) {
+		if (count_down == 0) {
+			StartCountDown();
+		}
+		if (GetTickCount64() - count_down >= 1000) {
+			this->canBeAttacked = true;
+		}
+	}
 
 	if (coEvents.size() == 0)
 	{

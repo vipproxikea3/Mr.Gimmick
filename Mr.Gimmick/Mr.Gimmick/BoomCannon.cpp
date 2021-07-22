@@ -11,6 +11,9 @@ CBoomCannon::CBoomCannon()
 
 void CBoomCannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!visible)
+		return;
+
 	CGameObject::Update(dt);
 	if (state == BOOM_CANNON_STATE_NORMAL) {
 		vy = -BOOM_CANNON_GRAVITY * dt;
@@ -127,6 +130,8 @@ void CBoomCannon::Render()
 }
 void CBoomCannon::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
+	if (!visible)
+		return;
 	l = x;
 	t = y - 1.0f;
 	r = l + BOOM_CANNON_BOX_WIDTH;

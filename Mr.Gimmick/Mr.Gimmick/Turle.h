@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #define	TURLE_GRAVITY				0.0005f
-#define TURLE_WALKING_SPEED			0.05f
+#define TURLE_WALKING_SPEED			0.01f
 #define TURLE_DIE_SPEED				0.075f
 
 #define	TURLE_WALKING_BBOX_WIDTH		20
@@ -36,9 +36,8 @@ class CTurle : public CGameObject
 	int untouchable;
 	float left = NULL;
 	float right = NULL;
-	bool stunning = false;
-	DWORD untouchable_start;
-	DWORD stunning_start;
+	bool canBeAttacked = true;
+	DWORD count_down = 0;
 
 public:
 	CTurle(float left, float right);
@@ -46,6 +45,6 @@ public:
 	virtual void Render();
 	void SetState(int state);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-	void StartUntouchable() { untouchable = 1; untouchable_start = DWORD(GetTickCount64()); }
+	void StartCountDown() { count_down = GetTickCount64(); }
 };
 

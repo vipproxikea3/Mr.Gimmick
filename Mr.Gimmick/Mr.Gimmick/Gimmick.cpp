@@ -381,6 +381,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						//this->vx = 0;
 					}
 				}
+				
+				/*else {
+					this->SetState(GIMMICK_STATE_STUN);
+					StartUntouchable();
+				}*/
 			}
 
 			if (dynamic_cast<CBoat*>(e->obj)) {
