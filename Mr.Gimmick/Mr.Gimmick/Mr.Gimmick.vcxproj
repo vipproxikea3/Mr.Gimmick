@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="Backup.h" />
     <ClInclude Include="BigBoatWindow.h" />
     <ClInclude Include="BlackBird.h" />
     <ClInclude Include="Bird.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Cannon.h" />
+    <ClInclude Include="Cat.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
@@ -206,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="Backup.cpp" />
     <ClCompile Include="BigBoatWindow.cpp" />
     <ClCompile Include="BlackBird.cpp" />
     <ClCompile Include="Bird.cpp" />
@@ -221,6 +224,7 @@
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Cannon.cpp" />
+    <ClCompile Include="Cat.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />

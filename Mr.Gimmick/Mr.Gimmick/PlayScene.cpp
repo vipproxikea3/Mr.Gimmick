@@ -66,6 +66,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SWORD			52
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BIRD			177
+#define OBJECT_TYPE_CAT				666
 #define OBJECT_TYPE_BOAT			700
 #define OBJECT_TYPE_WATER_DIE		750
 #define OBJECT_TYPE_BOOM_BOAT		777
@@ -123,8 +124,10 @@ void CPlayScene::_ParseSection_ZONES(string line)
 	float t = (float)atof(tokens[1].c_str());
 	float r = (float)atof(tokens[2].c_str());
 	float b = (float)atof(tokens[3].c_str());
+	float revival_x = (float)atof(tokens[4].c_str());
+	float revival_y = (float)atof(tokens[5].c_str());
 
-	CZone* zone = new CZone(l, t, r, b);
+	CZone* zone = new CZone(l, t, r, b, revival_x, revival_y);
 	zones.push_back(zone);
 }
 
@@ -230,6 +233,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
+	case OBJECT_TYPE_CAT:
+		obj = new CCat(atoi(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
+		break;
 	case OBJECT_TYPE_BIRD:
 		obj = new CBird(atoi(tokens[4].c_str()));
 		break;
@@ -459,6 +465,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CMedicine*>(objects[i]))
 			continue;
+		if (dynamic_cast<CCat*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -511,7 +519,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
 			|| dynamic_cast<CSword*>(objects[i])
 			|| dynamic_cast<CEnemyTail*>(objects[i])
-			|| dynamic_cast<CMedicine*>(objects[i]))
+			|| dynamic_cast<CMedicine*>(objects[i])
+			|| dynamic_cast<CCat*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
@@ -581,6 +590,8 @@ void CPlayScene::UpdateZone() {
 			lt = zones[i]->t;
 			lr = zones[i]->r;
 			lb = zones[i]->b;
+			revival_x = zones[i]->revival_x;
+			revival_y = zones[i]->revival_y;
 		}
 	}
 }
@@ -687,8 +698,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
-		return;
+	/*if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
+		return;*/
 
 	switch (KeyCode)
 	{
@@ -696,8 +707,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
 	//	break;
 	case DIK_S:
-		if (star != nullptr) {
-			star->Ready();
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			if (star != nullptr) {
+				star->Ready();
+			}
 		}
 		break;
 	case DIK_1:
@@ -713,8 +726,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->y = 650;
 		break;
 	case DIK_6:
-		gimmick->x = 1984;
-		gimmick->y = 320;
+		gimmick->Revival();
 		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
@@ -722,6 +734,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_B:
 		gimmick->x = 1670;
 		gimmick->y = 496;
+		break;
+	case DIK_M:
+		gimmick->SetState(GIMMICK_STATE_DIE);
 		break;
 	}
 }
@@ -751,20 +766,24 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
-		return;
+	/*if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
+		return;*/
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (star != nullptr) {
-			star->Shot();
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			if (star != nullptr) {
+				star->Shot();
+			}
 		}
 		break;
 	case DIK_SPACE:
-		gimmick->falling = true;
-		gimmick->jumping = false;
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			gimmick->falling = true;
+			gimmick->jumping = false;
+		}
 		break;
 	}
 }
