@@ -54,10 +54,13 @@ void CCannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				this->x = x0 + min_tx * dx + nx * 0.4f;
-				this->y = y0 + min_ty * dy + ny * 0.4f;
+				
+				
 
-				if (e->nx != 0) vx = 0;
+				if (e->nx != 0){
+					vx = 0;
+					this->x = x0 + min_tx * dx + nx * 0.4f;
+				}
 				if (e->ny != 0) vy = 0;
 
 			}
@@ -70,7 +73,7 @@ void CCannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		delay = CANNON_DELAY_TIME;
 		CBoomCannon* boom_cannon = new CBoomCannon();
-		boom_cannon->SetPosition(x - 16, y);
+		boom_cannon->SetPosition(x, y);
 		boom_cannon->SetSpeed(-0.08f, 0);
 		//boom_cannon->SetSpeed(-0.03f, 0);
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();

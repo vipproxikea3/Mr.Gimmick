@@ -50,6 +50,7 @@
 #include "Bird.h"
 #include "EnemyTail.h"
 #include "SpecialBrick.h"
+#include "Cat.h"
 
 class CPlayScene : public CScene
 {

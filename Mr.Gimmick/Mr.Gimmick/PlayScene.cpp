@@ -66,6 +66,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SWORD			52
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BIRD			177
+#define OBJECT_TYPE_CAT				666
 #define OBJECT_TYPE_BOAT			700
 #define OBJECT_TYPE_WATER_DIE		750
 #define OBJECT_TYPE_BOOM_BOAT		777
@@ -232,6 +233,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
+	case OBJECT_TYPE_CAT:
+		obj = new CCat(atoi(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str()));
+		break;
 	case OBJECT_TYPE_BIRD:
 		obj = new CBird(atoi(tokens[4].c_str()));
 		break;
@@ -335,6 +339,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_TURLTE:
 		obj = new CTurle(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
 	case OBJECT_TYPE_BLACKBIRD:
 		obj = new CBlackBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
@@ -458,6 +463,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CBird*>(objects[i]))
 			continue;
+		if (dynamic_cast<CCat*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -509,7 +516,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBird*>(objects[i])
 			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
 			|| dynamic_cast<CSword*>(objects[i])
-			|| dynamic_cast<CEnemyTail*>(objects[i]))
+			|| dynamic_cast<CEnemyTail*>(objects[i])
+			|| dynamic_cast<CCat*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
