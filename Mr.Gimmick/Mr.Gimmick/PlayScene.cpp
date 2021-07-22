@@ -457,6 +457,8 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CBird*>(objects[i]))
 			continue;
+		if (dynamic_cast<CMedicine*>(objects[i]))
+			continue;
 		quadtree->Insert(objects[i]);
 	}
 
@@ -508,7 +510,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CBird*>(objects[i])
 			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
 			|| dynamic_cast<CSword*>(objects[i])
-			|| dynamic_cast<CEnemyTail*>(objects[i]))
+			|| dynamic_cast<CEnemyTail*>(objects[i])
+			|| dynamic_cast<CMedicine*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
