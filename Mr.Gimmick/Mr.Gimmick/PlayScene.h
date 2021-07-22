@@ -48,6 +48,8 @@
 #include "StandBlackEnemy.h"
 #include "Bridge.h"
 #include "Bird.h"
+#include "EnemyTail.h"
+#include "SpecialBrick.h"
 
 class CPlayScene : public CScene
 {

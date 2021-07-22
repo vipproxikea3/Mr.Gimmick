@@ -119,6 +119,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CSpecialBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CConveyor*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CMedicine*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
@@ -166,6 +167,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (onTopOf(brick)) this->onGround = true;
 			if (isUnder(brick, 2.0f)) this->underBrick = true;
 			if (onSideOf(brick)) this->facingBrick = true;
+		}
+		if (dynamic_cast<CSpecialBrick*>(coObjects->at(i))) {
+			CSpecialBrick* specialBrick = dynamic_cast<CSpecialBrick*>(coObjects->at(i));
+			if (onTopOf(specialBrick) && specialBrick->type == 0) this->onGround = true;
+			if (isUnder(specialBrick, 2.0f)) this->underBrick = true;
+			if (onSideOf(specialBrick)) this->facingBrick = true;
 		}
 		if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) {
 			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
@@ -411,6 +418,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->ny > 0) this->onGround = true;
 				}
 
+			}
+
+			if (dynamic_cast<CSpecialBrick*>(e->obj)) {
+				x = x0 + dx;
+				y = y0 + dy;
+				
+
+				if (e->ny > 0) {
+					vy = 0;
+					x = x0 + min_tx * dx + nx * 0.1f;
+					y = y0 + min_ty * dy + ny * 0.1f;
+					this->onGround = true;
+				}
 			}
 
 			if (dynamic_cast<CBrickPink*>(e->obj)) {
