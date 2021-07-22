@@ -148,6 +148,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (!((CBlackBird*)(coObjects->at(i)))->DropPlayer())
 				newCoObjects.push_back(coObjects->at(i));
 		}
+		else if (dynamic_cast<CTurle*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
@@ -231,6 +232,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
+		if (dynamic_cast<CTurle*>(coObjects->at(i))) {
+			CTurle* turle = dynamic_cast<CTurle*>(coObjects->at(i));
+			if (onTopOf(turle)) { 
+				this->onGround = true; 
+				standOn(turle);
+			}
+		}
 	}
 
 	if (onInclinedBrick == true && direction != 0) {
@@ -305,6 +313,68 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (e->ny > 0) this->falling = false;
 			if (e->ny < 0) { this->falling = true; jumping = false; } //roi khi dung gach tren dau
+
+			if (dynamic_cast<CTurle*>(e->obj)) {
+				CTurle* turle = dynamic_cast<CTurle*>(e->obj);
+				if (e->ny != 0) {
+					this->y = y0 + min_ty * dy + e->ny * 0.1f;
+					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+						this->vy = 0;
+						if (state == GIMMICK_STATE_WALKING_RIGHT)
+						{
+							x = x0 + min_tx * dx - 2.0f;
+						}
+						if (state == GIMMICK_STATE_WALKING_LEFT)
+						{
+							x = x0 + min_tx * dx - 1.5f;
+						}
+						if (state == GIMMICK_STATE_IDLE)
+						{
+							x = x0 - 2.0f;
+						}
+					}
+					if (state == TURLE_STATE_DIE_RIGHT) {
+						this->vy = 0;
+						if (state == GIMMICK_STATE_WALKING_RIGHT)
+						{
+							x = x0 + min_tx * dx + 1.5f;
+						}
+						if (state == GIMMICK_STATE_WALKING_LEFT)
+						{
+							x = x0 + min_tx * dx + 2.0f;
+						}
+						if (state == GIMMICK_STATE_IDLE)
+						{
+							x = x0 + 2.0f;
+						}
+					}
+				}
+				if (e->nx < 0) {
+					//this->vy = 0;
+					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+						this->x += 0.3;
+						turle->x += 0.3;
+						//this->vx = 0;
+					}
+					if (turle->state == TURLE_STATE_DIE_LEFT) {
+						this->x += 0.3;
+						turle->x += 0.3;
+						//this->vx = 0;
+					}
+				}
+				else if (e->nx > 0) {
+					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+						this->x -= 0.3;
+						turle->x -= 0.3;
+						//this->vx = 0;
+					}
+					if (turle->state == TURLE_STATE_DIE_LEFT) {
+						this->x -= 0.3;
+						turle->x -= 0.3;
+						//this->vx = 0;
+					}
+				}
+			}
 
 			if (dynamic_cast<CBoat*>(e->obj)) {
 				CBoat* Boat = dynamic_cast<CBoat*>(e->obj);
@@ -758,7 +828,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 			
-
 			if (dynamic_cast<CStandBlackEnemy*>(e->obj)) {
 
 				CStandBlackEnemy* enemyB = dynamic_cast<CStandBlackEnemy*>(e->obj);
@@ -855,7 +924,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {
@@ -1070,12 +1139,10 @@ void CGimmick::standOn(CGameObject* object)
 
 	if (dynamic_cast<CBoomCannon*>(object)) {
 
-		DebugOut(L"onGround = %d\n", this->onGround);
 		this->x += object->dx;
 		if (!jumping) {
 			this->y = object->y + GIMMICK_BBOX_HEIGHT;
 			this->vy = 0;
-			
 		}
 	}
 
@@ -1086,6 +1153,23 @@ void CGimmick::standOn(CGameObject* object)
 		this->vy = 0;
 		if (state == ENEMY_STATE_STAND) {
 			this->y = object->y + GIMMICK_BBOX_HEIGHT -1;
+		}
+	}
+	if (dynamic_cast<CTurle*>(object)) {
+		CTurle* turle = dynamic_cast<CTurle*>(object);
+		if (turle->state == TURLE_STATE_DIE_RIGHT) {
+			this->x -= 0.1f;
+			if (!jumping) {
+				this->y = object->y + GIMMICK_BBOX_HEIGHT + 0.5f;
+				this->vy = 0;
+			}
+		}
+		if (turle->state == TURLE_STATE_DIE_LEFT) {
+			this->x += 0.1f;
+			if (!jumping) {
+				this->y = object->y + GIMMICK_BBOX_HEIGHT + 0.5f;
+				this->vy = 0;
+			}
 		}
 	}
 }
