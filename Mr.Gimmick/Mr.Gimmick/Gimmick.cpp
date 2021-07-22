@@ -451,8 +451,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
 						x = x0 + min_tx * (dx+BrickPink->dx) + BrickPink->nx * 0.01f;
 					else
-						x = x0 + BrickPink->dx * 2 + BrickPink->nx * 0.01f;
-					y = y0 + min_ty * dy + ny * 0.1f;
+						x = x0 + BrickPink->dx * 2 + BrickPink->nx * 0.011f;
+					if(BrickPink->vy <0)
+						y = y0 + min_ty * dy + ny * 0.1f;
+					else
+						y = y0 + min_ty * dy + ny * 0.1f;
 					this->onGround = true;
 					vy = 0;
 				}
