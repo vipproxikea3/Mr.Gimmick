@@ -63,7 +63,6 @@ void CSword::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < newCoObjects.size(); i++) newCoObjects[i] = nullptr;
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	DebugOut(L"%d", start_y);
 }
 
 void CSword::Render()

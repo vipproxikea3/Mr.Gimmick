@@ -51,6 +51,9 @@
 #include "EnemyTail.h"
 #include "SpecialBrick.h"
 #include "Cat.h"
+#include "FinalBoss.h"
+#include "FinalBossSmallBullet.h"
+#include "FinalBossDieEffect.h"
 
 class CPlayScene : public CScene
 {
