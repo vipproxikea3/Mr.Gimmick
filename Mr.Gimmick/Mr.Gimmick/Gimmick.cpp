@@ -354,7 +354,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							x = x0 - 2.0f;
 						}
 					}
-					if (state == TURLE_STATE_DIE_RIGHT) {
+					if (turle->state == TURLE_STATE_DIE_LEFT) {
 						this->vy = 0;
 						if (state == GIMMICK_STATE_WALKING_RIGHT)
 						{
@@ -371,35 +371,18 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				if (e->nx < 0) {
-					//this->vy = 0;
-					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+					if (turle->state == TURLE_STATE_DIE_RIGHT || turle->state == TURLE_STATE_DIE_LEFT) {
 						this->x += 0.3;
 						turle->x += 0.3;
-						//this->vx = 0;
-					}
-					if (turle->state == TURLE_STATE_DIE_LEFT) {
-						this->x += 0.3;
-						turle->x += 0.3;
-						//this->vx = 0;
 					}
 				}
-				else if (e->nx > 0) {
-					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+				if (e->nx >= 0) {
+					if (turle->state == TURLE_STATE_DIE_RIGHT || turle->state == TURLE_STATE_DIE_LEFT) {
 						this->x -= 0.3;
 						turle->x -= 0.3;
-						//this->vx = 0;
-					}
-					if (turle->state == TURLE_STATE_DIE_LEFT) {
-						this->x -= 0.3;
-						turle->x -= 0.3;
-						//this->vx = 0;
 					}
 				}
-				
-				/*else {
-					this->SetState(GIMMICK_STATE_STUN);
-					StartUntouchable();
-				}*/
+
 			}
 
 			if (dynamic_cast<CBoat*>(e->obj)) {
@@ -571,19 +554,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					y = y0 + min_ty * dy + ny * 0.1f;
 					onGround = true;
-				}
-			}
-
-			if (dynamic_cast<CMedicine*>(e->obj))
-			{
-				CMedicine* medicine = dynamic_cast<CMedicine*>(e->obj);
-				if (e->nx != 0)
-				{
-					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
-				}
-				if (e->ny != 0)
-				{
-					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
 				}
 			}
 

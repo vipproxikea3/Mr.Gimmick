@@ -55,12 +55,9 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (this->GetState() == TURLE_STATE_DIE_RIGHT) {
 			this->SetState(TURLE_STATE_DIE_COMPLETE_RIGHT);
-			DebugOut(L"va cham ngoi sao\n");
-		}
-			
+		}	
 		else if (this->GetState() == TURLE_STATE_DIE_LEFT) {
 			this->SetState(TURLE_STATE_DIE_COMPLETE_LEFT);
-			DebugOut(L"va cham ngoi sao\n");
 		}
 	}
 		
@@ -92,8 +89,10 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy -= TURLE_GRAVITY * dt;
+	if(this->state != TURLE_STATE_WALKING_RIGHT || this->state != TURLE_STATE_WALKING_LEFT)
+		vy -= TURLE_GRAVITY * dt;
 
+	//vy -= TURLE_GRAVITY * dt;
 	float x0 = x;
 	float y0 = y;
 
@@ -136,12 +135,7 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
 			if (dynamic_cast<CBrick*>(e->obj))
-			{
-				if (e->nx > 0 && this->state == TURLE_STATE_WALKING_LEFT)
-					this->SetState(TURLE_STATE_WALKING_RIGHT);
-				if (e->nx < 0 && this->state == TURLE_STATE_WALKING_RIGHT)
-					this->SetState(TURLE_STATE_WALKING_LEFT);
-				
+			{				
 				if (e->ny != 0) {
 					this->vy = 0;
 					if (this->state == TURLE_STATE_WALKING_LEFT
@@ -172,9 +166,9 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (this->x < this->left + 1 && this->state == TURLE_STATE_WALKING_LEFT)
+	if (this->x < this->left + 1.0f && this->state == TURLE_STATE_WALKING_LEFT)
 		this->SetState(TURLE_STATE_WALKING_RIGHT);
-	if (this->x + TURLE_WALKING_BBOX_WIDTH > this->right && this->state == TURLE_STATE_WALKING_RIGHT)
+	if (this->x + TURLE_WALKING_BBOX_WIDTH > this->right - 1.0f && this->state == TURLE_STATE_WALKING_RIGHT)
 		this->SetState(TURLE_STATE_WALKING_LEFT);
 
 	// clean up collision events
@@ -222,12 +216,12 @@ void CTurle::SetState(int state)
 		break;
 	case TURLE_STATE_DIE_RIGHT:
 	case TURLE_STATE_DIE_COMPLETE_RIGHT:
-		this->vx = -0.02f;
+		this->vx = -0.03f;
 		this->vy = TURLE_DIE_SPEED;
 		break;
 	case TURLE_STATE_DIE_LEFT:
 	case TURLE_STATE_DIE_COMPLETE_LEFT:
-		this->vx = 0.02f;
+		this->vx = 0.03f;
 		this->vy = TURLE_DIE_SPEED;
 		break;
 	}
