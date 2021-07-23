@@ -146,8 +146,8 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Backup.h" />
     <ClInclude Include="BigBoatWindow.h" />
-    <ClInclude Include="BlackBird.h" />
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="BlackBird.h" />
     <ClInclude Include="BlackBoss.h" />
     <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="BlueFire.h" />
@@ -162,6 +162,7 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="Chain.h" />
+    <ClInclude Include="CloudEnemy.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
     <ClInclude Include="Conveyor.h" />
@@ -170,6 +171,10 @@
     <ClInclude Include="EnemyBoom.h" />
     <ClInclude Include="ElectricBlackEnemy.h" />
     <ClInclude Include="EnemyTail.h" />
+    <ClInclude Include="FinalBoss.h" />
+    <ClInclude Include="FinalBossBigBullet.h" />
+    <ClInclude Include="FinalBossDieEffect.h" />
+    <ClInclude Include="FinalBossSmallBullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gimmick.h" />
@@ -210,8 +215,8 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Backup.cpp" />
     <ClCompile Include="BigBoatWindow.cpp" />
-    <ClCompile Include="BlackBird.cpp" />
     <ClCompile Include="Bird.cpp" />
+    <ClCompile Include="BlackBird.cpp" />
     <ClCompile Include="BlackBoss.cpp" />
     <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="BlueFire.cpp" />
@@ -226,6 +231,7 @@
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="Chain.cpp" />
+    <ClCompile Include="CloudEnemy.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
     <ClCompile Include="Conveyor.cpp" />
@@ -233,6 +239,10 @@
     <ClCompile Include="EnemyBoom.cpp" />
     <ClCompile Include="ElectricBlackEnemy.cpp" />
     <ClCompile Include="EnemyTail.cpp" />
+    <ClCompile Include="FinalBoss.cpp" />
+    <ClCompile Include="FinalBossBigBullet.cpp" />
+    <ClCompile Include="FinalBossDieEffect.cpp" />
+    <ClCompile Include="FinalBossSmallBullet.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gimmick.cpp" />
