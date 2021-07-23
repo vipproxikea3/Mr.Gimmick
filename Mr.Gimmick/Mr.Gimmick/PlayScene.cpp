@@ -64,6 +64,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GREEN_BOSS		50
 #define OBJECT_TYPE_SWORD_BOSS		51
 #define OBJECT_TYPE_SWORD			52
+#define OBJECT_TYPE_FINALBOSS		53
+#define OBJECT_TYPE_FINALBOSS_BIG_BULLET		54
+#define OBJECT_TYPE_FINALBOSS_SMALL_BULLET		55
+#define OBJECT_TYPE_FINALBOSS_DIE_EFFECT		56
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BIRD			177
 #define OBJECT_TYPE_CAT				666
@@ -348,6 +352,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_SWORD_BOSS:
 		obj = new CSwordBoss();
+		break; 
+	case OBJECT_TYPE_FINALBOSS:
+		obj = new CFinalBoss();
 		break;
 	case OBJECT_TYPE_BRIDGE:
 		obj = new CBridge(atoi(tokens[4].c_str()));
@@ -463,7 +470,11 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CBird*>(objects[i]))
 			continue;
+		if (dynamic_cast<CMedicine*>(objects[i]))
+			continue;
 		if (dynamic_cast<CCat*>(objects[i]))
+			continue;
+		if (dynamic_cast<CFinalBossDieEffect*>(objects[i]))
 			continue;
 		quadtree->Insert(objects[i]);
 	}
@@ -513,10 +524,16 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CTurle*>(objects[i])
 			|| dynamic_cast<CBlackBird*>(objects[i])
 			|| dynamic_cast<CSwordBoss*>(objects[i])
+			|| dynamic_cast<CSword*>(objects[i])
+			|| dynamic_cast<CFinalBoss*>(objects[i])
+			|| dynamic_cast<CFinalBossBigBullet*>(objects[i])
+			|| dynamic_cast<CFinalBossSmallBullet*>(objects[i])
+			|| dynamic_cast<CFinalBossDieEffect*>(objects[i])
 			|| dynamic_cast<CBird*>(objects[i])
 			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
 			|| dynamic_cast<CSword*>(objects[i])
 			|| dynamic_cast<CEnemyTail*>(objects[i])
+			|| dynamic_cast<CMedicine*>(objects[i])
 			|| dynamic_cast<CCat*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects;
@@ -547,6 +564,24 @@ void CPlayScene::Update(DWORD dt)
 		{
 			CBullet* bullet = (CBullet*)(objects[i]);
 			if (bullet->isDelete == true)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
+		else if (dynamic_cast<CFinalBossSmallBullet*>(objects[i]))
+		{
+			CFinalBossSmallBullet* bullet = (CFinalBossSmallBullet*)(objects[i]);
+			if (!bullet->visible)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
+		else if (dynamic_cast<CFinalBossBigBullet*>(objects[i]))
+		{
+			CFinalBossBigBullet* bullet = (CFinalBossBigBullet*)(objects[i]);
+			if (!bullet->visible)
 			{
 				objects.erase(objects.begin() + i);
 				delete bullet;
@@ -731,6 +766,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_B:
 		gimmick->x = 1670;
 		gimmick->y = 496;
+		break;
+	case DIK_N:
+		gimmick->x = 1725;
+		gimmick->y = 637;
 		break;
 	case DIK_M:
 		gimmick->SetState(GIMMICK_STATE_DIE);

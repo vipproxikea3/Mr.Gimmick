@@ -14,9 +14,8 @@
 
 class CHud : public CGameObject
 {
-public:
 	//Score
-	int timeDP = HUB_TIME_DP;
+	int timeDP = HUB_TIME_DP; // thời gian để nó tăng
 	int dpScore = 0;
 	int curScore = 0;
 	int displayScore = 0;
@@ -30,8 +29,10 @@ public:
 	//Item
 	int item1 = 6, item2 = 4, item3 = 1;
 
+
+public:
 	CHud() {
-		UpdateScore(350);
+		UpdateScore(100);
 	}
 
 	virtual void Update(DWORD dt);
@@ -70,4 +71,3 @@ public:
 	}
 	void RenderItem();
 };
-
