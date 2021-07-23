@@ -56,7 +56,7 @@ void CBrickPink::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (this->CheckAABB(gimmick)) {
-		gimmick->y = y + 16.4f;
+		gimmick->UpdateWithBird(dx, dy);
 	}
 }
 
