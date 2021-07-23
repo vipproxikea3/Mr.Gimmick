@@ -6,6 +6,7 @@
 30	textures\stage1.png	215	121	214
 40	textures\NES - Gimmick Mr Gimmick - Intro.png	200	205	250
 41	textures\INTRO_GATE.png	255	174	201
+42	textures\introbig.png	0	0	255
 
 #[MAP]
 # PosX	PosY	TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
@@ -224,6 +225,8 @@ Audio/Sound Effect (84).wav	SOUND_Effect_84
 70036	0	720	127	799	41
 #full white gate
 70037	0	800	127	879	41
+# select screen
+70038	0	0	256	224	42
 						
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -289,6 +292,8 @@ Audio/Sound Effect (84).wav	SOUND_Effect_84
 70010	70025	1000
 #INTRO GATE OPEN (1.35s)
 70011	70027	50	70028	50	70027	50	70029	100	70031	50	70032	50	70031	50	70032	50	70034	50	70033	50	70035	50	70036	2000	70037	50	70036	50	70035	50	70034	50	70031	50
+# SELECT SCREEN
+70012	70038	100
 
 #
 # id	ani1	ani2	ani3

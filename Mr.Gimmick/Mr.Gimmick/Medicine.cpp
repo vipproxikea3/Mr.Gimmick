@@ -1,6 +1,8 @@
 #include "Medicine.h"
 #include "PlayScene.h"
 #include "Gimmick.h"
+#include "Brick.h"
+#include "Backup.h"
 
 CMedicine::CMedicine(int type) : CGameObject()
 {
@@ -57,11 +59,55 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+	CBackup* backup = CBackup::GetInstance();
 
 	if (CheckAABB(player) && this->state == MEDICINE_STATE_APPEAR) {
 		SetState(MEDICINE_STATE_DISAPPEAR);
+		switch (this->type)
+		{
+		case 1:
+			backup->UpdateLifeStack(backup->lifeStack + 1);
+			break;
+		case 5:
+			backup->UpdateScore(backup->score + 50000);
+			backup->UpdateRest(backup->rest + 2);
+			break;
+		default:
+			break;
+		}
 	}
 
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
+			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
+			if (CheckAABB(brick)) {
+				switch (this->type)
+				{
+				case 1:
+					this->y = brick->y + 16 + 1;
+					break;
+				case 2:
+					this->y = brick->y + 14 + 1;
+					break;
+				case 3:
+					this->y = brick->y + 15 + 1;
+					break;
+				case 4:
+					this->y = brick->y + 15 + 1;
+					break;
+				case 5:
+					this->y = brick->y + 43 + 1;
+					break;
+				case 6:
+					this->y = brick->y + 28 + 1;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
 	CGameObject::Update(dt);
 
 	vector<LPGAMEOBJECT> newCoObjects;
@@ -81,8 +127,6 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
-
-	//DebugOut(L"state = %d\n", state);
 
 	if (coEvents.size() == 0)
 	{

@@ -45,6 +45,7 @@ class CGameObject
 {
 public:
 
+	int score = 0;
 	bool visible = true;
 
 	float x;
