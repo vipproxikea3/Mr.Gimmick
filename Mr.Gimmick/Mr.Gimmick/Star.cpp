@@ -211,6 +211,18 @@ void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->nx != 0)
 						vx = -vx;
 				}
+				if (dynamic_cast<CSewer*>(e->obj))
+				{
+					y = y0 + min_ty * dy + ny * 0.1f;
+					x = x0 + min_tx * dx + nx * 0.1f;
+
+					if (e->ny != 0) {
+						vy = -0.75 * vy;
+						if (abs(vy) < 0.1f) vy = 0;
+					}
+					if (e->nx != 0)
+						vx = -vx;
+				}
 			}
 		}
 

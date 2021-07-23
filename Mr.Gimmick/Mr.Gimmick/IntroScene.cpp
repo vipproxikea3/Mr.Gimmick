@@ -7,6 +7,7 @@
 #include "Sprites.h"
 #include "IntroScene.h"
 #include "define.h"
+#include "Sound.h"
 
 using namespace std;
 
@@ -38,6 +39,7 @@ CIntroScene::CIntroScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
+#define SCENE_SECTION_SOUND		8
 
 #define OBJECT_TYPE_BRICK			1
 #define OBJECT_TYPE_GIMMICK			2
@@ -152,6 +154,18 @@ void CIntroScene::_ParseSection_ANIMATION_SETS(string line)
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
 
+void CIntroScene::_ParseSection_SOUNDS(string line)
+{
+	Sound* sound = Sound::GetInstance();
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return; // phai co ten va duong dan
+
+	string filepath = tokens[0].c_str();
+	string sound_name = tokens[1].c_str();
+	sound->LoadSound(filepath, sound_name);
+}
+
 /*
 	Parse a line in section [OBJECTS]
 */
@@ -223,6 +237,7 @@ void CIntroScene::Load()
 
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
 		if (line == "[MAP]") { section = SCENE_SECTION_MAP; continue; }
+		if (line == "[SOUNDS]") { section = SCENE_SECTION_SOUND; continue; }
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
@@ -244,6 +259,7 @@ void CIntroScene::Load()
 		{
 		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
 		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
+		case SCENE_SECTION_SOUND: _ParseSection_SOUNDS(line); break;
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
@@ -256,6 +272,8 @@ void CIntroScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	//Nhac nen
+	Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
 }
 
 void CIntroScene::Update(DWORD dt)
@@ -378,6 +396,14 @@ void CIntroScene::RenderGate()
 	getIntroPos(intro_x, intro_y);
 
 	CAnimations::GetInstance()->Get(INTRO_GATE_ANI_ID)->Render(intro_x, intro_y);
+}
+
+void CIntroScene::RenderMainScreen()
+{
+	float camx, camy;
+	CGame::GetInstance()->GetCamPos(camx, camy);
+
+	CAnimations::GetInstance()->Get(INTRO_MAINSCREEN_ANI_ID)->Render(camx, camy);
 }
 
 void CIntroScene::getIntroPos(float &intro_x, float &intro_y)
@@ -513,9 +539,12 @@ void CIntroScene::Timing()
 	}
 
 	//END INTRO:
-	if (GetTickCount64() - mainintro_start >= INTRO_TIME - 2000)
+	if (GetTickCount64() - mainintro_start >= INTRO_TIME - 2000 ) // so default de khi khoi chay ko vao day
 	{
 		DebugOut(L"end intro \n");
+		avoiInitialCount += 1;
+		
+		if(avoiInitialCount == 3 && phase == 1) phase = 2;
 	}
 }
 
@@ -533,12 +562,19 @@ void CIntroScene::Render()
 		if (!dynamic_cast<CGimmick*>(objects[i]))
 			objects[i]->Render();
 	//Render Intro:
-	RenderMainIntro();
-	RenderCake();
-	RenderGirlBlow();
-	RenderLightingDissapear();
-	RenderGate();//before gimmick
-	RenderGimmick();
+	if (phase == 1)
+	{
+		RenderMainIntro();
+		RenderCake();
+		RenderGirlBlow();
+		RenderLightingDissapear();
+		RenderGate();//before gimmick
+		RenderGimmick();
+	}
+	else
+	{
+		RenderMainScreen();
+	}
 }
 
 /*
@@ -558,10 +594,16 @@ void CIntroSceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CGame* game = CGame::GetInstance();
+	CIntroScene* intro_scene = (CIntroScene*)game->GetCurrentScene();
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
-		game->SwitchScene(1);
+	case DIK_S:
+		if (intro_scene->phase == 1)
+		{
+			intro_scene->phase = 2;
+		}
+		else
+			game->SwitchScene(1);
 		break;
 	}
 }

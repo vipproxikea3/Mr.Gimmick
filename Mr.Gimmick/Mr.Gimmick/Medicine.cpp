@@ -1,6 +1,7 @@
 #include "Medicine.h"
 #include "PlayScene.h"
 #include "Gimmick.h"
+#include "Brick.h"
 #include "Backup.h"
 
 CMedicine::CMedicine(int type) : CGameObject()
@@ -107,7 +108,6 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
 	CGameObject::Update(dt);
 
 	vector<LPGAMEOBJECT> newCoObjects;
@@ -127,8 +127,6 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
-
-	//DebugOut(L"state = %d\n", state);
 
 	if (coEvents.size() == 0)
 	{

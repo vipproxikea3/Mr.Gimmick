@@ -47,8 +47,8 @@
 #define TIME_SHOCKING				200
 #define	TIME_BETWEEN_TWO_SHOCKING	1200
 
-#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X		0.075f	
-#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y		0.12f
+#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X		0.01f	
+#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y		0.01f
 
 class CElectricBlackEnemy : public CGameObject
 {
@@ -62,6 +62,7 @@ public:
 
 	bool shocking = false;
 	bool shocking_large = false;
+	bool touchGround = false;
 	DWORD start_shock = 0;
 
 	CElectricBlackEnemy(); //-1 left, 1 right
