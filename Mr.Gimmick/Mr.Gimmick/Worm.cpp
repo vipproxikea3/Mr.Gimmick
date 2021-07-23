@@ -7,10 +7,10 @@
 #include "Game.h"
 #include "Star.h"
 #include "PlayScene.h"
+#include "Backup.h"
 
 CWorm::CWorm() : CGameObject()
 {
-	
 	//SetState(WORM_STATE_DIE);
 }
 
@@ -19,6 +19,7 @@ CWorm::CWorm(int l) : CGameObject()
 	length = l;
 	SetState(WORM_STATE_WALKING);
 	nx = 1;
+	this->score = 90;
 }
 
 void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -31,8 +32,11 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 
-	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && this->GetState() == WORM_STATE_WALKING)
+	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && this->GetState() == WORM_STATE_WALKING) {
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 		this->SetState(WORM_STATE_DIE);
+	}
 
 	if (firstLocation)
 	{

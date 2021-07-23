@@ -1,9 +1,12 @@
 #include "BlackEnemy.h"
 #include "Utils.h"
 #include "InclinedBrick.h"
+#include "Backup.h"
 
 CBlackEnemy::CBlackEnemy(int direction)
 {
+	this->score = 120;
+
 	SetState(BLACKENEMY_STATE_WALK);
 	if (direction == 1) //chinh huong di ban dau
 		ax = BLACKENEMY_ACCELERATION; // moi vo di sang Phai 1
@@ -476,6 +479,9 @@ void CBlackEnemy::DetectStar()
 		&& star->state != STAR_STATE_EXPLOSIVE && star->state != STAR_STATE_PENDING && star->state != STAR_STATE_READY)
 	{
 		SetState(BLACKENEMY_STATE_DIE);
+
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 	}
 }
 

@@ -12,6 +12,7 @@ CEnemyBoom::CEnemyBoom(float left, float right) : CGameObject()
 	this->SetState(ENEMYBOOM_STATE_WALKING_RIGHT);
 	this->left = left;
 	this->right = right;
+	this->vy = 0;
 }
 
 void CEnemyBoom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -55,7 +56,10 @@ void CEnemyBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy -= ENEMYBOOM_GRAVITY * dt;
+	if (this->state == ENEMYBOOM_STATE_DIE_RIGHT || this->state == ENEMYBOOM_STATE_DIE_LEFT)
+		vy -= ENEMYBOOM_GRAVITY * dt;
+	else
+		vy = 0;
 
 	float x0 = x;
 	float y0 = y;

@@ -6,6 +6,7 @@ CEnemyTail::CEnemyTail(float left, float right) : CGameObject()
 	this->SetState(ENEMYTAIL_STATE_WALKING_RIGHT);
 	this->left = left;
 	this->right = right;
+	this->vy = 0;
 }
 
 void CEnemyTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -22,7 +23,7 @@ void CEnemyTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy -= ENEMYTAIL_GRAVITY * dt;
+	//vy -= ENEMYTAIL_GRAVITY * dt;
 
 	float x0 = x;
 	float y0 = y;
