@@ -13,7 +13,7 @@
 55	textures\Enemies_upsidedown.png	57	189	255
 56	textures\Enemies_upsidedown_flip.png	57	189	255
 60	Map\Gimmick!(J)-Level1_bank.png	60	188	252
-70	textures\HUD.png	0	36	255
+70	textures\HUD (2).png	0	0	0
 801	textures\hud.png	255	255	0
 80	textures\star.png	0	0	255
 90	textures\door.png	203	102	185
@@ -966,7 +966,13 @@
 750	928	592	20101	352	16
 
 # GIMMICK
+<<<<<<< HEAD
+2	64	100	20101
+#2	208	630	20101
+#2	1940	308	20101	
+=======
 2	48	66	20101	
+>>>>>>> master
 
 # STAR
 18	48	82	180001
@@ -1149,6 +1155,12 @@
 44	1392	258	440001	1394	1422
 44	1312	258	440001	1314	1358
 44	1056	258	440001	1058	1118
+
+# MEDICINE
+17	881	305	170001	1
+17	929	305	170001	1
+17	793	239	170001	2
+
 #CAT
 666	1008	70	666000	0	-1	0
 666	785	565	666000	0	1	1
