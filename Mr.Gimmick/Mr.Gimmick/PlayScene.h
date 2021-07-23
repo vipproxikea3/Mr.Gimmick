@@ -61,7 +61,7 @@ class CPlayScene : public CScene
 protected:
 	CGimmick* player = nullptr;					// A play scene has to have player, right?
 	CStar* star = nullptr;
-	
+
 	CHud* hud = new CHud();
 	//Map* map = nullptr;
 

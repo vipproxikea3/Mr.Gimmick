@@ -1,4 +1,5 @@
 #include "ElectricBlackEnemy.h"
+#include "Sewer.h"
 
 CElectricBlackEnemy::CElectricBlackEnemy() {
 	this->appear = false;
@@ -23,6 +24,7 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -30,26 +32,22 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 
-	if (appear && state != ELECTRIC_BLACKENEMY_STATE_DIE) {
+	if (this->appear /*&& this->state != ELECTRIC_BLACKENEMY_STATE_DIE*/) {
 		CalcPotentialCollisions(&newCoObjects, coEvents);
 	}
 
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
-	if (!appear)
+	if (!this->appear)
 	{
 		if (gimmick->x - x <= DISTANCE_X && y - gimmick->y <= DISTANCE_Y) {
-			appear = true;
+			this->appear = true;
 			SetState(ELECTRIC_BLACKENEMY_STATE_FALL);
 			ax = ELECTRIC_BLACKENEMY_ACCELERATION;
 		}
 	}
-
-	if (carry_player) {
-		SetState(ELECTRIC_BLACKENEMY_STATE_STOP);
-	}
 	
-	if (state == ELECTRIC_BLACKENEMY_STATE_WALK && !shocking) {
+	if (this->state == ELECTRIC_BLACKENEMY_STATE_WALK && !this->shocking) {
 		if (GetTickCount64() - start_shock >= TIME_BETWEEN_TWO_SHOCKING) {
 			this->shocking = true;
 			SetState(ELECTRIC_BLACKENEMY_STATE_SHOCK);
@@ -57,7 +55,7 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (shocking) {
+	if (this->shocking) {
 		if (GetTickCount64() - start_shock >= TIME_SHOCKING) {
 			this->shocking = false;
 			SetState(ELECTRIC_BLACKENEMY_STATE_WALK);
@@ -69,7 +67,8 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (coEvents.size() == 0)
 	{
-		//x += dx;
+		if(this->state != ELECTRIC_BLACKENEMY_STATE_FALL)
+			x += dx;
 		y += dy;
 	}
 	else
@@ -99,17 +98,29 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 				if (e->ny > 0) {
-					if (state != ELECTRIC_BLACKENEMY_STATE_DIE) {
-						if (!carry_player && state != ELECTRIC_BLACKENEMY_STATE_SHOCK) {
+					x = x0 + min_tx * dx + e->nx * 0.2f;
+					//y = y0 + min_ty * dy + e->ny * 0.4f;
+					if (this->state != ELECTRIC_BLACKENEMY_STATE_DIE) {
+						if (!this->carry_player && this->state != ELECTRIC_BLACKENEMY_STATE_SHOCK) {
 							SetState(ELECTRIC_BLACKENEMY_STATE_WALK);
-							x = x0 + min_tx * dx + nx * 0.1f;
-							y = y0 + min_ty * dy + ny * 0.1f;
+							y = y0 + min_ty * dy + e->ny * 0.4f;
+						}
+						if (this->carry_player) {
+							SetState(ELECTRIC_BLACKENEMY_STATE_STOP);
 						}
 					}
+					if (this->state == ELECTRIC_BLACKENEMY_STATE_DIE) {
+						x = x0 + min_tx * dx + e->nx * 0.2f;
+						y = y0 - 1.5f;
+					}
 				}
-
-				if (e->nx != 0) vx = 0;
 			}
+			/*if (dynamic_cast<CSewer*>(e->obj))
+			{
+				SetState(ELECTRIC_BLACKENEMY_STATE_DIE);
+				x = x0 + min_tx * dx + e->nx * 0.2f;
+				y = y0 - 1.5f;
+			}*/
 		}
 	}
 	// clean up newCoObjects
@@ -157,22 +168,10 @@ void CElectricBlackEnemy::Render()
 		animation_set->at(ani)->Render(x, y);
 	
 	if (shocking) {
-		if (shocking_large) {
-			if (nx > 1) {
-				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_RIGHT)->Render(x + 3, y + 10);
-				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_2_RIGHT)->Render(x, y);
-			}
-			else {
-				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_LEFT)->Render(x, y + 10);
-				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_2_LEFT)->Render(x, y);
-			}
-		}
-		else {
-			if (ax > 0)
-				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_RIGHT)->Render(x + 3, y + 10);
-			else
-				animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_LEFT)->Render(x, y + 10);
-		}
+		if (ax > 0)
+			animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_RIGHT)->Render(x + 3, y + 10);
+		else
+			animation_set->at(ELECTRIC_BLACKENEMY_ANI_THUNDER_1_LEFT)->Render(x, y + 10);
 	}
 
 	//RenderBoundingBox();
@@ -184,6 +183,7 @@ void CElectricBlackEnemy::SetState(int state)
 	switch (state)
 	{
 	case ELECTRIC_BLACKENEMY_STATE_DIE:
+		this->carry_player = false;
 		ax = 0;
 		if (CheckSideOfStar() == -1) {
 			vx = ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X;
@@ -191,7 +191,9 @@ void CElectricBlackEnemy::SetState(int state)
 		else {
 			vx = -ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X;
 		}
-		vy = -ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y;
+		//vx = ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X;
+		//vy -= ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y;
+		//y -= 1.0f;
 		break;
 	case ELECTRIC_BLACKENEMY_STATE_WALK:
 		if (ax > 0) nx = 1;
@@ -202,7 +204,7 @@ void CElectricBlackEnemy::SetState(int state)
 		vy -= ELECTRIC_BLACKENEMY_GRAVITY * dt;
 		break;
 	case ELECTRIC_BLACKENEMY_STATE_STOP:
-		if (appear)
+		if (this->appear)
 			vx = 0;
 		else
 		{
@@ -296,21 +298,21 @@ void CElectricBlackEnemy::DetectPlayer()
 void CElectricBlackEnemy::DetectStar() {
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 
-	if (CheckAABB(star) && state != ELECTRIC_BLACKENEMY_STATE_DIE
+	if (CheckAABB(star) && this->state != ELECTRIC_BLACKENEMY_STATE_DIE
 		&& star->state != STAR_STATE_HIDE && star->state != STAR_STATE_EXPLOSIVE
 		&& star->state != STAR_STATE_PENDING && star->state != STAR_STATE_READY)
 	{
 		if (state == ELECTRIC_BLACKENEMY_STATE_STOP) {
 			this->carry_player = false;
 			SetState(ELECTRIC_BLACKENEMY_STATE_DIE);
-			DebugOut(L"va cham ngoi sao \n");
+			star->SetState(STAR_STATE_EXPLOSIVE);
 		}
 			
 		if (state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
 			this->shocking_large = true;
 			star->SetState(STAR_STATE_EXPLOSIVE);
 		}
-		else {
+		else if(state == ELECTRIC_BLACKENEMY_STATE_WALK) {
 			star->SetState(STAR_STATE_EXPLOSIVE);
 			SetState(ELECTRIC_BLACKENEMY_STATE_SHOCK);
 			this->shocking = true;
