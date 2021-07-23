@@ -358,7 +358,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_SPECIALBRICK: obj = new CSpecialBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str())); break;
 	case OBJECT_TYPE_CLOUDENEMY:
-		obj = new CCloudEnemy();
+		obj = new CCloudEnemy(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -522,9 +522,12 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CSword*>(objects[i])
 			|| dynamic_cast<CEnemyTail*>(objects[i])
 			|| dynamic_cast<CCat*>(objects[i])
-
 			|| dynamic_cast<CCloudEnemy*>(objects[i]))
 		{
+			if (dynamic_cast<CCloudEnemy*>(objects[i]) && attackBird > 0)
+			{
+				((CCloudEnemy*)(objects[i]))->SetState(CLOUD_STATE_ATTACK);
+			}
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
 			objects[i]->Update(dt, &coObjects);
@@ -571,6 +574,8 @@ void CPlayScene::Update(DWORD dt)
 		
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
+
+	attackBird--;
 
 	SetCamPos();
 

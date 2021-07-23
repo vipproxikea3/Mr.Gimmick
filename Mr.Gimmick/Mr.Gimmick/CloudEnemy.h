@@ -29,24 +29,18 @@ class CCloudEnemy : public CGameObject
 {
 
 public:
-	float ax = 0;
-	bool canTurnAround = false;
+	int direction = 1;
+	int turnTime = 2000;
 	bool carryPlayer = false;
-	bool attack = false;
+	float limitRight = 99999, limitLeft = -99999;
+	int tmpState = CLOUD_STATE_WALK;
+
 	CCloudEnemy();
 	CCloudEnemy(int left, int right);
 	~CCloudEnemy() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
-	void SetState(int state);
+	void SetState(int state = -1);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-
-	void CalculateSpeed();
-	void TurnAroundSlowly();
-	void DetectPlayer();
-	void SpecialCollisionWithPlayer();
-	bool IsCollidingWithPlayer();
-	void DetectStar();
-	int CheckSideOfStar();
 };
 
