@@ -1,6 +1,7 @@
 #include "Medicine.h"
 #include "PlayScene.h"
 #include "Gimmick.h"
+#include "Backup.h"
 
 CMedicine::CMedicine(int type) : CGameObject()
 {
@@ -57,9 +58,22 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+	CBackup* backup = CBackup::GetInstance();
 
 	if (CheckAABB(player) && this->state == MEDICINE_STATE_APPEAR) {
 		SetState(MEDICINE_STATE_DISAPPEAR);
+		switch (this->type)
+		{
+		case 1:
+			backup->UpdateLifeStack(backup->lifeStack + 1);
+			break;
+		case 5:
+			backup->UpdateScore(backup->score + 50000);
+			backup->UpdateRest(backup->rest + 2);
+			break;
+		default:
+			break;
+		}
 	}
 
 	for (UINT i = 0; i < coObjects->size(); i++)

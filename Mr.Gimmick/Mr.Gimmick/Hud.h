@@ -10,7 +10,7 @@
 #define HUD_ZONE_HEIGHT	32
 
 //Thoi gian tang giam diem so
-#define HUB_TIME_DP	3000
+#define HUB_TIME_DP	2000
 
 class CHud : public CGameObject
 {
@@ -32,7 +32,6 @@ class CHud : public CGameObject
 
 public:
 	CHud() {
-		UpdateScore(100);
 	}
 
 	virtual void Update(DWORD dt);

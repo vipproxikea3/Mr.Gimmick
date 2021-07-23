@@ -20,6 +20,8 @@ void CBackup::UpdateRest(int newRest) {
 
 void CBackup::UpdateLifeStack(int newLifeStack) {
 	this->lifeStack = newLifeStack;
+	if (this->lifeStack > 4)
+		this->lifeStack = 4;
 	if (this->lifeStack <= 0) {
 		CGimmick* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		player->SetState(GIMMICK_STATE_DIE);
@@ -44,4 +46,10 @@ void CBackup::UpdateLifeStack(int newLifeStack) {
 		break;
 	}
 	hud->UpdateRest(this->rest);
+}
+
+void CBackup::UpdateScore(int score) {
+	this->score = score;
+	CHud* hud = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHud();
+	hud->UpdateScore(this->score);
 }
