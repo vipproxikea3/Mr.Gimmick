@@ -51,6 +51,10 @@
 #include "EnemyTail.h"
 #include "SpecialBrick.h"
 #include "Cat.h"
+#include "FinalBoss.h"
+#include "FinalBossSmallBullet.h"
+#include "FinalBossDieEffect.h"
+#include "CloudEnemy.h"
 
 class CPlayScene : public CScene
 {
@@ -68,11 +72,15 @@ protected:
 	int countfps = 0;//speed waterfall
 	int fps = 1;
 
+	int attackBird = -1;
+
 	vector<CZone*> zones;
 	float ll = -9999.0f;
 	float lt = 9999.0f;
 	float lr = 9999.0f;
 	float lb = -9999.0f;
+	float revival_x = 0;
+	float revival_y = 0;
 
 	Quadtree* quadtree;
 
@@ -99,10 +107,17 @@ public:
 	void UpdateZone();
 	void SetCamPos();
 
+	void GetRevivalPosition(float& x, float& y) {
+		x = this->revival_x;
+		y = this->revival_y;
+	}
+
 	void PushBackObj(CGameObject* obj);
 
 	CGimmick* GetPlayer() { return player; };
 	CStar* GetStar() { return star; };
+	CHud* GetHud() { return hud; };
+	void AttackBird() { attackBird = 3; }
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler

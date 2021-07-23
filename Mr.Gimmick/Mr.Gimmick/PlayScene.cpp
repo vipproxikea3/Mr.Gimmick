@@ -64,6 +64,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GREEN_BOSS		50
 #define OBJECT_TYPE_SWORD_BOSS		51
 #define OBJECT_TYPE_SWORD			52
+#define OBJECT_TYPE_FINALBOSS		53
+#define OBJECT_TYPE_FINALBOSS_BIG_BULLET		54
+#define OBJECT_TYPE_FINALBOSS_SMALL_BULLET		55
+#define OBJECT_TYPE_FINALBOSS_DIE_EFFECT		56
 #define OBJECT_TYPE_GUN				20
 #define OBJECT_TYPE_BIRD			177
 #define OBJECT_TYPE_CAT				666
@@ -75,6 +79,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_TURLTE			91
 #define OBJECT_TYPE_BLACKBIRD		35
 #define OBJECT_TYPE_STANDBLACKENEMY		34
+#define OBJECT_TYPE_CLOUDENEMY		37
 
 #define MAX_SCENE_LINE 1024
 
@@ -124,8 +129,10 @@ void CPlayScene::_ParseSection_ZONES(string line)
 	float t = (float)atof(tokens[1].c_str());
 	float r = (float)atof(tokens[2].c_str());
 	float b = (float)atof(tokens[3].c_str());
+	float revival_x = (float)atof(tokens[4].c_str());
+	float revival_y = (float)atof(tokens[5].c_str());
 
-	CZone* zone = new CZone(l, t, r, b);
+	CZone* zone = new CZone(l, t, r, b, revival_x, revival_y);
 	zones.push_back(zone);
 }
 
@@ -346,6 +353,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_SWORD_BOSS:
 		obj = new CSwordBoss();
+		break; 
+	case OBJECT_TYPE_FINALBOSS:
+		obj = new CFinalBoss();
 		break;
 	case OBJECT_TYPE_BRIDGE:
 		obj = new CBridge(atoi(tokens[4].c_str()));
@@ -354,6 +364,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CEnemyTail(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
 	case OBJECT_TYPE_SPECIALBRICK: obj = new CSpecialBrick(atof(tokens[4].c_str()), atof(tokens[5].c_str()), atoi(tokens[6].c_str())); break;
+	case OBJECT_TYPE_CLOUDENEMY:
+		obj = new CCloudEnemy(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -461,7 +474,11 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		if (dynamic_cast<CBird*>(objects[i]))
 			continue;
+		if (dynamic_cast<CMedicine*>(objects[i]))
+			continue;
 		if (dynamic_cast<CCat*>(objects[i]))
+			continue;
+		if (dynamic_cast<CFinalBossDieEffect*>(objects[i]))
 			continue;
 		quadtree->Insert(objects[i]);
 	}
@@ -511,12 +528,23 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CTurle*>(objects[i])
 			|| dynamic_cast<CBlackBird*>(objects[i])
 			|| dynamic_cast<CSwordBoss*>(objects[i])
+			|| dynamic_cast<CSword*>(objects[i])
+			|| dynamic_cast<CFinalBoss*>(objects[i])
+			|| dynamic_cast<CFinalBossBigBullet*>(objects[i])
+			|| dynamic_cast<CFinalBossSmallBullet*>(objects[i])
+			|| dynamic_cast<CFinalBossDieEffect*>(objects[i])
 			|| dynamic_cast<CBird*>(objects[i])
 			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
 			|| dynamic_cast<CSword*>(objects[i])
 			|| dynamic_cast<CEnemyTail*>(objects[i])
+			|| dynamic_cast<CCloudEnemy*>(objects[i])
+			|| dynamic_cast<CMedicine*>(objects[i])
 			|| dynamic_cast<CCat*>(objects[i]))
 		{
+			if (dynamic_cast<CCloudEnemy*>(objects[i]) && attackBird > 0)
+			{
+				((CCloudEnemy*)(objects[i]))->SetState(CLOUD_STATE_ATTACK);
+			}
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
 			objects[i]->Update(dt, &coObjects);
@@ -550,6 +578,24 @@ void CPlayScene::Update(DWORD dt)
 				delete bullet;
 			}
 		}
+		else if (dynamic_cast<CFinalBossSmallBullet*>(objects[i]))
+		{
+			CFinalBossSmallBullet* bullet = (CFinalBossSmallBullet*)(objects[i]);
+			if (!bullet->visible)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
+		else if (dynamic_cast<CFinalBossBigBullet*>(objects[i]))
+		{
+			CFinalBossBigBullet* bullet = (CFinalBossBigBullet*)(objects[i]);
+			if (!bullet->visible)
+			{
+				objects.erase(objects.begin() + i);
+				delete bullet;
+			}
+		}
 		else if (dynamic_cast<CBoomCannon*>(objects[i]))
 		{
 			CBoomCannon* boom_cannon = (CBoomCannon*)(objects[i]);
@@ -563,6 +609,8 @@ void CPlayScene::Update(DWORD dt)
 		
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
+
+	attackBird--;
 
 	SetCamPos();
 
@@ -585,6 +633,8 @@ void CPlayScene::UpdateZone() {
 			lt = zones[i]->t;
 			lr = zones[i]->r;
 			lb = zones[i]->b;
+			revival_x = zones[i]->revival_x;
+			revival_y = zones[i]->revival_y;
 		}
 	}
 }
@@ -691,8 +741,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
-		return;
+	/*if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true)
+		return;*/
 
 	switch (KeyCode)
 	{
@@ -700,8 +750,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
 	//	break;
 	case DIK_S:
-		if (star != nullptr) {
-			star->Ready();
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			if (star != nullptr) {
+				star->Ready();
+			}
 		}
 		break;
 	case DIK_1:
@@ -717,8 +769,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->y = 650;
 		break;
 	case DIK_6:
-		gimmick->x = 1984;
-		gimmick->y = 320;
+		gimmick->Revival();
 		break;
 	case DIK_L:
 		gimmick->SetPosition(64, 448);
@@ -726,6 +777,13 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_B:
 		gimmick->x = 1670;
 		gimmick->y = 496;
+		break;
+	case DIK_N:
+		gimmick->x = 1725;
+		gimmick->y = 637;
+		break;
+	case DIK_M:
+		gimmick->SetState(GIMMICK_STATE_DIE);
 		break;
 	}
 }
@@ -755,20 +813,24 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	CGimmick* gimmick = ((CPlayScene*)scene)->GetPlayer();
-	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
-		return;
+	/*if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->stunning == true || gimmick->inSewer == true)
+		return;*/
 	CStar* star = ((CPlayScene*)scene)->GetStar();
 
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (star != nullptr) {
-			star->Shot();
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			if (star != nullptr) {
+				star->Shot();
+			}
 		}
 		break;
 	case DIK_SPACE:
-		gimmick->falling = true;
-		gimmick->jumping = false;
+		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
+			gimmick->falling = true;
+			gimmick->jumping = false;
+		}
 		break;
 	}
 }

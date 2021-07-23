@@ -71,8 +71,11 @@ void CBomboat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
-	if (this->CheckAABB(gimmick) && this->state == BOOM_BOAT_STATE_FALLING && vy<0)
-		gimmick->SetState(GIMMICK_STATE_STUN);
+	if (this->CheckAABB(gimmick) && this->state == BOOM_BOAT_STATE_FALLING && vy < 0) {
+		if (gimmick->untouchable == 0)
+			gimmick->SetState(GIMMICK_STATE_STUN);
+	}
+
 	if (state == BOOM_BOAT_STATE_ALIVE)
 	{
 		if (gimmick->y < this->y)

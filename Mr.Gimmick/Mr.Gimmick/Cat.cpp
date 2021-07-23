@@ -21,8 +21,10 @@ void CCat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (state != CAT_STATE_SLEEP && state != CAT_STATE_WATER_DIE && state != CAT_STATE_HIDE)
 	{
-		if (this->CheckAABB(gimmick))
-			gimmick->SetState(GIMMICK_STATE_STUN);
+		if (this->CheckAABB(gimmick)) {
+			if (gimmick->untouchable == 0)
+				gimmick->SetState(GIMMICK_STATE_STUN);
+		}
 	}
 
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();

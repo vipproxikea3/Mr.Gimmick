@@ -7,6 +7,7 @@
 #include "PlayScene.h"
 #include "Brick.h"
 #include "BlackBird.h"
+#include "Backup.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -52,6 +53,10 @@ void CGimmick::CalculateSpeed(DWORD dt) {
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->state == GIMMICK_STATE_DIE && GetTickCount64() - die_start >= GIMMICK_REVIVAL_TIME) {
+		this->Revival();
+	}
+
 	if (this->state == GIMMICK_STATE_DIE)
 		return;
 	// Set in sewer
@@ -131,6 +136,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CStandBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CCloudEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBoat*>(coObjects->at(i))) {
 			CBoat* Boat = dynamic_cast<CBoat*>(coObjects->at(i));
 			if (onTopOf(Boat)) { this->onBoat = true; }
@@ -154,13 +160,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CSewer*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CInclinedBrick*>(coObjects->at(i))) {
 			CInclinedBrick* brick = dynamic_cast<CInclinedBrick*>(coObjects->at(i));
-				int tmp = brick->Collision(this, dy);
-				if (tmp != 0)
-					direction = tmp;
+			int tmp = brick->Collision(this, dy);
+			if (tmp != 0)
+				direction = tmp;
 		}
 		if (dynamic_cast<CConveyor*>(coObjects->at(i))) {
 			CConveyor* conveyor = dynamic_cast<CConveyor*>(coObjects->at(i));
-			if (onTopOf(conveyor)) { this->onGround = true;}
+			if (onTopOf(conveyor)) { this->onGround = true; }
 		}
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
@@ -176,11 +182,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) {
 			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
-			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK && this->vy < 0 ) { 
+			if (onTopOf(enemy, 7) && enemy->state == BLACKENEMY_STATE_WALK && this->vy < 0) {
 				this->onGround = true;
-				if(!onEnemy && !stunning) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
+				if (!onEnemy && !stunning) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
-			if (isUnder(enemy)) { 
+			if (isUnder(enemy)) {
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
 			}
@@ -191,7 +197,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CSwing*>(coObjects->at(i))) {
 			CSwing* swing = dynamic_cast<CSwing*>(coObjects->at(i));
-			if (onTopOf(swing)) this->onGround = true; 
+			if (onTopOf(swing)) this->onGround = true;
 		}
 		if (dynamic_cast<CGreenBoss*>(coObjects->at(i))) {
 			CGreenBoss* enemy = dynamic_cast<CGreenBoss*>(coObjects->at(i));
@@ -216,8 +222,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CCannon*>(coObjects->at(i))) {
 			CCannon* cannon = dynamic_cast<CCannon*>(coObjects->at(i));
-			if (onTopOf(cannon) && this->vy < 0) { 
-				this->onGround = true; 
+			if (onTopOf(cannon) && this->vy < 0) {
+				this->onGround = true;
 			}
 		}
 		if (dynamic_cast<CBoomCannon*>(coObjects->at(i))) {
@@ -241,9 +247,17 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<CTurle*>(coObjects->at(i))) {
 			CTurle* turle = dynamic_cast<CTurle*>(coObjects->at(i));
-			if (onTopOf(turle)) { 
-				this->onGround = true; 
+			if (onTopOf(turle)) {
+				this->onGround = true;
 				standOn(turle);
+			}
+		}
+
+		if (dynamic_cast<CCloudEnemy*>(coObjects->at(i))) {
+			CCloudEnemy* enemy = dynamic_cast<CCloudEnemy*>(coObjects->at(i));
+			if (onTopOf(enemy, 7.0f) && this->vy < 0) {
+				this->onGround = true;
+				standOn(enemy);
 			}
 		}
 	}
@@ -340,7 +354,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							x = x0 - 2.0f;
 						}
 					}
-					if (state == TURLE_STATE_DIE_RIGHT) {
+					if (turle->state == TURLE_STATE_DIE_LEFT) {
 						this->vy = 0;
 						if (state == GIMMICK_STATE_WALKING_RIGHT)
 						{
@@ -357,35 +371,18 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				if (e->nx < 0) {
-					//this->vy = 0;
-					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+					if (turle->state == TURLE_STATE_DIE_RIGHT || turle->state == TURLE_STATE_DIE_LEFT) {
 						this->x += 0.3;
 						turle->x += 0.3;
-						//this->vx = 0;
-					}
-					if (turle->state == TURLE_STATE_DIE_LEFT) {
-						this->x += 0.3;
-						turle->x += 0.3;
-						//this->vx = 0;
 					}
 				}
-				else if (e->nx > 0) {
-					if (turle->state == TURLE_STATE_DIE_RIGHT) {
+				if (e->nx >= 0) {
+					if (turle->state == TURLE_STATE_DIE_RIGHT || turle->state == TURLE_STATE_DIE_LEFT) {
 						this->x -= 0.3;
 						turle->x -= 0.3;
-						//this->vx = 0;
-					}
-					if (turle->state == TURLE_STATE_DIE_LEFT) {
-						this->x -= 0.3;
-						turle->x -= 0.3;
-						//this->vx = 0;
 					}
 				}
-				
-				/*else {
-					this->SetState(GIMMICK_STATE_STUN);
-					StartUntouchable();
-				}*/
+
 			}
 
 			if (dynamic_cast<CBoat*>(e->obj)) {
@@ -557,19 +554,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					y = y0 + min_ty * dy + ny * 0.1f;
 					onGround = true;
-				}
-			}
-
-			if (dynamic_cast<CMedicine*>(e->obj))
-			{
-				CMedicine* medicine = dynamic_cast<CMedicine*>(e->obj);
-				if (e->nx != 0)
-				{
-					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
-				}
-				if (e->ny != 0)
-				{
-					medicine->SetState(MEDICINE_STATE_DISAPPEAR);
 				}
 			}
 
@@ -884,6 +868,34 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->SetState(GIMMICK_STATE_STUN);
 				}
 			}
+
+			if (dynamic_cast<CCloudEnemy*>(e->obj)) {
+				CCloudEnemy* cloud = dynamic_cast<CCloudEnemy*>(e->obj);
+				if (e->nx != 0)
+				{
+					if (e->nx != 0)
+					{
+						if (cloud->x < this->x)
+						{
+							this->vx = GIMMICK_DEFLECT_SPEED_X;
+							this->nx = 1.0;
+						}
+						else
+						{
+							this->vx = -GIMMICK_DEFLECT_SPEED_X;
+							this->nx = -1.0;
+						}
+						this->SetState(GIMMICK_STATE_STUN);
+					}
+				}
+				if (e->ny > 0) {
+					vy = 0;
+					this->y = y0 + min_ty * dy + 0.3f;
+					
+					standOn(cloud);
+				}
+
+			}
 		}
 		if (equalinSewer && tempy != 0)
 			vy = tempy;
@@ -1001,19 +1013,26 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
-		if (stunning == false && untouchable == 0) {
+		if (untouchable == 0) {
+			this->SetState(GIMMICK_STATE_IDLE);
+			
 			stunning = true;
 			stunning_start = GetTickCount64();
-			this->SetState(GIMMICK_STATE_IDLE);
-
 			StartUntouchable();
 
 			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 			star->Shot();
+			CBackup::GetInstance()->UpdateLifeStack(CBackup::GetInstance()->lifeStack - 1);
 		}
-		break;
+		else {
+			this->SetState(GIMMICK_STATE_IDLE);
+		}
 	}
+	break;
 	case GIMMICK_STATE_DIE:
+		CBackup::GetInstance()->UpdateRest(CBackup::GetInstance()->rest - 1);
+		CBackup::GetInstance()->UpdateLifeStack(4);
+		this->die_start = GetTickCount64();
 		CreateDieEffect();
 		vx = 0;
 		vy = 0;
@@ -1051,6 +1070,11 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 		l = l + 1; //x pixel
 		r = r - 1;
 	}
+	if (dynamic_cast<CCloudEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
+	{
+		l = l + 1; //x pixel
+		r = r - 1;
+	}
 	if (r >= ol && l <= or && abs(b - ot) < equal)
 		return true;
 	return false;
@@ -1081,6 +1105,19 @@ void CGimmick::DetectStar()
 			standOn(star);
 		}
 	}
+}
+
+void CGimmick::Revival() {
+	float revival_x, revival_y;
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	((CPlayScene*)scene)->GetRevivalPosition(revival_x, revival_y);
+	this->SetPosition(revival_x, revival_y);
+	this->SetSpeed(0, 0);
+	this->ax = 0;
+	this->ay = 0;
+	this->SetState(GIMMICK_STATE_IDLE);
+	this->stunning = false;
+	this->untouchable = 0;
 }
 
 bool CGimmick::onSideOf(CGameObject* object, float equal)
@@ -1199,6 +1236,16 @@ void CGimmick::standOn(CGameObject* object)
 				this->vy = 0;
 			}
 		}
+	}
+
+	if (dynamic_cast<CCloudEnemy*>(object)) {
+		CCloudEnemy* enemy = dynamic_cast<CCloudEnemy*>(object);
+		this->x += object->dx;
+		onEnemy = true;
+		enemy->carryPlayer = true;
+		this->vy = 0;
+		this->y = object->y + GIMMICK_BBOX_HEIGHT;
+
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "Swing.h"
 #include "Medicine.h"
 #include "Sewer.h"
+#include "CloudEnemy.h"
 
 
 #define GIMMICK_WALKING_SPEED		0.1f
@@ -43,12 +44,14 @@
 
 #define GIMMICK_UNTOUCHABLE_TIME	2000
 #define GIMMICK_STUNNING_TIME		500
+#define GIMMICK_REVIVAL_TIME		2000
 
 
 class CGimmick : public CGameObject
 {
-	int untouchable;
 	DWORD untouchable_start;
+
+	DWORD die_start;
 
 	DWORD stunning_start;
 	float ax = NULL;
@@ -56,6 +59,7 @@ class CGimmick : public CGameObject
 	
 	bool updated = false;
 public:
+	int untouchable;
 	float ay = 0;
 	bool onGround = false;
 	bool falling = false;
@@ -88,6 +92,7 @@ public:
 	bool isUnder(CGameObject* object, float equal = 1);
 	int getUntouchable() { return untouchable; }
 	void DetectStar();
+	void Revival();
 
 	void UpdateWithBird(float x, float y) { this->x += x; this->y += y; };
 };
