@@ -162,6 +162,7 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="Chain.h" />
+    <ClInclude Include="CloudEnemy.h" />
     <ClInclude Include="Cogwheel.h" />
     <ClInclude Include="CogwheelSmall.h" />
     <ClInclude Include="Conveyor.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="Chain.cpp" />
+    <ClCompile Include="CloudEnemy.cpp" />
     <ClCompile Include="Cogwheel.cpp" />
     <ClCompile Include="CogwheelSmall.cpp" />
     <ClCompile Include="Conveyor.cpp" />

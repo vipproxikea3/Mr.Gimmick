@@ -18,7 +18,7 @@ class CHud : public CGameObject
 	int timeDP = HUB_TIME_DP; // thời gian để nó tăng
 	int dpScore = 0;
 	int curScore = 0;
-	int displayScore = 0;
+	float displayScore = 0;
 
 	//Rest
 	int rest = 5;

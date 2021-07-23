@@ -54,6 +54,7 @@
 #include "FinalBoss.h"
 #include "FinalBossSmallBullet.h"
 #include "FinalBossDieEffect.h"
+#include "CloudEnemy.h"
 
 class CPlayScene : public CScene
 {
@@ -70,6 +71,8 @@ protected:
 	int spritemap = 4;// so luong sprite map
 	int countfps = 0;//speed waterfall
 	int fps = 1;
+
+	int attackBird = -1;
 
 	vector<CZone*> zones;
 	float ll = -9999.0f;
@@ -114,6 +117,7 @@ public:
 	CGimmick* GetPlayer() { return player; };
 	CStar* GetStar() { return star; };
 	CHud* GetHud() { return hud; };
+	void AttackBird() { attackBird = 3; }
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler

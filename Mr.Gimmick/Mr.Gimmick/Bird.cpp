@@ -180,6 +180,7 @@ void CBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		{
 			CreateReward();
 		}
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AttackBird();
 	}
 	if (die_start != 0 && GetTickCount64() - die_start >= BIRD_TIME_DIE)
 	{
