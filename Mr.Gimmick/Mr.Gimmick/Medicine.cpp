@@ -30,8 +30,8 @@ void CMedicine::GetBoundingBox(float& l, float& t, float& r, float& b)
 		{
 			l = x;
 			t = y;
-			r = l + MEDICINE_TYPE_3_4_BBOX_WIDTH;
-			b = t - MEDICINE_TYPE_3_4_BBOX_HEIGHT + 0.5f;
+			r = l + MEDICINE_TYPE_CIRCLE_BBOX_WIDTH;
+			b = t - MEDICINE_TYPE_CIRCLE_BBOX_HEIGHT + 0.5f;
 		}
 		else if (type == 5)
 		{
@@ -132,10 +132,10 @@ void CMedicine::Render()
 			ani = MEDICINE_ANI_PINK;
 			break;
 		case 3:
-			ani = MEDICINE_ANI_TYPE_3;
+			ani = MEDICINE_ANI_TYPE_PINK_CIRCLE;
 			break;
 		case 4:
-			ani = MEDICINE_ANI_TYPE_4;
+			ani = MEDICINE_ANI_TYPE_BLACK_CIRCLE;
 			break;
 		case 5:
 			ani = VASE_ANI_FLOWER;
