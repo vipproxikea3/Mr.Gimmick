@@ -3,6 +3,7 @@
 #include "Brick.h"
 #include "Conveyor.h"
 #include "InclinedBrick.h"
+#include "Sewer.h"
 
 #define	STAR_GRAVITY			0.001f
 #define STAR_VX					0.15f
