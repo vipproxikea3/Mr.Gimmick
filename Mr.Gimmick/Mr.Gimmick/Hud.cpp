@@ -34,18 +34,14 @@ void CHud::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CHud::RenderScore()
 {
-	//DebugOut(L"%d    %d    %d\n", timeDP, dt, timeDP - dt);
-
-	/*if (timeDP - int(dt) > 0) {
+	if (timeDP - int(dt) > 0) {
 		displayScore += int(float(dpScore) / HUB_TIME_DP * dt);
 		timeDP = timeDP - dt;
 	}
 	else {
 		displayScore = curScore;
 		timeDP = 0;
-	}*/
-
-	displayScore = 99;
+	}
 
 	int tmpScore = displayScore;
 
@@ -56,8 +52,6 @@ void CHud::RenderScore()
 		animation_set->at(1)->Render(x_Score - 8, y - 16, 255, i);
 		x_Score -= 8;
 	}
-	
-	
 }
 
 void CHud::RenderRest()

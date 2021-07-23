@@ -10,14 +10,14 @@
 #define HUD_ZONE_HEIGHT	32
 
 //Thoi gian tang giam diem so
-#define HUB_TIME_DP	5000
+#define HUB_TIME_DP	3000
 
 class CHud : public CGameObject
 {
 public:
 	//Score
-	//int timeDP = HUB_TIME_DP;
-	int dpScore = 1000;
+	int timeDP = HUB_TIME_DP;
+	int dpScore = 0;
 	int curScore = 0;
 	int displayScore = 0;
 
@@ -31,7 +31,7 @@ public:
 	int item1 = 6, item2 = 4, item3 = 1;
 
 	CHud() {
-
+		UpdateScore(350);
 	}
 
 	virtual void Update(DWORD dt);
@@ -41,7 +41,7 @@ public:
 	void UpdateScore(int score) {
 		dpScore = score - this->curScore;
 		this->curScore = score;
-		//timeDP = HUB_TIME_DP;
+		timeDP = HUB_TIME_DP;
 	}
 	void RenderScore();
 
