@@ -133,7 +133,7 @@
     <ClInclude Include="Cat.h" />
     <ClInclude Include="EnemyTail.h" />
     <ClInclude Include="SpecialBrick.h" />
-    <ClInclude Include="StandBlackEnemy.h" />
-    <ClInclude Include="Turle.h" />
+    <ClInclude Include="Cat.h" />
+    <ClInclude Include="Backup.h" />
   </ItemGroup>
 </Project>
