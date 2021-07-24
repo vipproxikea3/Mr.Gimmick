@@ -182,6 +182,7 @@ void CSwordBoss::SetState(int state)
 		backup->end_scene_2 = 1;
 		CScene* scene = CGame::GetInstance()->GetCurrentScene();
 		((CPlayScene*)scene)->EndScene();
+		Sound::GetInstance()->Play("SOUND_Effect_84", 0, 1);
 		ax = 0;
 		if (nx < 0) {
 			vx = SWORDBOSS_DEFLECT_SPEED_X;

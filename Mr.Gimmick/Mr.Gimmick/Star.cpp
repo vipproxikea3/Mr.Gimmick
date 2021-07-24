@@ -291,15 +291,18 @@ void CStar::SetState(int state)
 	case STAR_STATE_HIDE:
 		break;
 	case STAR_STATE_PENDING:
+		Sound::GetInstance()->Play("SOUND_Effect_73", 0, 1);
 		break;
 	case STAR_STATE_CREATED:
 		break;
 	case STAR_STATE_READY:
 		break;
 	case STAR_STATE_WALKING_RIGHT:
+		Sound::GetInstance()->Play("SOUND_Effect_25", 0, 1);
 		vx = STAR_VX;
 		break;
 	case STAR_STATE_WALKING_LEFT:
+		Sound::GetInstance()->Play("SOUND_Effect_25", 0, 1);
 		vx = -STAR_VX;
 		break;
 	case STAR_STATE_EXPLOSIVE:

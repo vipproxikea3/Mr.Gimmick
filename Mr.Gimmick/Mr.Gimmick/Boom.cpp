@@ -155,6 +155,7 @@ void CBoom::SetState(int state)
 		vy = -BOOM_GRAVITY;
 		break;
 	case BOOM_STATE_EXPLODE:
+		Sound::GetInstance()->Play("SOUND_Effect_3", 0, 1);
 		vy = 0;
 		break;
 	}

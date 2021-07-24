@@ -154,9 +154,11 @@ void CBullet::SetState(int state)
 	switch (state)
 	{
 	case BULLET_STATE_MOVE:
+		//Sound::GetInstance()->Play("SOUND_Effect_24", 0, 1);
 		nx = 1;
 		break;
 	case BULLET_STATE_EXPLODE:
+		Sound::GetInstance()->Play("SOUND_Effect_14", 0, 1);
 		vx = 0;
 		break;
 	}

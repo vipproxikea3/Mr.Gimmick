@@ -8,6 +8,7 @@
 #include "Medicine.h"
 #include "Sewer.h"
 #include "CloudEnemy.h"
+#include "Sound.h"
 
 
 #define GIMMICK_WALKING_SPEED		0.1f

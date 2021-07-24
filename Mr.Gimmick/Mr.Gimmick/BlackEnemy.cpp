@@ -224,6 +224,7 @@ void CBlackEnemy::Render()
 void CBlackEnemy::SetState(int state)
 {
 	CGameObject::SetState(state);
+	Sound::GetInstance()->Stop("SOUND_Effect_8");
 	switch (state)
 	{
 	case BLACKENEMY_STATE_WALK:
@@ -237,7 +238,8 @@ void CBlackEnemy::SetState(int state)
 		ax = 0;
 		vx = 0;
 		break;
-	case BLACKENEMY_STATE_FLY: 
+	case BLACKENEMY_STATE_FLY:
+		Sound::GetInstance()->Play("SOUND_Effect_8", 1);
 		if (nx > 0) 
 			ax = BLACKENEMY_FLY_ACCELERATION;
 		else

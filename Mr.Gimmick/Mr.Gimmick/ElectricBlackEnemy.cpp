@@ -180,6 +180,7 @@ void CElectricBlackEnemy::Render()
 void CElectricBlackEnemy::SetState(int state)
 {
 	CGameObject::SetState(state);
+	Sound::GetInstance()->Stop("SOUND_Effect_1");
 	switch (state)
 	{
 	case ELECTRIC_BLACKENEMY_STATE_DIE:
@@ -213,6 +214,7 @@ void CElectricBlackEnemy::SetState(int state)
 		}
 		break;
 	case ELECTRIC_BLACKENEMY_STATE_SHOCK:
+		Sound::GetInstance()->Play("SOUND_Effect_1", 0,1);
 		vx = 0;
 		//ax = 0;
 		break;

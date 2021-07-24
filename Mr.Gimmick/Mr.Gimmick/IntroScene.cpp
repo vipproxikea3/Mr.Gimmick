@@ -273,7 +273,7 @@ void CIntroScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 	//Nhac nen
-	Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
+	Sound::GetInstance()->Play("SOUND_Intro", 1);
 }
 
 void CIntroScene::Update(DWORD dt)
