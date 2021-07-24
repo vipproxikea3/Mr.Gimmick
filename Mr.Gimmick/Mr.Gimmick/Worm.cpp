@@ -33,9 +33,11 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 
 	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && this->GetState() == WORM_STATE_WALKING) {
-		CBackup* backup = CBackup::GetInstance();
-		backup->UpdateScore(backup->score + this->score);
-		this->SetState(WORM_STATE_DIE);
+		if (this->state != WORM_STATE_DIE) {
+			CBackup* backup = CBackup::GetInstance();
+			backup->UpdateScore(backup->score + this->score);
+			this->SetState(WORM_STATE_DIE);
+		}
 	}
 
 	if (firstLocation)

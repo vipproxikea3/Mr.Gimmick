@@ -505,29 +505,36 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 			if (dynamic_cast<CWorm*>(e->obj)) {
-				x = x0 + min_tx * dx + nx * 0.1f;
-				y = y0 + min_ty * dy + ny * 0.1f;
+				
 
 				CWorm* worm = dynamic_cast<CWorm*>(e->obj);
-
-				if (e->nx != 0) {
-					if (worm->x < this->x)
-					{
-						this->vx = GIMMICK_DEFLECT_SPEED_X;
-						this->nx = 1.0;
+				if (worm->GetState() != WORM_STATE_DIE) {
+					x = x0 + min_tx * dx + nx * 0.1f;
+					y = y0 + min_ty * dy + ny * 0.1f;
+					if (e->nx != 0) {
+						if (worm->x < this->x)
+						{
+							this->vx = GIMMICK_DEFLECT_SPEED_X;
+							this->nx = 1.0;
+						}
+						else
+						{
+							this->vx = -GIMMICK_DEFLECT_SPEED_X;
+							this->nx = -1.0;
+						}
+						this->SetState(GIMMICK_STATE_STUN);
 					}
-					else
-					{
-						this->vx = -GIMMICK_DEFLECT_SPEED_X;
-						this->nx = -1.0;
-					}						
-					this->SetState(GIMMICK_STATE_STUN);
+					if (e->ny != 0) {
+						vy = 0;
+					}
+					if (e->ny == 1)
+						this->onGround = true;
+				} else {
+					x = x0 + dx;
+					y = y0 + dy;
 				}
-				if (e->ny != 0) {
-					vy = 0;
-				}
-				if (e->ny == 1)
-					this->onGround = true;
+
+				
 			}
 
 			if (dynamic_cast<CSwing*>(e->obj)) {

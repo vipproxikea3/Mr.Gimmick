@@ -157,6 +157,8 @@ void CFinalBoss::SetState(int state)
 		stun_start = GetTickCount64();
 		break;
 	case FINALBOSS_STATE_DIE:
+		CScene* scene = CGame::GetInstance()->GetCurrentScene();
+		((CPlayScene*)scene)->EndGame();
 		Sound::GetInstance()->Play("SOUND_Effect_84", 0, 1);
 		vx = 0;
 		ax = 0;

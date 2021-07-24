@@ -603,7 +603,7 @@ void CIntroSceneKeyHandler::OnKeyDown(int KeyCode)
 			intro_scene->phase = 2;
 		}
 		else
-			game->SwitchScene(1);
+			game->SwitchScene(1000);
 		break;
 	}
 }
