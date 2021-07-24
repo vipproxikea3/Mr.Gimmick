@@ -836,6 +836,11 @@ void CFinalBoss::CalculateState()
 		die_start = 0;
 		visible = false;
 	}
+	//if (state == FINALBOSS_STATE_DIE && GetTickCount64() - die_start >= FINALBOSS_DIE_TIME + 3000)
+	//{
+	//	die_start = 0;
+	//	CGame::GetInstance()->SwitchScene(888);// Outro
+	//}
 }
 
 void CFinalBoss::StartBlink()

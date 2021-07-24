@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "BlackEnemy.h"
 
 class CWaterDie : public CGameObject
 {

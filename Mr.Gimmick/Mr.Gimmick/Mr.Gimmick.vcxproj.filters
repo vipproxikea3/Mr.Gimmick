@@ -68,7 +68,7 @@
     <ClCompile Include="StandBlackEnemy.cpp" />
     <ClCompile Include="Turle.cpp" />
     <ClCompile Include="CloudEnemy.cpp" />
-    <ClCompile Include="WorldMap.cpp" />
+    <ClCompile Include="OutroScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -140,6 +140,6 @@
     <ClInclude Include="CloudEnemy.h" />
     <ClInclude Include="StandBlackEnemy.h" />
     <ClInclude Include="Turle.h" />
-    <ClInclude Include="WorldMap.h" />
+    <ClInclude Include="OutroScene.h" />
   </ItemGroup>
 </Project>

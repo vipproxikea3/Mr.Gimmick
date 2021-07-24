@@ -309,7 +309,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
-		obj = new CBlackEnemy(atoi(tokens[4].c_str()));
+		if(tokens.size() > 5)
+			obj = new CBlackEnemy(atoi(tokens[4].c_str()), atoi(tokens[5].c_str()) );
+		else
+			obj = new CBlackEnemy(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_STAR:
 		if (star != NULL)
