@@ -174,6 +174,7 @@ void CSwordBoss::SetState(int state)
 		vy = SWORDBOSS_DEFLECT_SPEED_Y;
 		break;
 	case SWORDBOSS_STATE_DIE:
+		Sound::GetInstance()->Play("SOUND_Effect_84", 0, 1);
 		ax = 0;
 		if (nx < 0) {
 			vx = SWORDBOSS_DEFLECT_SPEED_X;

@@ -440,10 +440,6 @@ void CPlayScene::Load()
 
 	// Create quadtree
 	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
-
-	// Play Soundtrack
-	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
-	
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -615,6 +611,79 @@ void CPlayScene::Update(DWORD dt)
 	SetCamPos();
 
 	hud->Update(dt);
+	// Play soundtrack sence
+	CScene* Scene = CGame::GetInstance()->GetCurrentScene();
+	if (player->state == GIMMICK_STATE_DIE)
+	{
+		Sound::GetInstance()->Stop("SOUND_Boss_1");
+		Sound::GetInstance()->Stop("SOUND_Scene_1");
+		Sound::GetInstance()->Stop("SOUND_Sence_2");
+		Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+		Sound::GetInstance()->Stop("SOUND_Sence_7");
+	}
+	else if (Scene->Getid() == 1)
+	{
+		if (player->x >= 0 && player->x <= 1024 && player->y <= 850 && player->y >= 576)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Stop("SOUND_Scene_1");
+			Sound::GetInstance()->Play("SOUND_Scene_High_1", 1);
+		}
+		else if(player->x >= 1024 && player->x <= 1280 && player->y <= 800 && player->y >= 576)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Scene_1");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Scene_1", 1);
+		}
+	}
+	else if (Scene->Getid() == 2)
+	{
+		if (player->x >= 0 && player->x <= 480 && player->y <= 980 && player->y >= 432)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Stop("SOUND_Sence_2");
+			Sound::GetInstance()->Play("SOUND_Scene_High_1", 1);
+		}
+		else if (player->x >= 1792 && player->x <= 2048 && player->y <= 590 && player->y >= 384)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Sence_2");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Sence_2", 1);
+		}
+	}
+	else if (Scene->Getid() == 7)
+	{
+		if (player->x >= 1792 && player->x <= 2048 && player->y <= 768 && player->y >= 576)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Sence_7");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Sence_7", 1);
+		}
+	}
 }
 
 void CPlayScene::UpdateZone() {
@@ -747,7 +816,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	//case DIK_SPACE:
-	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
+	//	sound->Play("SOUND_Effect_24", 0, 1); // jump
 	//	break;
 	case DIK_S:
 		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {

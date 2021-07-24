@@ -159,6 +159,7 @@ void CBomboat::SetState(int state)
 		vy = BOOM_BOAT_BUM_GRAVITY;
 		break;
 	case BOOM_BOAT_STATE_EXPLODE:
+		Sound::GetInstance()->Play("SOUND_Effect_14", 0, 1);
 		vy = 0;
 		break;
 	}

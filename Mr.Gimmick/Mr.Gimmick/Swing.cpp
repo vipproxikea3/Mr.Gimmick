@@ -73,12 +73,17 @@ void CSwing::SetState(int state)
 	switch (state)
 	{
 	case SWING_STATE_STAND:
+		Sound::GetInstance()->Stop("SOUND_Effect_19");
+		Sound::GetInstance()->Stop("SOUND_Effect_45");
 		vx = 0;
 		break;
 	case SWING_STATE_MOVE:
+		Sound::GetInstance()->Play("SOUND_Effect_19", 1);
 		vx = SWING_SPEED_X;
 		break;
 	case SWING_STATE_OPEN:
+		Sound::GetInstance()->Stop("SOUND_Effect_19");
+		Sound::GetInstance()->Play("SOUND_Effect_45", 0,1);
 		vx = 0;
 		break;
 	}

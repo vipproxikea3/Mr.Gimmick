@@ -1001,6 +1001,7 @@ void CGimmick::SetState(int state)
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
+		Sound::GetInstance()->Play("SOUND_Effect_24",0, 1);
 		jumping = true;
 		if (vy == 0 || this->onInclinedBrick || this->onGround) 
 			vy = GIMMICK_JUMP_SPEED_Y_MIN;
@@ -1015,9 +1016,10 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
+		Sound::GetInstance()->Play("SOUND_Effect_35", 0, 1);
 		if (untouchable == 0) {
 			this->SetState(GIMMICK_STATE_IDLE);
-			
+
 			stunning = true;
 			stunning_start = GetTickCount64();
 			StartUntouchable();
@@ -1032,6 +1034,7 @@ void CGimmick::SetState(int state)
 	}
 	break;
 	case GIMMICK_STATE_DIE:
+		Sound::GetInstance()->Play("SOUND_Effect_78", 0, 1);
 		CBackup::GetInstance()->UpdateRest(CBackup::GetInstance()->rest - 1);
 		CBackup::GetInstance()->UpdateLifeStack(4);
 		this->die_start = GetTickCount64();

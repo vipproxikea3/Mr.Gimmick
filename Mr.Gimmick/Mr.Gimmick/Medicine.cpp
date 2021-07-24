@@ -63,6 +63,12 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (CheckAABB(player) && this->state == MEDICINE_STATE_APPEAR) {
 		SetState(MEDICINE_STATE_DISAPPEAR);
+		if (type != 5 && type != 6)
+		{
+			Sound::GetInstance()->Play("SOUND_Effect_35", 0, 1);
+		}
+		else
+			Sound::GetInstance()->Play("SOUND_Effect_80", 0, 1);
 		switch (this->type)
 		{
 		case 1:
