@@ -338,7 +338,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CTurle*>(e->obj)) {
 				CTurle* turle = dynamic_cast<CTurle*>(e->obj);
 				if (e->ny != 0) {
-					this->y = y0 + min_ty * dy + e->ny * 0.1f;
+					//this->y = y0 + min_ty * dy + e->ny * 0.1f;
 					if (turle->state == TURLE_STATE_DIE_RIGHT) {
 						this->vy = 0;
 						if (state == GIMMICK_STATE_WALKING_RIGHT)
@@ -368,6 +368,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						{
 							x = x0 + 2.0f;
 						}
+					}
+					if (turle->state == TURLE_STATE_WALKING_RIGHT 
+						|| turle->state == TURLE_STATE_WALKING_LEFT) {
+						if (untouchable == 0) {
+							SetState(GIMMICK_STATE_STUN);
+						}
+						this->y = y0 + min_ty * dy;
 					}
 				}
 				if (e->nx < 0) {
