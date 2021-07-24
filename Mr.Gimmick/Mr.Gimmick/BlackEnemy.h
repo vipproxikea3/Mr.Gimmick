@@ -8,6 +8,9 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "Gimmick.h"
+#include "BlueFire.h"
+#include "WaterDie.h"
+#include "Sewer.h"
 
 #define BLACKENEMY_STATE_DIE	0
 #define BLACKENEMY_STATE_WALK	1
@@ -68,7 +71,7 @@ public:
 	bool onFastConveyor = false;
 	bool onSlowConveyor = false;
 
-	CBlackEnemy(int direction); //-1 left, 1 right
+	CBlackEnemy(int direction, int level = 0); //-1 left, 1 right
 	~CBlackEnemy() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
