@@ -3,9 +3,11 @@
 #include "algorithm"
 #include "WaterDie.h"
 #include "Star.h"
+#include "Backup.h"
 
 CBomboat::CBomboat() : CGameObject()
 {
+	this->score = 410;
 	SetState(BOOM_BOAT_STATE_ALIVE);
 }
 
@@ -159,6 +161,8 @@ void CBomboat::SetState(int state)
 		vy = BOOM_BOAT_BUM_GRAVITY;
 		break;
 	case BOOM_BOAT_STATE_EXPLODE:
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 		Sound::GetInstance()->Play("SOUND_Effect_14", 0, 1);
 		vy = 0;
 		break;

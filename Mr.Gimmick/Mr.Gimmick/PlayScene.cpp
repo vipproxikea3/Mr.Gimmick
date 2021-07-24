@@ -15,7 +15,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 {
 	key_handler = new CPlaySceneKeyHandler(this);
 	this->player = nullptr;
-	this->map = nullptr;
+	this->star = nullptr;
 }
 
 /*
@@ -112,10 +112,14 @@ void CPlayScene::_ParseSection_MAP(string line)
 	int TileSetID = atoi(tokens[4].c_str());
 	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	if (maptt == -1)
+	/*if (maptt == -1)
 		this->map = new Map * [spritemap];
 	maptt++;
-	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);*/
+
+	Map* map = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	maps.push_back(map);
+
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
@@ -305,7 +309,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
-		obj = new CBlackEnemy(atoi(tokens[4].c_str()));
+		if(tokens.size() > 5)
+			obj = new CBlackEnemy(atoi(tokens[4].c_str()), atoi(tokens[5].c_str()) );
+		else
+			obj = new CBlackEnemy(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_STAR:
 		if (star != NULL)
@@ -684,7 +691,10 @@ void CPlayScene::Update(DWORD dt)
 			Sound::GetInstance()->Play("SOUND_Sence_7", 1);
 		}
 	}
+	// CheckEndScene
+	CheckSwitchScene();
 }
+
 
 void CPlayScene::UpdateZone() {
 	float x, y;
@@ -731,6 +741,13 @@ void CPlayScene::SetCamPos() {
 	hud->SetPosition(cx, cy - game->GetScreenHeight());
 }
 
+void CPlayScene::CheckSwitchScene() {
+	if (end_scene == 1 && GetTickCount64() - end_scene_start >= ENDSCENE_TIME) {
+		end_scene = 0;
+		end_scene_start = NULL;
+		CGame::GetInstance()->SwitchScene(1000);
+	}}
+
 void CPlayScene::PushBackObj(CGameObject* obj) {
 	objects.push_back(obj);
 }
@@ -743,13 +760,12 @@ void CPlayScene::Render()
 		fps = 3;
 	if (countfps == fps)
 	{
-		if (this->maptt == this->spritemap - 1)
+		if (this->maptt == maps.size() - 1)
 			this->maptt = 0;
 		else
 			this->maptt++;
 	}
-	if (this->map)
-		this->map[maptt]->Render();
+	maps[maptt]->Render();
 	if (countfps >= fps)
 	{
 		countfps = 0;
@@ -789,9 +805,25 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
-	player = NULL;
+
+	player = nullptr;
+
+	star = nullptr;
+
+	/*if (hud)
+	{
+		delete hud;
+		hud = nullptr;
+	}*/
+
+	for (unsigned int i = 0; i < maps.size(); i++)
+		delete maps[i];
+	maps.clear();
+
 	for (unsigned int i = 0; i < zones.size(); i++)
 		delete zones[i];
+	zones.clear();
+
 	zones.clear();
 
 	if (quadtree) {
@@ -851,8 +883,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->x = 1725;
 		gimmick->y = 637;
 		break;
-	case DIK_M:
-		gimmick->SetState(GIMMICK_STATE_DIE);
+	case DIK_U:
+		CGame::GetInstance()->SwitchScene(1000);
 		break;
 	}
 }

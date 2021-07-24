@@ -1,0 +1,126 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	Map\Gimmick!(J)-Level1_bank.png	255	0	0
+10	textures\gimmick_right.png	0	0	255
+20	textures\gimmick_left.png	0	0	255
+30	textures\stage1.png	215	121	214
+40	textures\NES - Gimmick Mr Gimmick - Intro.png	200	205	250
+41	textures\INTRO_GATE.png	255	174	201
+42	textures\introbig.png	0	0	255
+43	textures\waterfall.png	60	188	252
+45	textures\waterfall-flip.png	60	188	252
+44 	textures\background-wf.png	0	255	255	
+
+#[MAP]
+# PosX	PosY	TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# GIMMICK
+# idle right					
+20101	2	2	18	21	10
+20102	22	2	38	21	10
+# idle left					
+20151	399	2	415	21	20
+20152	379	2	395	21	20
+# walk right					
+20201	2	24	18	43	10
+20202	21	24	37	43	10
+20203	39	24	55	43	10
+20204	58	24	74	43	10
+20205	79	24	95	43	10
+20206	99	24	115	43	10
+# walk left					
+20251	399	24	415	43	20
+20252	380	24	396	43	20
+20253	362	24	378	43	20
+20254	343	24	359	43	20
+20255	322	24	338	43	20
+20256	302	24	318	43	20
+# jump right					
+20301	2	46	18	70	10
+# jump left					
+20351	399	46	415	70	20
+# pipe right
+# pipe left
+# stun right
+# stun left
+
+#water
+43011	176	84	208	124	43
+43012	211	84	243	124	43
+43013	176	127	208	167	43
+43014	211	127	243	176	43
+
+#cloud big
+43100	169	5	201	21	43
+#cloud small
+43101	168	29	200	45	43
+
+#pink triangle
+43200	242	10	250	18	43
+43201	242	20	250	28	43
+
+#tiny Enemy
+45000	18	25	30	37	45
+45001	31	22	42	38	45
+45002	44	22	53	38	45
+
+45003	203	22	212	38	43
+45004	214	22	225	38	43
+45005	226	25	238	37	43
+
+
+
+
+# ======= WORLDMAP ========#
+44000	0	0	1000	1000	44
+43000	0	152	170	324	43
+						
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+#water
+43010	43011	100	43012	100	43013	100
+#	43014	100
+
+#cloud
+43100	43100	100
+43101	43101	100
+
+#pink triangle
+43200	43200	250	43201	250
+
+#tiny enemy
+45000	45000	200	45004	200	45005	200	45003	200	45001	200	45002	200
+45001	45002	200	45001	200	45003	200	45005	200	45004	200	45000	200
+
+
+
+# WORLDMAP
+44000	44000	100
+43000	43000	100
+
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+
+43100	43100
+43101	43101
+
+# GIMMICK				
+20101	20101	20151	20201	20251	20301	20351	20351
+#43010	43010
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor
+10	300	50	43101
+10	350	100	43100
+10	200	150	43101
+10	150	50	43100
+
+
+

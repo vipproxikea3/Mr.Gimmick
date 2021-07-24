@@ -67,6 +67,8 @@
     <ClCompile Include="SpecialBrick.cpp" />
     <ClCompile Include="StandBlackEnemy.cpp" />
     <ClCompile Include="Turle.cpp" />
+    <ClCompile Include="CloudEnemy.cpp" />
+    <ClCompile Include="OutroScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -135,5 +137,9 @@
     <ClInclude Include="SpecialBrick.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="Backup.h" />
+    <ClInclude Include="CloudEnemy.h" />
+    <ClInclude Include="StandBlackEnemy.h" />
+    <ClInclude Include="Turle.h" />
+    <ClInclude Include="OutroScene.h" />
   </ItemGroup>
 </Project>

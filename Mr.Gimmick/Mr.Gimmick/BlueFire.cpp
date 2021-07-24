@@ -15,6 +15,16 @@ void CBlueFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT))
 		star->SetState(STAR_STATE_EXPLOSIVE);
+
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+
+		if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) {
+			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
+			if (CheckAABB(enemy) && enemy->state != BLACKENEMY_STATE_DIE)
+				enemy->SetState(BLACKENEMY_STATE_DIE);
+		}
+	}
 }
 
 void CBlueFire::Render()

@@ -7,6 +7,8 @@
 
 
 void CWaterDie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+
+
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (this->CheckAABB(gimmick)) {
 		if (gimmick->GetState() != GIMMICK_STATE_DIE) {
@@ -16,6 +18,16 @@ void CWaterDie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 	if (this->CheckAABB(star)&&(star->GetState() == STAR_STATE_WALKING_LEFT|| star->GetState() == STAR_STATE_WALKING_RIGHT))
 		star->SetState(STAR_STATE_EXPLOSIVE);
+
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+
+		if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) {
+			CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(coObjects->at(i));
+			if (CheckAABB(enemy) && enemy->state!= BLACKENEMY_STATE_DIE)
+				enemy->SetState(BLACKENEMY_STATE_DIE);
+		}
+	}
 }
 
 void CWaterDie::Render()

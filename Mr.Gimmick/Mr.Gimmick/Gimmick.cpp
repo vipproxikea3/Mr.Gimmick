@@ -1023,6 +1023,7 @@ void CGimmick::SetState(int state)
 			stunning = true;
 			stunning_start = GetTickCount64();
 			StartUntouchable();
+			jumping = false;
 
 			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 			star->Shot();

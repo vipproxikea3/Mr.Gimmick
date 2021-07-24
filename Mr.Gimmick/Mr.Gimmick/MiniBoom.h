@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define	MINIBOOM_GRAVITY				0.001f
+#define	MINIBOOM_GRAVITY				0.0005f
 #define MINIBOOM_WALKING_SPEED			0.1f
 
 #define	MINIBOOM_BBOX_WIDTH				16
@@ -15,7 +15,7 @@
 #define MINIBOOM_ANI_WALKING			0
 #define MINIBOOM_ANI_EXPLOSIVE			1
 
-#define MINIBOOM_ALIVE_TIME				5000
+#define MINIBOOM_ALIVE_TIME				1500
 #define MINIBOOM_EXPLOSIVE_TIME			250
 
 

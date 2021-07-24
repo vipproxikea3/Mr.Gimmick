@@ -1,8 +1,10 @@
 #include "SwordBoss.h"
 #include "Utils.h"
+#include "Backup.h"
 
 CSwordBoss::CSwordBoss()
 {
+	this->score = 8000;
 	nx = -1;
 	SetState(SWORDBOSS_STATE_WALK);
 }
@@ -174,6 +176,12 @@ void CSwordBoss::SetState(int state)
 		vy = SWORDBOSS_DEFLECT_SPEED_Y;
 		break;
 	case SWORDBOSS_STATE_DIE:
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
+		backup->end_scene_1 = 1;
+		backup->end_scene_2 = 1;
+		CScene* scene = CGame::GetInstance()->GetCurrentScene();
+		((CPlayScene*)scene)->EndScene();
 		Sound::GetInstance()->Play("SOUND_Effect_84", 0, 1);
 		ax = 0;
 		if (nx < 0) {

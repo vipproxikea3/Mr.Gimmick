@@ -1,8 +1,10 @@
 #include "GreenBoss.h"
 #include "Utils.h"
+#include "Backup.h"
 
 CGreenBoss::CGreenBoss()
 {
+	this->score = 1800;
 	SetState(GREENBOSS_STATE_WALK);
 	ax = GREENBOSS_ACCELERATION; // di sang phai
 
@@ -155,6 +157,8 @@ void CGreenBoss::SetState(int state)
 		ax = -GREENBOSS_ACCELERATION; // moi vo di sang Phai
 		break;
 	case GREENBOSS_STATE_DIE:
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 		ax = 0;
 		if (CheckSideOfStar() == -1) {
 			vx = GREENBOSS_DEFLECT_SPEED_X;

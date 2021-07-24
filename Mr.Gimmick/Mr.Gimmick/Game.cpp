@@ -10,6 +10,8 @@
 #include "PlayScene.h"
 #include "Sound.h"
 #include "IntroScene.h"
+#include "WorldMap.h"
+#include "OutroScene.h"
 
 
 CGame* CGame::__instance = NULL;
@@ -368,6 +370,16 @@ void CGame::_ParseSection_SCENES(string line)
 	if (id == INTRO_SCENE_ID)
 	{
 		LPSCENE scene = new CIntroScene(id, path);
+		scenes[id] = scene;
+	}
+	else if (id == OUTTRO_SCENE_ID)
+	{
+		LPSCENE scene = new COutroScene(id, path);
+		scenes[id] = scene;
+	}
+	else if (id == 1000)
+	{
+		LPSCENE scene = new CWorldMap(id, path);
 		scenes[id] = scene;
 	}
 	else
