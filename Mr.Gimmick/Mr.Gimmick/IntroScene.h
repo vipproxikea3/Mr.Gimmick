@@ -11,7 +11,7 @@ class CIntroScene: public CScene
 protected:				// A play scene has to have player, right?
 	Map* map = nullptr;
 	
-	DWORD mainintro_start = 0;
+	ULONGLONG mainintro_start = 0 ;
 
 	float gimmick_x; //Position so voi Intro
 	float gimmick_y;
@@ -42,9 +42,11 @@ protected:				// A play scene has to have player, right?
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
-
+	void _ParseSection_SOUNDS(string line);
 
 public:
+	int avoiInitialCount = 0; // bien de fix khi khoi tao scene chay update 2 lan
+	int phase = 1;
 	CIntroScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
@@ -59,6 +61,7 @@ public:
 	void RenderLightingDissapear();
 	void RenderGimmick();
 	void RenderGate();
+	void RenderMainScreen();
 	void getIntroPos(float &intro_x, float &intro_y);
 	void Timing();
 	void EndScene();

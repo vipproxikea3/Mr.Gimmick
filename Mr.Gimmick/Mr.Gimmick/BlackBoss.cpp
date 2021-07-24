@@ -1,8 +1,10 @@
 #include "BlackBoss.h"
 #include "Utils.h"
+#include "Backup.h"
 
 CBlackBoss::CBlackBoss()
 {
+	this->score = 5000;
 	SetState(BLACKBOSS_STATE_IDLE);
 }
 
@@ -146,6 +148,8 @@ void CBlackBoss::SetState(int state)
 		ax = 0;
 		break;
 	case BLACKBOSS_STATE_DIE:
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 		ax = 0;
 		vy = BLACKBOSS_DEFLECT_SPEED;
 		vx = -BLACKBOSS_DEFLECT_SPEED;

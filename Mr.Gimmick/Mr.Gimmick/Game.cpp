@@ -427,7 +427,7 @@ void CGame::SwitchScene(int scene_id)
 	CAnimations::GetInstance()->Clear();
 	//sound
 	Sound::GetInstance()->StopAll();
-	Sound::GetInstance()->UnLoadAllSound();
+	//Sound::GetInstance()->UnLoadAllSound(); // khong can thiet
 	//update:
 
 	current_scene = scene_id;
