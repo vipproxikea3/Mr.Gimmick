@@ -56,9 +56,14 @@
 #include "FinalBossDieEffect.h"
 #include "CloudEnemy.h"
 
+#define ENDSCENE_TIME	3000
+
 class CPlayScene : public CScene
 {
 protected:
+	int end_scene = 0;
+	DWORD end_scene_start = NULL;
+
 	CGimmick* player = nullptr;					// A play scene has to have player, right?
 	CStar* star = nullptr;
 
@@ -122,6 +127,11 @@ public:
 	CStar* GetStar() { return star; };
 	CHud* GetHud() { return hud; };
 	void AttackBird() { attackBird = 3; }
+	void CheckSwitchScene();
+	void EndScene() {
+		end_scene = 1;
+		end_scene_start = GetTickCount64();
+	}
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler
