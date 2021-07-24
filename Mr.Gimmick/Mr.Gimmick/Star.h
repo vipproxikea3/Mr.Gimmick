@@ -54,6 +54,8 @@
 
 #define STAR_EXPLOSIVE_TIME		250
 
+#define STAR_DELAY_FRAME		2
+
 
 class CStar : public CGameObject
 {
@@ -73,6 +75,15 @@ class CStar : public CGameObject
 	float star_small_5_y = STAR_SMALL_5_Y0;
 
 	DWORD explosive_start;
+
+	int current_frame = 0;
+	float star_delay_1_x = 0;
+	float star_delay_1_y = 0;
+	float star_delay_2_x = 0;
+	float star_delay_2_y = 0;
+	float star_delay_3_x = 0;
+	float star_delay_3_y = 0;
+
 public:
 	CStar();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);

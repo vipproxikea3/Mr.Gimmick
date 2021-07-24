@@ -74,6 +74,15 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		case 1:
 			backup->UpdateLifeStack(backup->lifeStack + 1);
 			break;
+		case 2:
+			backup->UpdateItem(BACKUP_ITEM_TYPE_MEDICINE);
+			break;
+		case 3:
+			backup->UpdateItem(BACKUP_ITEM_TYPE_CIRCLE);
+			break;
+		case 4:
+			backup->UpdateItem(BACKUP_ITEM_TYPE_BOOM);
+			break;
 		case 5:
 			backup->UpdateScore(backup->score + 50000);
 			backup->UpdateRest(backup->rest + 2);
