@@ -188,10 +188,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->onGround = true;
 				if (!onEnemy && !stunning) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
-			if (isUnder(enemy)) {
+			/*if (isUnder(enemy)) {
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
-			}
+			}*/
 		}
 		if (dynamic_cast<CBrickPink*>(coObjects->at(i))) {
 			CBrickPink* brick = dynamic_cast<CBrickPink*>(coObjects->at(i));
@@ -260,6 +260,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (onTopOf(enemy, 7.0f) && this->vy < 0) {
 				this->onGround = true;
 				standOn(enemy);
+			}
+		}
+
+		if (dynamic_cast<CBlackBird*>(coObjects->at(i))) {
+			CBlackBird* enemy = dynamic_cast<CBlackBird*>(coObjects->at(i));
+			if (onTopOf(enemy, 2.0f) && this->vy < 0) {
+				this->onGround = true;
 			}
 		}
 	}

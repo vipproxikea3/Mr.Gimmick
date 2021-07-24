@@ -17,7 +17,7 @@ protected:
 
 	bool end = false;
 
-	bool isRenderingGimmick;
+	bool isRenderingGimmick = false;
 	bool isRenderingBall = false;
 
 	int ball_ani = 1;
