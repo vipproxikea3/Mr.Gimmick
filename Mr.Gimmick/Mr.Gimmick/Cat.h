@@ -47,6 +47,7 @@ public:
 	DWORD water_die = 0;
 
 	CCat(int type,int nx,int state) : CGameObject() {
+		this->score = 10;
 		this->type = type;
 		this->nx = nx;
 		SetState(state);

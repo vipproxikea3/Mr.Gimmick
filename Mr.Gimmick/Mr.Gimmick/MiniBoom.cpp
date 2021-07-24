@@ -96,7 +96,7 @@ void CMiniBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					x = x0 + min_tx * dx + nx * 0.1f;
 
 					if (e->ny != 0) {
-						vy = -0.75 * vy;
+						vy = -0.5 * vy;
 					}
 
 					if (e->nx > 0 && this->state == MINIBOOM_STATE_WALKING_LEFT)

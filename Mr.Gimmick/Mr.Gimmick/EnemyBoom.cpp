@@ -6,9 +6,11 @@
 #include "Star.h"
 #include "Gimmick.h"
 #include "MiniBoom.h"
+#include "Backup.h"
 
 CEnemyBoom::CEnemyBoom(float left, float right) : CGameObject()
 {
+	this->score = 300;
 	this->SetState(ENEMYBOOM_STATE_WALKING_RIGHT);
 	this->left = left;
 	this->right = right;
@@ -167,6 +169,7 @@ void CEnemyBoom::Render()
 void CEnemyBoom::SetState(int state)
 {
 	CGameObject::SetState(state);
+	CBackup* backup = CBackup::GetInstance();
 
 	switch (state)
 	{
@@ -177,10 +180,12 @@ void CEnemyBoom::SetState(int state)
 		this->vx = -ENEMYBOOM_WALKING_SPEED;
 		break;
 	case ENEMYBOOM_STATE_DIE_RIGHT:
+		backup->UpdateScore(backup->score + this->score);
 		this->y -= 16;
 		this->vy = ENEMYBOOM_DIE_SPEED;
 		break;
 	case ENEMYBOOM_STATE_DIE_LEFT:
+		backup->UpdateScore(backup->score + this->score);
 		this->y -= 16;
 		this->vy = ENEMYBOOM_DIE_SPEED;
 		break;

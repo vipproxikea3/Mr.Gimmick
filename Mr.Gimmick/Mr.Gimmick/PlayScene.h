@@ -65,14 +65,18 @@ protected:
 	CHud* hud = new CHud();
 	//Map* map = nullptr;
 
-	Map** map = nullptr;
+	
 	//unordered_map<int, Map*> map;
-	int maptt = -1; // stt cua sprite map
+
+	//Map** map = nullptr;
+	int maptt = 0; // stt cua sprite map
 	int spritemap = 4;// so luong sprite map
 	int countfps = 0;//speed waterfall
 	int fps = 1;
 
 	int attackBird = -1;
+
+	vector<Map*> maps;
 
 	vector<CZone*> zones;
 	float ll = -9999.0f;
