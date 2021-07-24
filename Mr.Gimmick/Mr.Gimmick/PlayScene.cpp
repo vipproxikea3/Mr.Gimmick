@@ -447,6 +447,9 @@ void CPlayScene::Load()
 
 	// Create quadtree
 	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
+
+	// create hud
+	hud = new CHud();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -815,6 +818,8 @@ void CPlayScene::Unload()
 
 	star = nullptr;
 
+	hud = nullptr;
+
 	/*if (hud)
 	{
 		delete hud;
@@ -861,6 +866,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 				star->Ready();
 			}
 		}
+		break;
+	case DIK_DOWN:
+		CBackup::GetInstance()->ChangeItem();
 		break;
 	case DIK_1:
 		gimmick->x = 100;
