@@ -72,6 +72,10 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			backup->UpdateScore(backup->score + 50000);
 			backup->UpdateRest(backup->rest + 2);
 			break;
+		case 6:
+			backup->UpdateScore(backup->score + 50000);
+			backup->UpdateRest(backup->rest + 2);
+			break;
 		default:
 			break;
 		}

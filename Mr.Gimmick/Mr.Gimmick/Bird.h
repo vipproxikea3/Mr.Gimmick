@@ -52,6 +52,7 @@ public:
 	DWORD die_water_start = 0;
 
 	CBird(int type) : CGameObject() {
+		this->score = 30;
 		this->type = type;
 		SetState(BIRD_STATE_IDLE);
 	}

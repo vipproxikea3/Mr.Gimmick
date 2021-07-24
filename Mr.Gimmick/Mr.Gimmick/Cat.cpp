@@ -7,6 +7,7 @@
 #include "Medicine.h"
 #include "WaterDie.h"
 #include "SpecialBrick.h"
+#include "Backup.h"
 
 void CCat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if ((this->state == CAT_STATE_RUN || this->state == CAT_STATE_CHASE) && !CGame::GetInstance()->InCamera(this) && CGame::GetInstance()->InLargeCamera(this) && this->visible == true) {
@@ -30,6 +31,9 @@ void CCat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && state != CAT_STATE_WATER_DIE && state != CAT_STATE_HIDE)
 	{
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
+
 		sleep_start = 0;
 		run_start = 0;
 		if (gimmick->x < x)

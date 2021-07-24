@@ -5,6 +5,7 @@
 #include "algorithm"
 #include "Medicine.h"
 #include "WaterDie.h"
+#include "Backup.h"
 
 /*int CSewer::Collision(LPGAMEOBJECT object, float dy) {
 	if (!this->CheckAABB(object))
@@ -245,6 +246,7 @@ void CBird::SetState(int state) {
 	CGameObject::SetState(state);
 	if (state == BIRD_STATE_HIDE)
 		return;
+	CBackup* backup = CBackup::GetInstance();
 	switch (state)
 	{
 	case BIRD_STATE_IDLE:
@@ -275,6 +277,7 @@ void CBird::SetState(int state) {
 		vy = BIRD_VY_FLY;
 		break;
 	case BIRD_STATE_DIE:
+		backup->UpdateScore(backup->score + this->score);
 		StartDie();
 		vy = BIRD_VY_JUMP;
 		break;

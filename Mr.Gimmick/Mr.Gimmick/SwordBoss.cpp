@@ -1,8 +1,10 @@
 #include "SwordBoss.h"
 #include "Utils.h"
+#include "Backup.h"
 
 CSwordBoss::CSwordBoss()
 {
+	this->score = 8000;
 	nx = -1;
 	SetState(SWORDBOSS_STATE_WALK);
 }
@@ -174,6 +176,8 @@ void CSwordBoss::SetState(int state)
 		vy = SWORDBOSS_DEFLECT_SPEED_Y;
 		break;
 	case SWORDBOSS_STATE_DIE:
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 		ax = 0;
 		if (nx < 0) {
 			vx = SWORDBOSS_DEFLECT_SPEED_X;

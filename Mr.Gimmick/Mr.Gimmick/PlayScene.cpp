@@ -720,9 +720,21 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
-	player = NULL;
+
+	player = nullptr;
+
+	star = nullptr;
+
+	/*if (hud)
+	{
+		delete hud;
+		hud = nullptr;
+	}*/
+
 	for (unsigned int i = 0; i < zones.size(); i++)
 		delete zones[i];
+	zones.clear();
+
 	zones.clear();
 
 	if (quadtree) {
@@ -782,8 +794,14 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->x = 1725;
 		gimmick->y = 637;
 		break;
-	case DIK_M:
-		gimmick->SetState(GIMMICK_STATE_DIE);
+	case DIK_I:
+		CGame::GetInstance()->SwitchScene(1);
+		break;
+	case DIK_O:
+		CGame::GetInstance()->SwitchScene(2);
+		break;
+	case DIK_P:
+		CGame::GetInstance()->SwitchScene(7);
 		break;
 	}
 }
