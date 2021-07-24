@@ -178,6 +178,10 @@ void CSwordBoss::SetState(int state)
 	case SWORDBOSS_STATE_DIE:
 		CBackup* backup = CBackup::GetInstance();
 		backup->UpdateScore(backup->score + this->score);
+		backup->end_scene_1 = 1;
+		backup->end_scene_2 = 1;
+		CScene* scene = CGame::GetInstance()->GetCurrentScene();
+		((CPlayScene*)scene)->EndScene();
 		ax = 0;
 		if (nx < 0) {
 			vx = SWORDBOSS_DEFLECT_SPEED_X;

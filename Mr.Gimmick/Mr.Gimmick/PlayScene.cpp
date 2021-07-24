@@ -619,6 +619,9 @@ void CPlayScene::Update(DWORD dt)
 	SetCamPos();
 
 	hud->Update(dt);
+
+	// CheckEndScene
+	CheckSwitchScene();
 }
 
 void CPlayScene::UpdateZone() {
@@ -665,6 +668,13 @@ void CPlayScene::SetCamPos() {
 
 	hud->SetPosition(cx, cy - game->GetScreenHeight());
 }
+
+void CPlayScene::CheckSwitchScene() {
+	if (end_scene == 1 && GetTickCount64() - end_scene_start >= ENDSCENE_TIME) {
+		end_scene = 0;
+		end_scene_start = NULL;
+		CGame::GetInstance()->SwitchScene(1000);
+	}}
 
 void CPlayScene::PushBackObj(CGameObject* obj) {
 	objects.push_back(obj);

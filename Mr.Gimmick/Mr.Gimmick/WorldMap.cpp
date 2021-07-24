@@ -7,6 +7,7 @@
 #include "Sprites.h"
 #include "WorldMap.h"
 #include "Sound.h"
+#include "Backup.h"
 
 using namespace std;
 
@@ -289,19 +290,24 @@ void CWorldMap::SetCamPos() {
 
 void CWorldMap::RenderMainScreen()
 {
+	CBackup* backup = CBackup::GetInstance();
+
 	float camx, camy;
 	getIntroPos(camx, camy);
 	CAnimations::GetInstance()->Get(44000)->Render(0, 500);	// background
 	CAnimations::GetInstance()->Get(WORLD_MAP)->Render(camx, camy);	//world-map
 	CAnimations::GetInstance()->Get(43010)->Render(165, 110);	// waterfall
 
-	CAnimations::GetInstance()->Get(45000)->Render(165, 55); //tiny enemy 1
-	CAnimations::GetInstance()->Get(45001)->Render(130, 75); //tiny enemy 2
-
-	CAnimations::GetInstance()->Get(43200)->Render(130, 50); //triangle 1
-	CAnimations::GetInstance()->Get(43200)->Render(155, 70); //triangle 2
-	CAnimations::GetInstance()->Get(43200)->Render(102, 167); //triangle 7
-	
+	if (backup->end_scene_1 == 0 && backup->end_scene_2 == 0) {
+		CAnimations::GetInstance()->Get(43200)->Render(130, 50); //triangle 1
+	} else if (backup->end_scene_1 == 1 && backup->end_scene_2 == 0) {
+		CAnimations::GetInstance()->Get(45000)->Render(165, 55); //tiny enemy 1
+		CAnimations::GetInstance()->Get(43200)->Render(155, 70); //triangle 2
+	} if (backup->end_scene_1 == 1 && backup->end_scene_2 == 1) {
+		CAnimations::GetInstance()->Get(45000)->Render(165, 55); //tiny enemy 1
+		CAnimations::GetInstance()->Get(45001)->Render(130, 75); //tiny enemy 2
+		CAnimations::GetInstance()->Get(43200)->Render(102, 167); //triangle 7
+	}	
 }
 
 void CWorldMap::getIntroPos(float& intro_x, float& intro_y)
