@@ -96,6 +96,8 @@
       </SubSystem>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <AdditionalDependencies>d3dx9.lib;d3d9.lib;dxguid.lib;dxerr.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>
+      </StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -208,6 +210,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WaterDie.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="WorldMap.h" />
     <ClInclude Include="Worm.h" />
     <ClInclude Include="Zone.h" />
   </ItemGroup>
@@ -277,6 +280,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WaterDie.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="WorldMap.cpp" />
     <ClCompile Include="Worm.cpp" />
     <ClCompile Include="Zone.cpp" />
   </ItemGroup>
