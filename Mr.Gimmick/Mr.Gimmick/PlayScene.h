@@ -62,6 +62,8 @@ class CPlayScene : public CScene
 {
 protected:
 	int end_scene = 0;
+	int end_game = 0;
+	DWORD end_game_start = NULL;
 	DWORD end_scene_start = NULL;
 
 	CGimmick* player = nullptr;					// A play scene has to have player, right?
@@ -131,6 +133,10 @@ public:
 	void EndScene() {
 		end_scene = 1;
 		end_scene_start = GetTickCount64();
+	}
+	void EndGame() {
+		end_game = 1;
+		end_game_start = GetTickCount64();
 	}
 };
 

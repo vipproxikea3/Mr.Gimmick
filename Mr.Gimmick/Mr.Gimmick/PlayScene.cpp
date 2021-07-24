@@ -746,7 +746,12 @@ void CPlayScene::CheckSwitchScene() {
 		end_scene = 0;
 		end_scene_start = NULL;
 		CGame::GetInstance()->SwitchScene(1000);
-	}}
+	} else if (end_game == 1 && GetTickCount64() - end_game_start >= ENDSCENE_TIME) {
+		end_game = 0;
+		end_game_start = NULL;
+		CGame::GetInstance()->SwitchScene(888);
+	}
+}
 
 void CPlayScene::PushBackObj(CGameObject* obj) {
 	objects.push_back(obj);
@@ -885,6 +890,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_U:
 		CGame::GetInstance()->SwitchScene(1000);
+		break;
+	case DIK_Y:
+		CGame::GetInstance()->SwitchScene(888);
 		break;
 	}
 }
