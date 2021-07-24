@@ -15,7 +15,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 {
 	key_handler = new CPlaySceneKeyHandler(this);
 	this->player = nullptr;
-	this->map = nullptr;
+	this->star = nullptr;
 }
 
 /*
@@ -112,10 +112,14 @@ void CPlayScene::_ParseSection_MAP(string line)
 	int TileSetID = atoi(tokens[4].c_str());
 	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	if (maptt == -1)
+	/*if (maptt == -1)
 		this->map = new Map * [spritemap];
 	maptt++;
-	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);*/
+
+	Map* map = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	maps.push_back(map);
+
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
@@ -674,13 +678,12 @@ void CPlayScene::Render()
 		fps = 3;
 	if (countfps == fps)
 	{
-		if (this->maptt == this->spritemap - 1)
+		if (this->maptt == maps.size() - 1)
 			this->maptt = 0;
 		else
 			this->maptt++;
 	}
-	if (this->map)
-		this->map[maptt]->Render();
+	maps[maptt]->Render();
 	if (countfps >= fps)
 	{
 		countfps = 0;
@@ -730,6 +733,10 @@ void CPlayScene::Unload()
 		delete hud;
 		hud = nullptr;
 	}*/
+
+	for (unsigned int i = 0; i < maps.size(); i++)
+		delete maps[i];
+	maps.clear();
 
 	for (unsigned int i = 0; i < zones.size(); i++)
 		delete zones[i];
@@ -794,14 +801,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->x = 1725;
 		gimmick->y = 637;
 		break;
-	case DIK_I:
-		CGame::GetInstance()->SwitchScene(1);
-		break;
-	case DIK_O:
-		CGame::GetInstance()->SwitchScene(2);
-		break;
-	case DIK_P:
-		CGame::GetInstance()->SwitchScene(7);
+	case DIK_U:
+		CGame::GetInstance()->SwitchScene(1000);
 		break;
 	}
 }
