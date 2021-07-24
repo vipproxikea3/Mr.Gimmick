@@ -17,8 +17,6 @@ COutroScene::COutroScene(int id, LPCWSTR filePath) :
 {
 	key_handler = new COutroSceneKeyHandler(this);
 
-	isRenderingGimmick = true;
-	
 
 	gimmick_x = OUTRO_GIMMICK_START_X;
 	gimmick_y = OUTRO_GIMMICK_START_Y;
@@ -272,6 +270,7 @@ void COutroScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 	isRenderingBall = false;
+	isRenderingGimmick = false;
 	SetCamPos();
 	Timing();// Script for Main Intro
 }
@@ -333,38 +332,27 @@ void COutroScene::getIntroPos(float& intro_x, float& intro_y)
 
 void COutroScene::Timing()
 {
-	if (avoiInitialCount >= 2) // fix loi moi vo update 2 lan bang bien avoid initialcount
+	//if (avoiInitialCount >= 2) // fix loi moi vo update 2 lan bang bien avoid initialcount
+	//{
+	//	
+	//}
+
+	//  ================= MAIN OUTRO:
+	//Di bo
+	if (GetTickCount64() - outtro_start < OUTRO_FRAME_1_TIME && GetTickCount64() - outtro_start > 0)
 	{
-		//  ================= MAIN OUTRO:
-		//Di bo
-		if (GetTickCount64() - outtro_start < OUTRO_FRAME_1_TIME ) 
-		{
-			gimmick_x += 1;
-
-		}
-		//An gimmick lan dau
-		if (GetTickCount64() - outtro_start >= OUTRO_FRAME_1_TIME && GetTickCount64() - outtro_start <= OUTRO_FRAME_1_TIME ) // so default de khi khoi chay ko vao day
-		{
-			if (isRenderingGimmick)
-				isRenderingGimmick = false;
-			gimmick_x = OUTRO_GIMMICK_START_X;
-
-		}
-		// Xuat hien gimmick lan 2
-		if (GetTickCount64() - outtro_start >= OUTRO_FRAME_3_START) // so default de khi khoi chay ko vao day
-		{
-			if (!isRenderingGimmick)
-				isRenderingGimmick = true;
-			gimmick_x += 1;
-		}
-		// An gimmick lan 2
-		if (GetTickCount64() - outtro_start >= OUTRO_FRAME_3_START + OUTRO_FRAME_1_TIME ) // so default de khi khoi chay ko vao day
-		{
-			if (isRenderingGimmick)
-				isRenderingGimmick = false;
-
-		}
+		if (!isRenderingGimmick)
+			isRenderingGimmick = true;
+		gimmick_x += 1;
 	}
+	else if (GetTickCount64() - outtro_start >= OUTRO_FRAME_3_START && GetTickCount64() - outtro_start <= OUTRO_FRAME_3_START + OUTRO_FRAME_1_TIME) // so default de khi khoi chay ko vao day
+	{
+		if (!isRenderingGimmick)
+			isRenderingGimmick = true;
+		gimmick_x += 1;
+	}
+	else
+		gimmick_x = OUTRO_GIMMICK_START_X;
 
 	// ================ BALL
 	// 1st Appear:
