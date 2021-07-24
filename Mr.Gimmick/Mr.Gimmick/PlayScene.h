@@ -56,7 +56,7 @@
 #include "FinalBossDieEffect.h"
 #include "CloudEnemy.h"
 
-#define ENDSCENE_TIME	3000
+#define ENDSCENE_TIME	6000
 
 class CPlayScene : public CScene
 {
