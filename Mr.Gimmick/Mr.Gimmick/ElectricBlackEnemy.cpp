@@ -8,6 +8,9 @@ CElectricBlackEnemy::CElectricBlackEnemy() {
 
 void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->state == ELECTRIC_BLACKENEMY_STATE_DISAPPEAR)
+		return;
+
 	CGameObject::Update(dt, coObjects);
 
 	if (appear && state != ELECTRIC_BLACKENEMY_STATE_DIE)
@@ -115,12 +118,12 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			/*if (dynamic_cast<CSewer*>(e->obj))
+			if (dynamic_cast<CSewer*>(e->obj))
 			{
-				SetState(ELECTRIC_BLACKENEMY_STATE_DIE);
-				x = x0 + min_tx * dx + e->nx * 0.2f;
-				y = y0 - 1.5f;
-			}*/
+				SetState(ELECTRIC_BLACKENEMY_STATE_DISAPPEAR);
+				/*x = x0 + min_tx * dx + e->nx * 0.2f;
+				y = y0 - 1.5f;*/
+			}
 		}
 	}
 	// clean up newCoObjects
@@ -132,6 +135,9 @@ void CElectricBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CElectricBlackEnemy::Render()
 {
 	int ani = 2;
+
+	if (this->state == ELECTRIC_BLACKENEMY_STATE_DISAPPEAR)
+		return;
 	if (appear) {
 		if (state == ELECTRIC_BLACKENEMY_STATE_STOP) {
 			if (ax > 0) {
@@ -191,9 +197,6 @@ void CElectricBlackEnemy::SetState(int state)
 		else {
 			vx = -ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X;
 		}
-		//vx = ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X;
-		//vy -= ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y;
-		//y -= 1.0f;
 		break;
 	case ELECTRIC_BLACKENEMY_STATE_WALK:
 		if (ax > 0) nx = 1;
