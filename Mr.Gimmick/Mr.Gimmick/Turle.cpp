@@ -77,7 +77,6 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->canBeAttacked = false;
 	}
 	
-
 	
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
 
@@ -91,8 +90,16 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if(this->state == TURLE_STATE_DIE_COMPLETE_RIGHT || this->state == TURLE_STATE_DIE_COMPLETE_LEFT)
-		vy -= TURLE_GRAVITY * dt;
+	vy -= TURLE_GRAVITY * dt;
+	
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
+			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
+			if (onTopOf(brick, 3.0f) && state != TURLE_STATE_DIE_COMPLETE_LEFT && state!= TURLE_STATE_DIE_COMPLETE_RIGHT)
+				vy = 0;
+		}
+	}
 
 	float x0 = x;
 	float y0 = y;
@@ -233,4 +240,15 @@ void CTurle::SetState(int state)
 		this->vy = 0.03;
 		break;
 	}
+}
+
+bool CTurle::onTopOf(CGameObject* object, float equal)
+{
+	float ol, ot, or , ob;
+	object->GetBoundingBox(ol, ot, or , ob);
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	if (r >= ol && l <= or && abs(b - ot) < equal)
+		return true;
+	return false;
 }

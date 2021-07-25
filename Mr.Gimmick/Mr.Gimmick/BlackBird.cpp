@@ -127,7 +127,7 @@ void CBlackBird::Render()
 		}
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 
 }

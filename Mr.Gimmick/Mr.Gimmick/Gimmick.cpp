@@ -980,7 +980,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {

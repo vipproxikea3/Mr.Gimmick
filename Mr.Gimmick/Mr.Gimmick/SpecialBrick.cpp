@@ -5,7 +5,7 @@ void CSpecialBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CSpecialBrick::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CSpecialBrick::SetState(int state) {}

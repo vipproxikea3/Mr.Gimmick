@@ -191,7 +191,7 @@ void CElectricBlackEnemy::Render()
 		}
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CElectricBlackEnemy::SetState(int state)

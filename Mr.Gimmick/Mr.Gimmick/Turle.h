@@ -46,5 +46,6 @@ public:
 	void SetState(int state);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void StartCountDown() { count_down = GetTickCount64(); }
+	bool onTopOf(CGameObject* object, float equal = 1.0f);
 };
 

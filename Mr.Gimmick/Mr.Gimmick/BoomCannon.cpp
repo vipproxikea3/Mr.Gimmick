@@ -124,7 +124,7 @@ void CBoomCannon::Render()
 	int alpha = 255;
 	animation_set->at(0)->Render(x, y, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CBoomCannon::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
