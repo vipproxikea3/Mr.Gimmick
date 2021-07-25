@@ -211,15 +211,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i))) {
 			CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i));
 			if (onTopOf(enemy) && this->vy < 0) {
-				if (enemy->state == ELECTRIC_BLACKENEMY_STATE_STOP) {
-					this->onGround = true;
-					if (!onEnemy) standOn(enemy);
-				}
 				if (enemy->state == ELECTRIC_BLACKENEMY_STATE_WALK) {
 					this->onGround = true;
-					if (!onEnemy) standOn(enemy);
+					if (!onEnemy && !stunning) standOn(enemy);
 				}
-
+				if (enemy->state == ELECTRIC_BLACKENEMY_STATE_STOP) {
+					this->onGround = true;
+					if (!onEnemy && !stunning) standOn(enemy);
+				}
 			}
 		}
 		if (dynamic_cast<CCannon*>(coObjects->at(i))) {
@@ -347,7 +346,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CTurle*>(e->obj)) {
 				CTurle* turle = dynamic_cast<CTurle*>(e->obj);
 				if (e->ny != 0) {
-					this->y = y0 + min_ty * dy + e->ny * 0.1f;
+					//this->y = y0 + min_ty * dy + e->ny * 0.1f;
 					if (turle->state == TURLE_STATE_DIE_RIGHT) {
 						this->vy = 0;
 						if (state == GIMMICK_STATE_WALKING_RIGHT)
@@ -377,6 +376,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						{
 							x = x0 + 2.0f;
 						}
+					}
+					if (turle->state == TURLE_STATE_WALKING_RIGHT 
+						|| turle->state == TURLE_STATE_WALKING_LEFT) {
+						if (untouchable == 0) {
+							SetState(GIMMICK_STATE_STUN);
+						}
+						this->y = y0 + min_ty * dy;
 					}
 				}
 				if (e->nx < 0) {
@@ -627,24 +633,25 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(e->obj);
 
-				if (e->ny > 0) {
-					if (enemy->state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
-						if (untouchable == 0) {
-							this->SetState(GIMMICK_STATE_STUN);
-							StartUntouchable();
-						}
-					}
-					if (enemy->state == ELECTRIC_BLACKENEMY_STATE_WALK || enemy->state == ELECTRIC_BLACKENEMY_STATE_FALL) {
-						vy = 0;
-						this->y = y0 + min_ty * dy + 10.0f;
-						enemy->SetState(ELECTRIC_BLACKENEMY_STATE_STOP);
-					}
-					if (enemy->state == ELECTRIC_BLACKENEMY_STATE_STOP) {
-						vy = 0;
-						this->y = y0 + min_ty * dy + 10.0f;
+				if (e->ny > 0 && enemy->state == ELECTRIC_BLACKENEMY_STATE_SHOCK) {
+					if (untouchable == 0) {
+						this->SetState(GIMMICK_STATE_STUN);
+						StartUntouchable();
 					}
 				}
-				else
+				if (e->ny > 0 && enemy->state == ELECTRIC_BLACKENEMY_STATE_WALK) {
+					this->vy = 0;
+					this->y = y0 + min_ty * dy + ny * 0.3f;
+					standOn(enemy);
+					enemy->SetState(ELECTRIC_BLACKENEMY_STATE_STOP);
+				}
+				if (e->ny > 0 && enemy->state == ELECTRIC_BLACKENEMY_STATE_STOP) {
+					enemy->vx = 0;
+					this->vy = 0;
+					standOn(enemy);
+					this->y = y0 + min_ty * dy + ny * 0.3f;
+				}
+				else if (!untouchable && enemy->state != ELECTRIC_BLACKENEMY_STATE_DIE)
 				{
 					if (enemy->x < this->x)
 					{
@@ -813,10 +820,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (e->nx != 0)
 				{
-					//this->vy = -100.0f;
 					cannon->SetState(CANNON_STATE_MOVE);
 					cannon->x += dx;
-					x += dx;
+					this->x += dx;
 				}
 			}
 
@@ -980,7 +986,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {
@@ -1082,8 +1088,8 @@ bool CGimmick::onTopOf(CGameObject* object, float equal)
 	}
 	if (dynamic_cast<CElectricBlackEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
 	{
-		l = l + 2; //x pixel
-		r = r - 2;
+		l = l + 1; //x pixel
+		r = r - 1;
 	}
 	if (dynamic_cast<CStandBlackEnemy*>(object)) //thu nho pham vi ngang cua quai, cho chan that, o chinh giua quai moi cuoi duoc
 	{
@@ -1214,19 +1220,26 @@ void CGimmick::standOn(CGameObject* object)
 	if (dynamic_cast<CElectricBlackEnemy*>(object)) {
 		CElectricBlackEnemy* enemy = dynamic_cast<CElectricBlackEnemy*>(object);
 
-		onEnemy = true;
-		enemy->carry_player = true;
+		this->onEnemy = true;
 		this->vy = 0;
-		if (state == ELECTRIC_BLACKENEMY_STATE_STOP) {
-			this->y = object->y + GIMMICK_BBOX_HEIGHT;
+		if (!jumping) {
+			if (enemy->state == ELECTRIC_BLACKENEMY_STATE_WALK) {
+				if (this->onEnemy)
+					return;
+				else {
+					SetState(ELECTRIC_BLACKENEMY_STATE_STOP);
+					this->y = object->y + GIMMICK_BBOX_HEIGHT;
+				}
+			}
 		}
+
 	}
 
 	if (dynamic_cast<CBoomCannon*>(object)) {
 
 		this->x += object->dx;
 		if (!jumping) {
-			this->y = object->y + GIMMICK_BBOX_HEIGHT;
+			this->y = object->y + GIMMICK_BBOX_HEIGHT + 0.5f;
 			this->vy = 0;
 		}
 	}
