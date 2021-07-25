@@ -539,6 +539,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					if (e->ny != 0) {
 						vy = 0;
+						this->y += dy;
 					}
 					if (e->ny == 1)
 						this->onGround = true;
