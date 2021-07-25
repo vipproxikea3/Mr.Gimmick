@@ -34,6 +34,7 @@ class CSwing : public CGameObject
 public:
 	CSwing();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void Revival();
 	virtual void Render();
 	void StartOpen() { open_start = GetTickCount64(); }
 	void SetState(int state);

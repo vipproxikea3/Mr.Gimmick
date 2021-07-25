@@ -87,8 +87,19 @@ void CBlackBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		countOnBird--;
 		state = BLACKBIRD_STATE_CARRYPLAYER;
 	}
+	Revival();
 }
 
+void CBlackBird::Revival() {
+	CGame* game = CGame::GetInstance();
+	if ((this->state == BLACKBIRD_STATE_DROPPLAYER || BLACKBIRD_STATE_CARRYPLAYER) && !game->InCamera(this) && !game->InCameraByBBox(x_start, y_start, x_start + BLACKBIRD_BBOX_WIDTH, y_start + BLACKBIRD_BBOX_HEIGHT))
+	{
+		this->SetState(BLACKBIRD_STATE_TRANSFORM);
+		this->SetPosition(x_start, y_start);
+		timeTransform = 500;
+		timeGoWaitPlace = 1500;
+	}
+}
 
 void CBlackBird::Render()
 {
