@@ -554,6 +554,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					if (e->ny != 0) {
 						vy = 0;
+						this->y += dy;
 					}
 					if (e->ny == 1)
 						this->onGround = true;
@@ -979,7 +980,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {
