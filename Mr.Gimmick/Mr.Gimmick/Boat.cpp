@@ -65,6 +65,17 @@ void CBoat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	//	gimmick->x = x;
 	//	//DebugOut(L"\nVao day %d", gimmick->x);
 	//}
+	Revival();
+}
+
+void CBoat::Revival() {
+	CGame* game = CGame::GetInstance();
+	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (!game->InCamera(this) && !game->InCameraByBBox(x_start, y_start, x_start + BOAT_BBOX_WIDTH, y_start + BOAT_BBOX_HEIGHT) && ((this->x - gimmick->x < -320) || (this->x - gimmick->x > 320)))
+	{
+		this->SetPosition(x_start, y_start);
+		this->run = false;
+	}
 }
 
 void CBoat::Render()

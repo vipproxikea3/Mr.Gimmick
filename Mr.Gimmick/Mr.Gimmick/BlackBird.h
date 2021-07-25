@@ -22,7 +22,7 @@ class CBlackBird : public CGameObject
 	float endPoint = 850;
 	int direction = 1;		// Huong ->> 1,  <-- -1
 
-	int timeTransform = 500;
+	int timeTransform = 1000;
 	int timeGoWaitPlace = 1500;
 
 public:
@@ -31,6 +31,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void Revival();
 
 	void setOnBird(bool x); 
 	bool DropPlayer(); 

@@ -43,6 +43,17 @@ void CSwing::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(SWING_STATE_STOP);
 		}
 	}
+
+	Revival();
+}
+
+void CSwing::Revival() {
+	CGame* game = CGame::GetInstance();
+	if (this->state == SWING_STATE_STOP && !game->InCamera(this) && !game->InCameraByBBox(x_start, y_start, x_start + SWING_BBOX_WIDTH, y_start + SWING_BBOX_HEIGHT))
+	{
+		this->SetPosition(x_start, y_start);
+		this->SetState(SWING_STATE_STAND);
+	}
 }
 
 void CSwing::Render()
