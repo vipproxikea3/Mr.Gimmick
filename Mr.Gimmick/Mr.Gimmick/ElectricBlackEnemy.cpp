@@ -197,6 +197,7 @@ void CElectricBlackEnemy::Render()
 void CElectricBlackEnemy::SetState(int state)
 {
 	CGameObject::SetState(state);
+	Sound::GetInstance()->Stop("SOUND_Effect_1");
 	switch (state)
 	{
 	case ELECTRIC_BLACKENEMY_STATE_DIE:
@@ -207,15 +208,7 @@ void CElectricBlackEnemy::SetState(int state)
 		else {
 			vx = -ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X;
 		}
-		ax = 0;
-		if (CheckSideOfStar() == -1) {
-			vx = BLACKENEMY_DEFLECT_SPEED_X;
-		}
-		else {
-			vx = -BLACKENEMY_DEFLECT_SPEED_X;
-		}
-		vy = BLACKENEMY_DEFLECT_SPEED_Y;
-		break;
+		vy = ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y;
 		break;
 	case ELECTRIC_BLACKENEMY_STATE_WALK:
 		if (nx > 0)
@@ -238,6 +231,8 @@ void CElectricBlackEnemy::SetState(int state)
 		break;
 	case ELECTRIC_BLACKENEMY_STATE_SHOCK:
 		this->vx = 0;
+		Sound::GetInstance()->Play("SOUND_Effect_1", 0,1);
+		//ax = 0;
 		break;
 	}
 }

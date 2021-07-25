@@ -7,6 +7,8 @@
 
 
 void CWaterDie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+
+
 	CGimmick* gimmick = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (this->CheckAABB(gimmick)) {
 		if (gimmick->GetState() != GIMMICK_STATE_DIE) {

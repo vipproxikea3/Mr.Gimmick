@@ -25,6 +25,31 @@
 99	textures\stage1.png	0	0	0
 400	textures\EnemyBoom.png	57	189	255
 778	textures\map2.png	0	0	0
+[SOUNDS]
+Audio/01_Good-Morning.wav	SOUND_Intro
+Audio/02_No-Limits.wav	SOUND_World_Map
+Audio/03_Happy-Birthday.wav	SOUND_Scene_1
+Audio/04_Just-Friends.wav	SOUND_Scene_High_1
+Audio/05_Aporia.wav	SOUND_Boss_1
+Audio/03_Good-Weather.wav	SOUND_Sence_2
+Audio/17_Siesta.wav	SOUND_Sence_7
+Audio/18_Good-Night.wav	SOUND_Ending_2
+Audio/Sound Effect (1).wav	SOUND_Effect_1
+Audio/Sound Effect (2).wav	SOUND_Effect_2
+Audio/Sound Effect (3).wav	SOUND_Effect_3
+Audio/Sound Effect (8).wav	SOUND_Effect_8
+Audio/Sound Effect (14).wav	SOUND_Effect_14
+Audio/Sound Effect (16).wav	SOUND_Effect_16
+Audio/Sound Effect (19).wav	SOUND_Effect_19
+Audio/Sound Effect (24).wav	SOUND_Effect_24
+Audio/Sound Effect (25).wav	SOUND_Effect_25
+Audio/Sound Effect (26).wav	SOUND_Effect_26
+Audio/Sound Effect (35).wav	SOUND_Effect_35
+Audio/Sound Effect (45).wav	SOUND_Effect_45
+Audio/Sound Effect (73).wav	SOUND_Effect_73
+Audio/Sound Effect (78).wav	SOUND_Effect_78
+Audio/Sound Effect (80).wav	SOUND_Effect_80
+Audio/Sound Effect (84).wav	SOUND_Effect_84
 [MAP]
 # TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
 60	128	25	11	0	Map\Gimmick!(J)-Level2a_map.txt
@@ -657,7 +682,7 @@
 # created
 180002	180001	50	180002	50	180003	50	180003	50	180005	50	180006	50	180007	50	180008	50	180009	50	180010	50
 # main
-180003	180011	40	180012	10
+180003	180011	90	180012	10
 # explosive
 180004	110006	50	110007	50	110008	50	110009	50	110010	50
 # ========HUD============
@@ -728,7 +753,7 @@
 510010	510020	100
 
 # ===== SWORD
-520001	520001	100	520002	100	520003	100
+520001	520001	30	520002	30	520003	30
 520002	520004	100
 
 
@@ -1043,6 +1068,7 @@
 40	1280	64	400001	1140	1404
 40	1360	64	400001	1140	1404
 40	1472	128	400001	1460	1516
+40	1072	96	400001	1042	1134
 
 # CANNON
 80	716	510	800001
@@ -1094,3 +1120,8 @@
 17	1504	113	170001	1
 17	857	674.5	170001	4
 17	128	653	170001	6
+
+#BLACK ENEMY
+13	1036	665	130001	-1
+13	1072	665	130001	-1
+13	1118	750	130001	-1	1

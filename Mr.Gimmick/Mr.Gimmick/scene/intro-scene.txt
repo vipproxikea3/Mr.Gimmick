@@ -11,6 +11,33 @@
 #[MAP]
 # PosX	PosY	TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
 
+#0	0	48	128	40	11	0	Map\Gimmick!(J)-Level1_map.txt
+[SOUNDS]
+Audio/01_Good-Morning.wav	SOUND_Intro
+Audio/02_No-Limits.wav	SOUND_World_Map
+Audio/03_Happy-Birthday.wav	SOUND_Scene_1
+Audio/04_Just-Friends.wav	SOUND_Scene_High_1
+Audio/05_Aporia.wav	SOUND_Boss_1
+Audio/03_Good-Weather.wav	SOUND_Sence_2
+Audio/17_Siesta.wav	SOUND_Sence_7
+Audio/18_Good-Night.wav	SOUND_Ending_2
+Audio/Sound Effect (1).wav	SOUND_Effect_1
+Audio/Sound Effect (2).wav	SOUND_Effect_2
+Audio/Sound Effect (3).wav	SOUND_Effect_3
+Audio/Sound Effect (8).wav	SOUND_Effect_8
+Audio/Sound Effect (14).wav	SOUND_Effect_14
+Audio/Sound Effect (16).wav	SOUND_Effect_16
+Audio/Sound Effect (19).wav	SOUND_Effect_19
+Audio/Sound Effect (24).wav	SOUND_Effect_24
+Audio/Sound Effect (25).wav	SOUND_Effect_25
+Audio/Sound Effect (26).wav	SOUND_Effect_26
+Audio/Sound Effect (35).wav	SOUND_Effect_35
+Audio/Sound Effect (45).wav	SOUND_Effect_45
+Audio/Sound Effect (73).wav	SOUND_Effect_73
+Audio/Sound Effect (78).wav	SOUND_Effect_78
+Audio/Sound Effect (80).wav	SOUND_Effect_80
+Audio/Sound Effect (84).wav	SOUND_Effect_84
+
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 # GIMMICK

@@ -3,15 +3,26 @@
 #include "InclinedBrick.h"
 #include "Backup.h"
 
-CBlackEnemy::CBlackEnemy(int direction)
+CBlackEnemy::CBlackEnemy(int direction, int level)
 {
 	this->score = 120;
-
-	SetState(BLACKENEMY_STATE_WALK);
-	if (direction == 1) //chinh huong di ban dau
-		ax = BLACKENEMY_ACCELERATION; // moi vo di sang Phai 1
+	if (level == 0)
+	{
+		SetState(BLACKENEMY_STATE_WALK);
+		if (direction == 1) //chinh huong di ban dau
+			ax = BLACKENEMY_ACCELERATION; // moi vo di sang Phai 1
+		else
+			ax = -BLACKENEMY_ACCELERATION; // moi vo di sang trai -1
+	}
 	else
-		ax = -BLACKENEMY_ACCELERATION; // moi vo di sang trai -1
+	{
+		SetState(BLACKENEMY_STATE_FLY);
+		if (direction == 1) //chinh huong di ban dau
+			ax = BLACKENEMY_FLY_ACCELERATION; // moi vo di sang Phai 1
+		else
+			ax = -BLACKENEMY_FLY_ACCELERATION; // moi vo di sang trai -1
+	}
+	
 
 	this->canTurnAround = false; //tranh truong hop moi vao da quay dau
 }
@@ -64,6 +75,11 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (onTopOf(brick)) this->onGround = true;
 			if (onSideOf(brick)) { this->facingBrick = true;
 			}
+		}
+		if (dynamic_cast<CSewer*>(coObjects->at(i))) {
+			CSewer* sewer = dynamic_cast<CSewer*>(coObjects->at(i));
+			if (CheckAABB(sewer) && sewer->type != SEWER_TYPE_1 && sewer->type != SEWER_TYPE_2)
+				visible = false;
 		}
 	}
 
@@ -147,6 +163,13 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
+			if (dynamic_cast<CSewer*>(e->obj))
+			{
+				CSewer* sewer = dynamic_cast<CSewer*>(e->obj);
+				if (sewer->type != SEWER_TYPE_1 && sewer->type != SEWER_TYPE_2) {
+					visible = false;
+				}
+			}
 		}
 	}
 	// clean up newCoObjects
@@ -201,6 +224,7 @@ void CBlackEnemy::Render()
 void CBlackEnemy::SetState(int state)
 {
 	CGameObject::SetState(state);
+	Sound::GetInstance()->Stop("SOUND_Effect_8");
 	switch (state)
 	{
 	case BLACKENEMY_STATE_WALK:
@@ -214,7 +238,8 @@ void CBlackEnemy::SetState(int state)
 		ax = 0;
 		vx = 0;
 		break;
-	case BLACKENEMY_STATE_FLY: 
+	case BLACKENEMY_STATE_FLY:
+		Sound::GetInstance()->Play("SOUND_Effect_8", 1);
 		if (nx > 0) 
 			ax = BLACKENEMY_FLY_ACCELERATION;
 		else

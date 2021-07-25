@@ -56,23 +56,34 @@
 #include "FinalBossDieEffect.h"
 #include "CloudEnemy.h"
 
+#define ENDSCENE_TIME	6000
+
 class CPlayScene : public CScene
 {
 protected:
+	int end_scene = 0;
+	int end_game = 0;
+	DWORD end_game_start = NULL;
+	DWORD end_scene_start = NULL;
+
 	CGimmick* player = nullptr;					// A play scene has to have player, right?
 	CStar* star = nullptr;
 
-	CHud* hud = new CHud();
+	CHud* hud = nullptr;
 	//Map* map = nullptr;
 
-	Map** map = nullptr;
+	
 	//unordered_map<int, Map*> map;
-	int maptt = -1; // stt cua sprite map
+
+	//Map** map = nullptr;
+	int maptt = 0; // stt cua sprite map
 	int spritemap = 4;// so luong sprite map
 	int countfps = 0;//speed waterfall
 	int fps = 1;
 
 	int attackBird = -1;
+
+	vector<Map*> maps;
 
 	vector<CZone*> zones;
 	float ll = -9999.0f;
@@ -118,6 +129,15 @@ public:
 	CStar* GetStar() { return star; };
 	CHud* GetHud() { return hud; };
 	void AttackBird() { attackBird = 3; }
+	void CheckSwitchScene();
+	void EndScene() {
+		end_scene = 1;
+		end_scene_start = GetTickCount64();
+	}
+	void EndGame() {
+		end_game = 1;
+		end_game_start = GetTickCount64();
+	}
 };
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler

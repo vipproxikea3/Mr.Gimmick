@@ -25,6 +25,18 @@ void CStar::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void CStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// cal delay star
+	current_frame = current_frame + 1;
+	if (current_frame == STAR_DELAY_FRAME) {
+		current_frame = 0;
+		star_delay_3_x = star_delay_2_x;
+		star_delay_3_y = star_delay_2_y;
+		star_delay_2_x = star_delay_1_x;
+		star_delay_2_y = star_delay_1_y;
+		star_delay_1_x = this->x;
+		star_delay_1_y = this->y;
+	}
+
 	if (state == STAR_STATE_HIDE) {
 
 		vx = 0;
@@ -273,6 +285,9 @@ void CStar::Render()
 	}
 	if (state == STAR_STATE_READY || state == STAR_STATE_WALKING_LEFT || state == STAR_STATE_WALKING_RIGHT) {
 		animation_set->at(STAR_ANI_MAIN)->Render(x - 5, y + 7, alpha);
+		animation_set->at(STAR_ANI_MAIN)->Render(star_delay_1_x - 5, star_delay_1_y + 7, alpha - 30);
+		animation_set->at(STAR_ANI_MAIN)->Render(star_delay_2_x - 5, star_delay_2_y + 7, alpha - 60);
+		animation_set->at(STAR_ANI_MAIN)->Render(star_delay_3_x - 5, star_delay_3_y + 7, alpha - 90);
 	}
 
 	if (state == STAR_STATE_EXPLOSIVE) {
@@ -291,15 +306,18 @@ void CStar::SetState(int state)
 	case STAR_STATE_HIDE:
 		break;
 	case STAR_STATE_PENDING:
+		Sound::GetInstance()->Play("SOUND_Effect_73", 0, 1);
 		break;
 	case STAR_STATE_CREATED:
 		break;
 	case STAR_STATE_READY:
 		break;
 	case STAR_STATE_WALKING_RIGHT:
+		Sound::GetInstance()->Play("SOUND_Effect_25", 0, 1);
 		vx = STAR_VX;
 		break;
 	case STAR_STATE_WALKING_LEFT:
+		Sound::GetInstance()->Play("SOUND_Effect_25", 0, 1);
 		vx = -STAR_VX;
 		break;
 	case STAR_STATE_EXPLOSIVE:

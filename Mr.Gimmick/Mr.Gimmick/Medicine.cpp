@@ -63,12 +63,31 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (CheckAABB(player) && this->state == MEDICINE_STATE_APPEAR) {
 		SetState(MEDICINE_STATE_DISAPPEAR);
+		if (type != 5 && type != 6)
+		{
+			Sound::GetInstance()->Play("SOUND_Effect_35", 0, 1);
+		}
+		else
+			Sound::GetInstance()->Play("SOUND_Effect_80", 0, 1);
 		switch (this->type)
 		{
 		case 1:
 			backup->UpdateLifeStack(backup->lifeStack + 1);
 			break;
+		case 2:
+			backup->UpdateItem(BACKUP_ITEM_TYPE_MEDICINE);
+			break;
+		case 3:
+			backup->UpdateItem(BACKUP_ITEM_TYPE_CIRCLE);
+			break;
+		case 4:
+			backup->UpdateItem(BACKUP_ITEM_TYPE_BOOM);
+			break;
 		case 5:
+			backup->UpdateScore(backup->score + 50000);
+			backup->UpdateRest(backup->rest + 2);
+			break;
+		case 6:
 			backup->UpdateScore(backup->score + 50000);
 			backup->UpdateRest(backup->rest + 2);
 			break;

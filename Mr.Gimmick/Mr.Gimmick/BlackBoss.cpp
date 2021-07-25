@@ -148,8 +148,12 @@ void CBlackBoss::SetState(int state)
 		ax = 0;
 		break;
 	case BLACKBOSS_STATE_DIE:
+		Sound::GetInstance()->Play("SOUND_Effect_84", 0, 1);
 		CBackup* backup = CBackup::GetInstance();
 		backup->UpdateScore(backup->score + this->score);
+		backup->end_scene_1 = 1;
+		CScene* scene = CGame::GetInstance()->GetCurrentScene();
+		((CPlayScene*)scene)->EndScene();
 		ax = 0;
 		vy = BLACKBOSS_DEFLECT_SPEED;
 		vx = -BLACKBOSS_DEFLECT_SPEED;

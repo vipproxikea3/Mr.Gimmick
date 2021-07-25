@@ -157,6 +157,9 @@ void CFinalBoss::SetState(int state)
 		stun_start = GetTickCount64();
 		break;
 	case FINALBOSS_STATE_DIE:
+		CScene* scene = CGame::GetInstance()->GetCurrentScene();
+		((CPlayScene*)scene)->EndGame();
+		Sound::GetInstance()->Play("SOUND_Effect_84", 0, 1);
 		vx = 0;
 		ax = 0;
 		vy = 0;
@@ -836,6 +839,11 @@ void CFinalBoss::CalculateState()
 		die_start = 0;
 		visible = false;
 	}
+	//if (state == FINALBOSS_STATE_DIE && GetTickCount64() - die_start >= FINALBOSS_DIE_TIME + 3000)
+	//{
+	//	die_start = 0;
+	//	CGame::GetInstance()->SwitchScene(888);// Outro
+	//}
 }
 
 void CFinalBoss::StartBlink()

@@ -188,10 +188,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->onGround = true;
 				if (!onEnemy && !stunning) standOn(enemy); //fix loi khi cuoi nhieu quai 1 luc
 			}
-			if (isUnder(enemy)) {
+			/*if (isUnder(enemy)) {
 				this->SetState(GIMMICK_STATE_STUN);
 				StartUntouchable();
-			}
+			}*/
 		}
 		if (dynamic_cast<CBrickPink*>(coObjects->at(i))) {
 			CBrickPink* brick = dynamic_cast<CBrickPink*>(coObjects->at(i));
@@ -259,6 +259,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (onTopOf(enemy, 7.0f) && this->vy < 0) {
 				this->onGround = true;
 				standOn(enemy);
+			}
+		}
+
+		if (dynamic_cast<CBlackBird*>(coObjects->at(i))) {
+			CBlackBird* enemy = dynamic_cast<CBlackBird*>(coObjects->at(i));
+			if (onTopOf(enemy, 2.0f) && this->vy < 0) {
+				this->onGround = true;
 			}
 		}
 	}
@@ -511,29 +518,36 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 			if (dynamic_cast<CWorm*>(e->obj)) {
-				x = x0 + min_tx * dx + nx * 0.1f;
-				y = y0 + min_ty * dy + ny * 0.1f;
+				
 
 				CWorm* worm = dynamic_cast<CWorm*>(e->obj);
-
-				if (e->nx != 0) {
-					if (worm->x < this->x)
-					{
-						this->vx = GIMMICK_DEFLECT_SPEED_X;
-						this->nx = 1.0;
+				if (worm->GetState() != WORM_STATE_DIE) {
+					x = x0 + min_tx * dx + nx * 0.1f;
+					y = y0 + min_ty * dy + ny * 0.1f;
+					if (e->nx != 0) {
+						if (worm->x < this->x)
+						{
+							this->vx = GIMMICK_DEFLECT_SPEED_X;
+							this->nx = 1.0;
+						}
+						else
+						{
+							this->vx = -GIMMICK_DEFLECT_SPEED_X;
+							this->nx = -1.0;
+						}
+						this->SetState(GIMMICK_STATE_STUN);
 					}
-					else
-					{
-						this->vx = -GIMMICK_DEFLECT_SPEED_X;
-						this->nx = -1.0;
-					}						
-					this->SetState(GIMMICK_STATE_STUN);
+					if (e->ny != 0) {
+						vy = 0;
+					}
+					if (e->ny == 1)
+						this->onGround = true;
+				} else {
+					x = x0 + dx;
+					y = y0 + dy;
 				}
-				if (e->ny != 0) {
-					vy = 0;
-				}
-				if (e->ny == 1)
-					this->onGround = true;
+
+				
 			}
 
 			if (dynamic_cast<CSwing*>(e->obj)) {
@@ -1007,6 +1021,7 @@ void CGimmick::SetState(int state)
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
+		Sound::GetInstance()->Play("SOUND_Effect_24",0, 1);
 		jumping = true;
 		if (vy == 0 || this->onInclinedBrick || this->onGround) 
 			vy = GIMMICK_JUMP_SPEED_Y_MIN;
@@ -1021,12 +1036,14 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_STUN:
 	{
+		Sound::GetInstance()->Play("SOUND_Effect_35", 0, 1);
 		if (untouchable == 0) {
 			this->SetState(GIMMICK_STATE_IDLE);
-			
+
 			stunning = true;
 			stunning_start = GetTickCount64();
 			StartUntouchable();
+			jumping = false;
 
 			CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 			star->Shot();
@@ -1038,6 +1055,7 @@ void CGimmick::SetState(int state)
 	}
 	break;
 	case GIMMICK_STATE_DIE:
+		Sound::GetInstance()->Play("SOUND_Effect_78", 0, 1);
 		CBackup::GetInstance()->UpdateRest(CBackup::GetInstance()->rest - 1);
 		CBackup::GetInstance()->UpdateLifeStack(4);
 		this->die_start = GetTickCount64();

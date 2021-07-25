@@ -1,14 +1,15 @@
 #include "StandBlackEnemy.h"
 #include "Brick.h"
-
 #include "Utils.h"
 #include "Gimmick.h"
 #include "Game.h"
 #include "Star.h"
 #include "PlayScene.h"
+#include "Backup.h"
 
 CStandBlackEnemy::CStandBlackEnemy() : CGameObject()
 {
+	this->score = 140;
 	SetState(ENEMY_STATE_STAND);
 }
 
@@ -99,6 +100,8 @@ void CStandBlackEnemy::SetState(int state)
 		vy = 0;
 		break;
 	case ENEMY_STATE_DIE:
+		CBackup* backup = CBackup::GetInstance();
+		backup->UpdateScore(backup->score + this->score);
 		vx = nx * 0.05;
 		vy = ENEMY_DIE_DEFLECT_SPEED;
 		break;

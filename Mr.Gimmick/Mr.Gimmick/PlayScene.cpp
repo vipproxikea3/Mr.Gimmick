@@ -15,7 +15,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 {
 	key_handler = new CPlaySceneKeyHandler(this);
 	this->player = nullptr;
-	this->map = nullptr;
+	this->star = nullptr;
 }
 
 /*
@@ -112,10 +112,14 @@ void CPlayScene::_ParseSection_MAP(string line)
 	int TileSetID = atoi(tokens[4].c_str());
 	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	if (maptt == -1)
+	/*if (maptt == -1)
 		this->map = new Map * [spritemap];
 	maptt++;
-	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	this->map[maptt] = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);*/
+
+	Map* map = new Map(TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, TileSetID, mapMatrixPath);
+	maps.push_back(map);
+
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
@@ -305,7 +309,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMedicine(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_BLACKENEMY:
-		obj = new CBlackEnemy(atoi(tokens[4].c_str()));
+		if(tokens.size() > 5)
+			obj = new CBlackEnemy(atoi(tokens[4].c_str()), atoi(tokens[5].c_str()) );
+		else
+			obj = new CBlackEnemy(atoi(tokens[4].c_str()));
 		break;
 	case OBJECT_TYPE_STAR:
 		if (star != NULL)
@@ -441,9 +448,8 @@ void CPlayScene::Load()
 	// Create quadtree
 	quadtree = new Quadtree(1, 0.0f, 768.0f, 2048.0f, 0.0f);
 
-	// Play Soundtrack
-	//Sound::GetInstance()->Play("SOUND_Stage1_Background", 1);
-	
+	// create hud
+	hud = new CHud();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -615,7 +621,83 @@ void CPlayScene::Update(DWORD dt)
 	SetCamPos();
 
 	hud->Update(dt);
+	// Play soundtrack sence
+	CScene* Scene = CGame::GetInstance()->GetCurrentScene();
+	if (player->state == GIMMICK_STATE_DIE)
+	{
+		Sound::GetInstance()->Stop("SOUND_Boss_1");
+		Sound::GetInstance()->Stop("SOUND_Scene_1");
+		Sound::GetInstance()->Stop("SOUND_Sence_2");
+		Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+		Sound::GetInstance()->Stop("SOUND_Sence_7");
+	}
+	else if (Scene->Getid() == 1)
+	{
+		if (player->x >= 0 && player->x <= 1024 && player->y <= 850 && player->y >= 576)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Stop("SOUND_Scene_1");
+			Sound::GetInstance()->Play("SOUND_Scene_High_1", 1);
+		}
+		else if(player->x >= 1024 && player->x <= 1280 && player->y <= 800 && player->y >= 576)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Scene_1");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Scene_1", 1);
+		}
+	}
+	else if (Scene->Getid() == 2)
+	{
+		if (player->x >= 0 && player->x <= 480 && player->y <= 980 && player->y >= 432)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Stop("SOUND_Sence_2");
+			Sound::GetInstance()->Play("SOUND_Scene_High_1", 1);
+		}
+		else if (player->x >= 1792 && player->x <= 2048 && player->y <= 590 && player->y >= 384)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Sence_2");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Sence_2", 1);
+		}
+	}
+	else if (Scene->Getid() == 7)
+	{
+		if (player->x >= 1792 && player->x <= 2048 && player->y <= 768 && player->y >= 576)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Sence_7");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Sence_7", 1);
+		}
+	}
+	// CheckEndScene
+	CheckSwitchScene();
 }
+
 
 void CPlayScene::UpdateZone() {
 	float x, y;
@@ -662,6 +744,18 @@ void CPlayScene::SetCamPos() {
 	hud->SetPosition(cx, cy - game->GetScreenHeight());
 }
 
+void CPlayScene::CheckSwitchScene() {
+	if (end_scene == 1 && GetTickCount64() - end_scene_start >= ENDSCENE_TIME) {
+		end_scene = 0;
+		end_scene_start = NULL;
+		CGame::GetInstance()->SwitchScene(1000);
+	} else if (end_game == 1 && GetTickCount64() - end_game_start >= ENDSCENE_TIME) {
+		end_game = 0;
+		end_game_start = NULL;
+		CGame::GetInstance()->SwitchScene(888);
+	}
+}
+
 void CPlayScene::PushBackObj(CGameObject* obj) {
 	objects.push_back(obj);
 }
@@ -674,13 +768,12 @@ void CPlayScene::Render()
 		fps = 3;
 	if (countfps == fps)
 	{
-		if (this->maptt == this->spritemap - 1)
+		if (this->maptt == maps.size() - 1)
 			this->maptt = 0;
 		else
 			this->maptt++;
 	}
-	if (this->map)
-		this->map[maptt]->Render();
+	maps[maptt]->Render();
 	if (countfps >= fps)
 	{
 		countfps = 0;
@@ -720,9 +813,27 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
-	player = NULL;
+
+	player = nullptr;
+
+	star = nullptr;
+
+	hud = nullptr;
+
+	/*if (hud)
+	{
+		delete hud;
+		hud = nullptr;
+	}*/
+
+	for (unsigned int i = 0; i < maps.size(); i++)
+		delete maps[i];
+	maps.clear();
+
 	for (unsigned int i = 0; i < zones.size(); i++)
 		delete zones[i];
+	zones.clear();
+
 	zones.clear();
 
 	if (quadtree) {
@@ -747,7 +858,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	//case DIK_SPACE:
-	//	sound->Play("SOUND_Effect_1", 0, 1); // Jump
+	//	sound->Play("SOUND_Effect_24", 0, 1); // jump
 	//	break;
 	case DIK_S:
 		if (gimmick->GetState() != GIMMICK_STATE_DIE && gimmick->stunning == false && gimmick->inSewer == false) {
@@ -755,6 +866,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 				star->Ready();
 			}
 		}
+		break;
+	case DIK_DOWN:
+		CBackup::GetInstance()->ChangeItem();
 		break;
 	case DIK_1:
 		gimmick->x = 100;
@@ -782,8 +896,11 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		gimmick->x = 1725;
 		gimmick->y = 637;
 		break;
-	case DIK_M:
-		gimmick->SetState(GIMMICK_STATE_DIE);
+	case DIK_U:
+		CGame::GetInstance()->SwitchScene(1000);
+		break;
+	case DIK_Y:
+		CGame::GetInstance()->SwitchScene(888);
 		break;
 	}
 }

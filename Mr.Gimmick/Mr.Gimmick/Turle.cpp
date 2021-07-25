@@ -6,9 +6,11 @@
 #include "Star.h"
 #include "Gimmick.h"
 #include "WaterDie.h"
+#include "Backup.h"
 
 CTurle::CTurle(float left, float right) : CGameObject()
 {
+	this->score = 200;
 	this->SetState(TURLE_STATE_WALKING_RIGHT);
 	this->left = left;
 	this->right = right;
@@ -203,6 +205,7 @@ void CTurle::Render()
 
 void CTurle::SetState(int state)
 {
+	CBackup* backup = CBackup::GetInstance();
 	CGameObject::SetState(state);
 
 	switch (state)
@@ -215,11 +218,13 @@ void CTurle::SetState(int state)
 		break;
 	case TURLE_STATE_DIE_RIGHT:
 	case TURLE_STATE_DIE_COMPLETE_RIGHT:
+		backup->UpdateScore(backup->score + this->score);
 		this->vx = -0.03f;
 		this->vy = TURLE_DIE_SPEED;
 		break;
 	case TURLE_STATE_DIE_LEFT:
 	case TURLE_STATE_DIE_COMPLETE_LEFT:
+		backup->UpdateScore(backup->score + this->score);
 		this->vx = 0.03f;
 		this->vy = TURLE_DIE_SPEED;
 		break;
