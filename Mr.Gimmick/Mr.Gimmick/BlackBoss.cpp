@@ -21,6 +21,7 @@ void CBlackBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalculateState();
 	CalculateSpeed();
 	CalculateShooting();
+	SpecialCollisionWithPlayer();
 	DetectStar();
 
 	vector<LPGAMEOBJECT> newCoObjects;
@@ -309,5 +310,32 @@ void CBlackBoss::CreateReward()
 	//them vao list object cua playscene
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	((CPlayScene*)scene)->PushBackObj(reward);
+}
+
+void CBlackBoss::SpecialCollisionWithPlayer()
+{
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
+
+	if (player->state != GIMMICK_STATE_DIE && player->getUntouchable() != 1
+		&& state != BLACKBOSS_STATE_DIE)
+	{
+		if (CheckAABB(player))
+		{
+			if (x < player->x)
+			{
+				//player->vx = GIMMICK_DEFLECT_SPEED_X;
+				player->nx = 1.0;
+			}
+			else
+			{
+				//player->vx = -GIMMICK_DEFLECT_SPEED_X;
+				player->nx = -1.0;
+			}
+
+			player->SetState(GIMMICK_STATE_STUN);
+			player->StartUntouchable();
+		}
+	}
 }
 
