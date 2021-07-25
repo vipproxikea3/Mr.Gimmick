@@ -48,6 +48,9 @@ public:
 	int score = 0;
 	bool visible = true;
 
+	float x_start;
+	float y_start;
+
 	float x;
 	float y;
 
@@ -68,6 +71,7 @@ public:
 	bool onInclinedBrick = false;
 
 public:
+	void SetStartPosition(float x, float y) { this->x_start = x; this->y_start = y; }
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }

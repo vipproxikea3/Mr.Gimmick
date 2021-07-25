@@ -381,6 +381,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
+	obj->SetStartPosition(x, y);
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
@@ -507,53 +508,61 @@ void CPlayScene::Update(DWORD dt)
 	// Duyệt các object cần update (có code xử lý trong hàm update của object đó)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (!CGame::GetInstance()->InLargeCamera(objects[i]))
-			continue;
-		if (dynamic_cast<CBoom*>(objects[i])
-			|| dynamic_cast<CSwing*>(objects[i])
-			|| dynamic_cast<CBlueFire*>(objects[i])
-			|| dynamic_cast<CGimmickDieEffect*>(objects[i])
-			|| dynamic_cast<CWorm*>(objects[i])
-			|| dynamic_cast<CBlackEnemy*>(objects[i])
-			|| dynamic_cast<CBlackBoss*>(objects[i])
-			|| dynamic_cast<CBrick*>(objects[i])
-			|| dynamic_cast<CBrickPink*>(objects[i])
-			|| dynamic_cast<CDoor*>(objects[i])
-			|| dynamic_cast<CElectricBlackEnemy*>(objects[i])
-			|| dynamic_cast<CGreenBoss*>(objects[i])
-			|| dynamic_cast<CPortal*>(objects[i])
-			|| dynamic_cast<CGun*>(objects[i])
-			|| dynamic_cast<CBullet*>(objects[i])
+		if (dynamic_cast<CSwing*>(objects[i])
 			|| dynamic_cast<CBoat*>(objects[i])
-			|| dynamic_cast<CWaterDie*>(objects[i])
-			|| dynamic_cast<CEnemyBoom*>(objects[i])
-			|| dynamic_cast<CMiniBoom*>(objects[i])
-			|| dynamic_cast<CBomboat*>(objects[i])
-			|| dynamic_cast<CCannon*>(objects[i])
-			|| dynamic_cast<CBoomCannon*>(objects[i])
-			|| dynamic_cast<CTurle*>(objects[i])
 			|| dynamic_cast<CBlackBird*>(objects[i])
-			|| dynamic_cast<CSwordBoss*>(objects[i])
-			|| dynamic_cast<CSword*>(objects[i])
-			|| dynamic_cast<CFinalBoss*>(objects[i])
-			|| dynamic_cast<CFinalBossBigBullet*>(objects[i])
-			|| dynamic_cast<CFinalBossSmallBullet*>(objects[i])
-			|| dynamic_cast<CFinalBossDieEffect*>(objects[i])
-			|| dynamic_cast<CBird*>(objects[i])
-			|| dynamic_cast<CStandBlackEnemy*>(objects[i])
-			|| dynamic_cast<CSword*>(objects[i])
-			|| dynamic_cast<CEnemyTail*>(objects[i])
-			|| dynamic_cast<CCloudEnemy*>(objects[i])
-			|| dynamic_cast<CMedicine*>(objects[i])
-			|| dynamic_cast<CCat*>(objects[i]))
+			|| dynamic_cast<CSwordBoss*>(objects[i]))
 		{
-			if (dynamic_cast<CCloudEnemy*>(objects[i]) && attackBird > 0)
-			{
-				((CCloudEnemy*)(objects[i]))->SetState(CLOUD_STATE_ATTACK);
-			}
 			vector<LPGAMEOBJECT> coObjects;
 			quadtree->Retrieve(&coObjects, objects[i]);
 			objects[i]->Update(dt, &coObjects);
+		}
+		else {
+			if (!CGame::GetInstance()->InLargeCamera(objects[i]))
+				continue;
+			if (dynamic_cast<CBoom*>(objects[i])
+				|| dynamic_cast<CBlueFire*>(objects[i])
+				|| dynamic_cast<CGimmickDieEffect*>(objects[i])
+				|| dynamic_cast<CWorm*>(objects[i])
+				|| dynamic_cast<CBlackEnemy*>(objects[i])
+				|| dynamic_cast<CBlackBoss*>(objects[i])
+				|| dynamic_cast<CBrick*>(objects[i])
+				|| dynamic_cast<CBrickPink*>(objects[i])
+				|| dynamic_cast<CDoor*>(objects[i])
+				|| dynamic_cast<CElectricBlackEnemy*>(objects[i])
+				|| dynamic_cast<CGreenBoss*>(objects[i])
+				|| dynamic_cast<CPortal*>(objects[i])
+				|| dynamic_cast<CGun*>(objects[i])
+				|| dynamic_cast<CBullet*>(objects[i])
+				|| dynamic_cast<CWaterDie*>(objects[i])
+				|| dynamic_cast<CEnemyBoom*>(objects[i])
+				|| dynamic_cast<CMiniBoom*>(objects[i])
+				|| dynamic_cast<CBomboat*>(objects[i])
+				|| dynamic_cast<CCannon*>(objects[i])
+				|| dynamic_cast<CBoomCannon*>(objects[i])
+				|| dynamic_cast<CTurle*>(objects[i])
+				|| dynamic_cast<CSwordBoss*>(objects[i])
+				|| dynamic_cast<CSword*>(objects[i])
+				|| dynamic_cast<CFinalBoss*>(objects[i])
+				|| dynamic_cast<CFinalBossBigBullet*>(objects[i])
+				|| dynamic_cast<CFinalBossSmallBullet*>(objects[i])
+				|| dynamic_cast<CFinalBossDieEffect*>(objects[i])
+				|| dynamic_cast<CBird*>(objects[i])
+				|| dynamic_cast<CStandBlackEnemy*>(objects[i])
+				|| dynamic_cast<CSword*>(objects[i])
+				|| dynamic_cast<CEnemyTail*>(objects[i])
+				|| dynamic_cast<CCloudEnemy*>(objects[i])
+				|| dynamic_cast<CMedicine*>(objects[i])
+				|| dynamic_cast<CCat*>(objects[i]))
+			{
+				if (dynamic_cast<CCloudEnemy*>(objects[i]) && attackBird > 0)
+				{
+					((CCloudEnemy*)(objects[i]))->SetState(CLOUD_STATE_ATTACK);
+				}
+				vector<LPGAMEOBJECT> coObjects;
+				quadtree->Retrieve(&coObjects, objects[i]);
+				objects[i]->Update(dt, &coObjects);
+			}
 		}
 	}
 	// Làm trống quadtree

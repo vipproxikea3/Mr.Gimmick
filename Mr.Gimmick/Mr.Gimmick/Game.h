@@ -88,6 +88,7 @@ public:
 
 	bool CheckAABB(float l, float t, float r, float b, float l1, float t1, float r1, float b1);
 
+	bool InCameraByBBox(float l, float t, float r, float b);
 	bool InCamera(CGameObject* object);
 	bool InLargeCamera(CGameObject* object);
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }

@@ -321,6 +321,10 @@ bool CGame::CheckAABB(float l, float t, float r, float b, float l1, float t1, fl
 
 }
 
+bool CGame::InCameraByBBox(float l, float t, float r, float b) {
+	return !(r < cam_x || l > cam_x + screen_width || t < cam_y - screen_height || b > cam_y);
+}
+
 bool CGame::InCamera(CGameObject* object)
 {
 	float l, t, r, b;
