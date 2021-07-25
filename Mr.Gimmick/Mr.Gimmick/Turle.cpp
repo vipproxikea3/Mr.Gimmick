@@ -91,10 +91,9 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if(this->state != TURLE_STATE_WALKING_RIGHT || this->state != TURLE_STATE_WALKING_LEFT)
+	if(this->state != TURLE_STATE_WALKING_RIGHT && this->state != TURLE_STATE_WALKING_LEFT)
 		vy -= TURLE_GRAVITY * dt;
 
-	//vy -= TURLE_GRAVITY * dt;
 	float x0 = x;
 	float y0 = y;
 
@@ -142,7 +141,7 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->vy = 0;
 					if (this->state == TURLE_STATE_WALKING_LEFT
 						|| this->state == TURLE_STATE_WALKING_RIGHT) {
-						this->y = y0 + min_ty * dy + e->ny * 0.2f;
+						this->y = y0 + min_ty * dy + e->ny * 0.1f;
 						this->x = x0 + min_tx * dx + e->nx * 0.2f;
 					}
 
@@ -160,9 +159,9 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0)
 				{
 					if (this->state == TURLE_STATE_DIE_RIGHT)
-						SetState(TURLE_STATE_DIE_COMPLETE_RIGHT);
+						SetState(TURLE_STATE_DISAPPEAR);
 					else if (this->state == TURLE_STATE_DIE_LEFT)
-						SetState(TURLE_STATE_DIE_COMPLETE_LEFT);
+						SetState(TURLE_STATE_DISAPPEAR);
 				}
 			}
 		}

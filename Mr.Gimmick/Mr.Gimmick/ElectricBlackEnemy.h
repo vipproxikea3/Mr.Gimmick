@@ -16,6 +16,7 @@
 #define	ELECTRIC_BLACKENEMY_STATE_WALK		2
 #define	ELECTRIC_BLACKENEMY_STATE_SHOCK		3
 #define	ELECTRIC_BLACKENEMY_STATE_STOP		4
+#define ELECTRIC_BLACKENEMY_STATE_DISAPPEAR	5
 
 
 #define	ELECTRIC_BLACKENEMY_ANI_WALKING_RIGHT	0
@@ -33,22 +34,20 @@
 
 
 #define ELECTRIC_BLACKENEMY_ACCELERATION		0.0002f
-#define ELECTRIC_BLACKENEMY_WALK_SPEED			0.075f	
+#define ELECTRIC_BLACKENEMY_WALK_SPEED			0.05f	
 #define ELECTRIC_BLACKENEMY_GRAVITY				0.0008f
 
 #define	DISTANCE_X		40
 #define	DISTANCE_Y		70
 
-#define ELECTRIC_BLACKENEMY_WALK_SPEED		0.075f
-
 #define PLAYER_MAX_RANGE_FLY	10
 #define PLAYER_MAX_RANGE_WALK	60
 
 #define TIME_SHOCKING				200
-#define	TIME_BETWEEN_TWO_SHOCKING	1200
+#define	TIME_BETWEEN_TWO_SHOCKING	2000
 
-#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X		0.01f	
-#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y		0.01f
+#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_X		0.09f	
+#define ELECTRIC_BLACKENEMY_DEFLECT_SPEED_Y		0.12f
 
 class CElectricBlackEnemy : public CGameObject
 {
@@ -57,12 +56,8 @@ public:
 	float ax = 0;
 	bool appear;
 	bool canTurnAround = false;
-	bool carry_player = false;
-	bool onGround = false;
-
-	bool shocking = false;
 	bool shocking_large = false;
-	bool touchGround = false;
+	bool shocking = false;
 	DWORD start_shock = 0;
 
 	CElectricBlackEnemy(); //-1 left, 1 right
