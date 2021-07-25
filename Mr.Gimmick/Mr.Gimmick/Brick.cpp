@@ -44,6 +44,17 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					e->obj->x -= (min_tx * dx + nx * 0.3f); //Day gimmick ra xa
 				
 			}
+			if (dynamic_cast<CCannon*>(e->obj))
+			{
+				CCannon* cannon = dynamic_cast<CCannon*>(e->obj);
+				if (e->nx != 0) {
+					if (cannon->state == CANNON_STATE_MOVE) {
+						e->obj->x -= (min_tx * dx + 0.3f); //Day gimmick ra xa
+					}
+				}
+					
+
+			}
 		}
 	}
 	// clean up collision events

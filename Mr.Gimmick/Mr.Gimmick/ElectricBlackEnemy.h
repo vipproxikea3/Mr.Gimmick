@@ -56,12 +56,8 @@ public:
 	float ax = 0;
 	bool appear;
 	bool canTurnAround = false;
-	bool carry_player = false;
-	bool onGround = false;
-
-	bool shocking = false;
 	bool shocking_large = false;
-	bool touchGround = false;
+	bool shocking = false;
 	DWORD start_shock = 0;
 
 	CElectricBlackEnemy(); //-1 left, 1 right

@@ -54,12 +54,8 @@ void CCannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				
-				
-
 				if (e->nx != 0){
-					vx = 0;
-					this->x = x0 + min_tx * dx + nx * 0.4f;
+					this->x = x0 + min_tx * dx - 0.4f;
 				}
 				if (e->ny != 0) vy = 0;
 
