@@ -91,7 +91,7 @@ void CTurle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if(this->state != TURLE_STATE_WALKING_RIGHT && this->state != TURLE_STATE_WALKING_LEFT)
+	if(this->state == TURLE_STATE_DIE_COMPLETE_RIGHT || this->state == TURLE_STATE_DIE_COMPLETE_LEFT)
 		vy -= TURLE_GRAVITY * dt;
 
 	float x0 = x;
@@ -217,16 +217,20 @@ void CTurle::SetState(int state)
 		this->vx = -TURLE_WALKING_SPEED;
 		break;
 	case TURLE_STATE_DIE_RIGHT:
+		this->vx = 0;
+		break;
 	case TURLE_STATE_DIE_COMPLETE_RIGHT:
 		backup->UpdateScore(backup->score + this->score);
-		this->vx = -0.03f;
-		this->vy = TURLE_DIE_SPEED;
+		this->vx = -0.03;
+		this->vy = 0.03;
 		break;
 	case TURLE_STATE_DIE_LEFT:
+		this->vx = 0;
+		break;
 	case TURLE_STATE_DIE_COMPLETE_LEFT:
 		backup->UpdateScore(backup->score + this->score);
 		this->vx = 0.03f;
-		this->vy = TURLE_DIE_SPEED;
+		this->vy = 0.03;
 		break;
 	}
 }
