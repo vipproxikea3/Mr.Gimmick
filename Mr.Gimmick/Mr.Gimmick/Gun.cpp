@@ -3,7 +3,6 @@
 
 void CGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
 	vy -= GIMMICK_GRAVITY * dt;
 	CGameObject::Update(dt);
 
@@ -23,6 +22,11 @@ void CGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		if (dynamic_cast<CSewer*>(coObjects->at(i))) {
+			CSewer* sewer = dynamic_cast<CSewer*>(coObjects->at(i));
+			if (CheckAABB(sewer))
+				visible = false;
+		}
 
 	}
 

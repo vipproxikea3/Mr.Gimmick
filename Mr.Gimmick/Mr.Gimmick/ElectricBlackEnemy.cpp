@@ -298,7 +298,6 @@ void CElectricBlackEnemy::DetectPlayer()
 			nx = 1;
 		}
 	}
-	DebugOut(L"onEnemy: %d\n", player->onEnemy);
 	//reset quay dau
 	if (state != ELECTRIC_BLACKENEMY_STATE_STOP && !player->onEnemy && state != ELECTRIC_BLACKENEMY_STATE_DIE) {
 		if (!this->canTurnAround && (this->x >= player->x - (PLAYER_MAX_RANGE_FLY - 1)) && (this->x <= player->x + (PLAYER_MAX_RANGE_FLY - 1))) //reset turn around, can dam bao so +- < PLAYER_MAX_RANGE_FLY

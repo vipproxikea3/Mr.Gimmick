@@ -101,6 +101,7 @@ void CMedicine::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) {
 			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
 			if (CheckAABB(brick)) {
+				this->vy = 0;
 				switch (this->type)
 				{
 				case 1:

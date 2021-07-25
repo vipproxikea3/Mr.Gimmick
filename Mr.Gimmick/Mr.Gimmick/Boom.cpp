@@ -99,7 +99,6 @@ void CBoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 				if (e->ny != 0)
 				{
-					DebugOut(L"[INFO] Collisions");
 					SetState(BOOM_STATE_EXPLODE);
 				}
 			}

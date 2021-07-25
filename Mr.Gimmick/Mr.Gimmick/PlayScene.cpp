@@ -620,6 +620,15 @@ void CPlayScene::Update(DWORD dt)
 				delete boom_cannon;
 			}
 		}
+		else if (dynamic_cast<CGun*>(objects[i]))
+		{
+			CGun* gun = (CGun*)(objects[i]);
+			if (gun->visible == false)
+			{
+				objects.erase(objects.begin() + i);
+				delete gun;
+			}
+		}
 	}
 		
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
