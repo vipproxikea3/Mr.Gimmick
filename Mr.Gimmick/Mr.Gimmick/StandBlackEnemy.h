@@ -17,6 +17,7 @@
 class CStandBlackEnemy : public CGameObject
 {
 public:
+	int dir = -1;
 	CStandBlackEnemy();
 	~CStandBlackEnemy() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
