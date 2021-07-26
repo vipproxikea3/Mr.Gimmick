@@ -48,7 +48,7 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CPortal::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPortal::SetState(int state) {}
