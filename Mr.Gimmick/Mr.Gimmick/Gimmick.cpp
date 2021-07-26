@@ -881,7 +881,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->vx = -GIMMICK_DEFLECT_SPEED_X;
 						this->nx = -1.0;
 					}
-					this->SetState(GIMMICK_STATE_STUN);
+					if(enemyB->state == ENEMY_STATE_STAND)
+						this->SetState(GIMMICK_STATE_STUN);
 				}
 			}
 
