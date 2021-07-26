@@ -1,0 +1,142 @@
+﻿  Animations.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\Animations.h(3,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Backup.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\Backup.h(3,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BigBoatWindow.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Bird.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BlackBird.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BlackBoss.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BlackEnemy.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BlueFire.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Boat.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Boomboat.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Boom.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BoomCannon.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Brick.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BrickPink.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Bridge.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Bullet.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Cannon.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Cat.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Chain.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  CloudEnemy.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Generating Code...
+  Compiling...
+  Cogwheel.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  CogwheelSmall.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Conveyor.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Door.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  EnemyBoom.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  ElectricBlackEnemy.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  EnemyTail.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  FinalBoss.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  FinalBossBigBullet.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  FinalBossDieEffect.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  FinalBossSmallBullet.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Game.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  GameObject.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.cpp(1,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Gimmick.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  GimmickDieEffect.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  GreenBoss.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Gun.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Hud.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  InclinedBrick.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  IntroScene.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Generating Code...
+  Compiling...
+  KeyEventHandler.cpp
+  main.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(16,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Map.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\Map.h(2,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Mario.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Medicine.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  MiniBoom.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  OutroScene.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  PlayScene.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Portal.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Quadtree.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Scene.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\Scene.h(3,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Sewer.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Sound.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  SpecialBrick.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Sprites.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\Sprites.h(3,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  StandBlackEnemy.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Star.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Swing.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Sword.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  SwordBoss.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Generating Code...
+  Compiling...
+  Textures.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\Textures.cpp(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Tube.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Turle.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Utils.cpp
+  WaterDie.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Window.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  WorldMap.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Worm.cpp
+E:\Hoc vl\game again\Gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.h(4,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Zone.cpp
+  Generating Code...
