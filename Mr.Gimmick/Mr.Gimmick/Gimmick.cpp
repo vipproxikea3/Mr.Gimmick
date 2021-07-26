@@ -869,6 +869,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 
+				if (e->ny < 0)
+				{
+					if (enemyB->state == ENEMY_STATE_STAND)
+					{
+						this->SetState(GIMMICK_STATE_STUN);
+					}
+				}
+
 				if (e->nx != 0)
 				{
 					if (enemyB->x < this->x)
