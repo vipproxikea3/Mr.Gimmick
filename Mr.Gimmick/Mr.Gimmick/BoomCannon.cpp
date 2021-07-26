@@ -17,7 +17,6 @@ void CBoomCannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	if (state == BOOM_CANNON_STATE_NORMAL) {
 		vy = -BOOM_CANNON_GRAVITY * dt;
-		DebugOut(L"boom thanh normal \n");
 	}
 	
 	if (!CGame::GetInstance()->InCamera(this) 
@@ -81,7 +80,6 @@ void CBoomCannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(BOOM_CANNON_STATE_NORMAL);
 					vx = 0.075f;
 					vy = -BOOM_CANNON_GRAVITY * dt;
-					DebugOut(L"state boom = %d\n", state);
 				}
 			}
 		}
@@ -126,7 +124,7 @@ void CBoomCannon::Render()
 	int alpha = 255;
 	animation_set->at(0)->Render(x, y, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CBoomCannon::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

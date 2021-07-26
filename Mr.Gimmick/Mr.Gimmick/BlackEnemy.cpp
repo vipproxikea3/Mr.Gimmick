@@ -218,7 +218,7 @@ void CBlackEnemy::Render()
 	}
 	animation_set->at(ani)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBlackEnemy::SetState(int state)
@@ -554,7 +554,7 @@ bool CBlackEnemy::IsCollidingWithPlayer()
 
 	float l, t, r, b;
 	GetBoundingBox(l, t, r, b);
-	t -= 5;
+	t -= 7;
 
 	float ol, ot, or , ob;
 	player->GetBoundingBox(ol, ot, or , ob);

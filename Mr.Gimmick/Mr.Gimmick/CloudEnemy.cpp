@@ -120,7 +120,7 @@ void CCloudEnemy::Render()
 
 	int alpha = 255;
 	animation_set->at(ani)->Render(x, y, alpha);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CCloudEnemy::SetState(int state_)

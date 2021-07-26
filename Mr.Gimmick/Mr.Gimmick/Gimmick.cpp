@@ -134,7 +134,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CBrickPink*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CElectricBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-		else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CStandBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
@@ -266,6 +265,22 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CBlackBird* enemy = dynamic_cast<CBlackBird*>(coObjects->at(i));
 			if (onTopOf(enemy, 2.0f) && this->vy < 0) {
 				this->onGround = true;
+			}
+		}
+
+		if (dynamic_cast<CSpecialBrick*>(coObjects->at(i))) {
+			CSpecialBrick* brick = dynamic_cast<CSpecialBrick*>(coObjects->at(i));
+			if (CheckAABB(brick) && brick->type == 0) {
+				y = brick->y + 17;
+				vy = 0;
+			}
+		}
+
+		if (dynamic_cast<CWorm*>(coObjects->at(i))) {
+			CWorm* worm = dynamic_cast<CWorm*>(coObjects->at(i));
+			if (onTopOf(worm)) {
+				vy = 0;
+				onGround = true;
 			}
 		}
 	}
@@ -539,6 +554,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					if (e->ny != 0) {
 						vy = 0;
+						this->y += dy;
 					}
 					if (e->ny == 1)
 						this->onGround = true;
@@ -605,28 +621,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						StartUntouchable();
 					}
 				}
-			}
-
-			if (dynamic_cast<CBlackBoss*>(e->obj)) {
-
-				CBlackBoss* boss = dynamic_cast<CBlackBoss*>(e->obj);
-				float l, t, r, b;
-				GetBoundingBox(l, t, r, b);
-				float ol, ot, or , ob;
-				e->obj->GetBoundingBox(ol, ot, or , ob);
-
-				if (boss->x < this->x)
-				{
-					//this->vx = GIMMICK_DEFLECT_SPEED_X;
-					this->nx = 1.0;
-				}
-				else
-				{
-					//this->vx = -GIMMICK_DEFLECT_SPEED_X;
-					this->nx = -1.0;
-				}
-				this->SetState(GIMMICK_STATE_STUN);
-				StartUntouchable();
 			}
 
 			if (dynamic_cast<CElectricBlackEnemy*>(e->obj)) {
@@ -987,7 +981,7 @@ void CGimmick::Render()
 
 		animation_set->at(ani)->Render(x, y + 3.0f, alpha);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::CreateDieEffect() {
@@ -1274,7 +1268,8 @@ void CGimmick::standOn(CGameObject* object)
 
 	if (dynamic_cast<CCloudEnemy*>(object)) {
 		CCloudEnemy* enemy = dynamic_cast<CCloudEnemy*>(object);
-		this->x += object->dx;
+		if(!facingBrick) // fix loi xuyen tuong khi cuoi
+			this->x += object->dx;
 		onEnemy = true;
 		enemy->carryPlayer = true;
 		this->vy = 0;

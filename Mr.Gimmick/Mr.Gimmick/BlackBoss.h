@@ -35,7 +35,7 @@
 #define BLACKBOSS_STOP_POSITION_X				1105
 
 #define BLACKBOSS_IDLE_TIME			2000
-#define BLACKBOSS_SHOOT_TIME		1500
+#define BLACKBOSS_SHOOT_TIME		2500
 #define BLACKBOSS_BLINK_TIME		450
 
 #define BLACKBOSS_LIFE_COUNT		3
@@ -73,5 +73,6 @@ public:
 	void DetectStar();
 	void CalculateSpeed();
 	void CreateReward();
+	void SpecialCollisionWithPlayer();
 };
 

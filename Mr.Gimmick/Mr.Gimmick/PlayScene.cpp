@@ -620,6 +620,15 @@ void CPlayScene::Update(DWORD dt)
 				delete boom_cannon;
 			}
 		}
+		else if (dynamic_cast<CGun*>(objects[i]))
+		{
+			CGun* gun = (CGun*)(objects[i]);
+			if (gun->visible == false)
+			{
+				objects.erase(objects.begin() + i);
+				delete gun;
+			}
+		}
 	}
 		
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -879,37 +888,65 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_DOWN:
 		CBackup::GetInstance()->ChangeItem();
 		break;
-	case DIK_1:
-		gimmick->x = 100;
-		gimmick->y = 650;
+	// =============== SCENE 1:
+	case DIK_1: // Cho can sao de nhay len
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 990;
+		gimmick->y = 560;
 		break;
-	case DIK_4:
-		gimmick->x = 1868;
-		gimmick->y = 440;
+	case DIK_V: // boss man 1
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1300;
+		gimmick->y = 630;
 		break;
-	case DIK_5:
-		gimmick->x = 1206;
-		gimmick->y = 650;
+	// =============== SCENE 2:
+	case DIK_2: // di thuyen qua bo
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1760;
+		gimmick->y = 272;
 		break;
-	case DIK_6:
-		gimmick->Revival();
+	case DIK_3: //truoc khau sung
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 752;
+		gimmick->y = 528;
 		break;
-	case DIK_L:
-		gimmick->SetPosition(64, 448);
+	case DIK_4: // truoc blackbird
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->SetPosition(176, 688);
 		break;
-	case DIK_B:
-		gimmick->x = 1670;
-		gimmick->y = 496;
+	case DIK_5: // truoc blackbird 2
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1504;
+		gimmick->y = 672;
 		break;
-	case DIK_N:
-		gimmick->x = 1725;
-		gimmick->y = 637;
+	case DIK_B: //green boss
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1150;
+		gimmick->y = 448;
+		break;
+	case DIK_N: //Sword boss
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1744;
+		gimmick->y = 480;
+		break;
+	// ============== SCENE 7:
+	case DIK_6: // truoc man 7 (1) tren ong nuoc
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1936;
+		gimmick->y = 304;
+		break;
+	case DIK_7: // truoc man 7 (2) bai co
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 944;
+		gimmick->y = 448;
+		break;
+	case DIK_M: // Final boss
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+		gimmick->x = 1712;
+		gimmick->y = 640;
 		break;
 	case DIK_U:
 		CGame::GetInstance()->SwitchScene(1000);
-		break;
-	case DIK_Y:
-		CGame::GetInstance()->SwitchScene(888);
 		break;
 	}
 }
