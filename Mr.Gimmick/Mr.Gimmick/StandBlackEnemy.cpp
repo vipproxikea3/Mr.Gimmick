@@ -20,13 +20,20 @@ void CStandBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CStar* star = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetStar();
 
 	if (this->CheckAABB(star) && (star->GetState() == STAR_STATE_WALKING_LEFT || star->GetState() == STAR_STATE_WALKING_RIGHT) && this->GetState() == ENEMY_STATE_STAND)
+	{
 		this->SetState(ENEMY_STATE_DIE);
+		if (star->GetState() == STAR_STATE_WALKING_LEFT)
+			dir = -1;
+		else if (star->GetState() == STAR_STATE_WALKING_RIGHT)
+			dir = 1;
+	}
 
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy -= ENEMY_GRAVITY * dt;
+	if(state != ENEMY_STATE_STAND)
+		vy -= ENEMY_GRAVITY * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -102,7 +109,7 @@ void CStandBlackEnemy::SetState(int state)
 	case ENEMY_STATE_DIE:
 		CBackup* backup = CBackup::GetInstance();
 		backup->UpdateScore(backup->score + this->score);
-		vx = nx * 0.05;
+		vx = dir * 0.05;
 		vy = ENEMY_DIE_DEFLECT_SPEED;
 		break;
 	}
